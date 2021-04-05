@@ -3,7 +3,8 @@ package eu.animegame.jeva;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
-import org.junit.platform.commons.logging.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.animegame.jeva.events.IrcHandlerEvent;
 import eu.animegame.jeva.events.IrcHandlerEventType;

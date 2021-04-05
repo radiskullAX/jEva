@@ -1,14 +1,10 @@
 package eu.animegame.jeva;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.regex.Pattern;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import eu.animegame.jeva.utils.RegexHelper;
 
@@ -19,22 +15,6 @@ import eu.animegame.jeva.utils.RegexHelper;
 public class ParseTest {
 
 	public ParseTest() {
-	}
-
-	@BeforeClass
-	public static void setUpClass() throws Exception {
-	}
-
-	@AfterClass
-	public static void tearDownClass() throws Exception {
-	}
-
-	@Before
-	public void setUp() {
-	}
-
-	@After
-	public void tearDown() {
 	}
 
 	// @Test

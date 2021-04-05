@@ -1,6 +1,7 @@
 package eu.animegame.jeva.plugins;
 
-import org.junit.platform.commons.logging.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.animegame.jeva.events.IrcHandlerEvent;
 import eu.animegame.jeva.events.IrcHandlerEventType;
