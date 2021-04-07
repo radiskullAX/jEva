@@ -7,7 +7,26 @@ package eu.animegame.jeva.events;
  *
  */
 public enum IrcHandlerEventType {
-	PRIVMSG, MODE, KICK, BANN, PING, JOIN, NICK, USER, PASS, INVITE, WHOIS, QUIT, PART, NOTICE, ISON, HELP, COMMAND, UNDEFINED,
-	// These are no Irc events but handler events
-	STARTUP, CONNECTED, DISCONNECTED,
+  PRIVMSG,
+  MODE,
+  KICK,
+  BANN,
+  PING,
+  JOIN,
+  NICK,
+  USER,
+  PASS,
+  INVITE,
+  WHOIS,
+  QUIT,
+  PART,
+  NOTICE,
+  ISON,
+  HELP,
+  COMMAND,
+  UNDEFINED,
+  // These are no Irc events but handler events
+  STARTUP,
+  CONNECTED,
+  DISCONNECTED,
 }
