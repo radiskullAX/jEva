@@ -6,7 +6,7 @@ import eu.animegame.jeva.events.IrcHandlerEventType;
 import eu.animegame.jeva.interfaces.IrcEventCallback;
 import eu.animegame.jeva.interfaces.IrcHandler;
 import eu.animegame.jeva.interfaces.IrcHandlerPlugin;
-import eu.animegame.jeva.utils.IrcCommandCode;
+import eu.animegame.jeva.irc.CommandCode;
 
 /**
  * @author radiskull
@@ -15,7 +15,7 @@ public class ConnectPlugin implements IrcHandlerPlugin, IrcEventCallback {
 	// TODO: Rename this class .. to something better
 	@Override
 	public void callback(IrcHandlerEvent ie) {
-		if (ie.getCommandCode() == IrcCommandCode.RPL_ENDOFMOTD) {
+		if (ie.getCommandCode() == CommandCode.RPL_ENDOFMOTD) {
 			AbstractIrcHandler handler = ie.getHandler();
 			handler.fireIrcHandlerEvent(
 					new IrcHandlerEvent(IrcHandlerEventType.CONNECTED, null, null, null, null, 0, null, handler));

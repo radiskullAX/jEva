@@ -3,14 +3,14 @@
  * and open the template in the editor.
  */
 
-package eu.animegame.jeva.utils;
+package eu.animegame.jeva.irc;
 
 /**
  * This Class can be used for coloring text in the chat.
  *
  * @author radiskull
  */
-public class IrcChatColor {
+public class ChatColor {
 	public static final String WHITE = "0";
 	public static final String BLACK = "1";
 	public static final String DARKBLUE = "2";

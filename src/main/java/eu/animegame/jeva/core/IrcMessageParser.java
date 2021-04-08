@@ -16,11 +16,11 @@ import eu.animegame.jeva.utils.RegexHelper;
 class IrcMessageParser {
 
 	protected static Logger LOG = LoggerFactory.getLogger(AbstractIrcHandler.class);
-	protected static final Pattern CHANNEL_MESSAGE_PARSER = Pattern
-			.compile("^:(?:[^\\s]+\\s){2}(([\\w\\p{Punct}]+)\\s*(.*))");
-	protected static final Pattern SENDER_HOST_PARSER = Pattern.compile("^:(?:([^\\!\\s]+)\\!)?([^\\s]+)\\s.*");
-	protected static final Pattern IRC_COMMAND_PARSER = Pattern.compile("^:[^\\s]+\\s(\\d{3})\\s[^\\s]+\\s(.*)");
-	protected static final Pattern IRC_COMMAND_FINDER = Pattern.compile("^:[^\\s]+\\s(\\d{3})\\s.+");
+    protected static final Pattern CHANNEL_MESSAGE_PARSER =
+        Pattern.compile("^:(?:[^\\s]+\\s){2}(([\\w\\p{Punct}]+)\\s*(.*))");
+    protected static final Pattern SENDER_HOST_PARSER = Pattern.compile("^:(?:([^\\!\\s]+)\\!)?([^\\s]+)\\s.*");
+    protected static final Pattern IRC_COMMAND_PARSER = Pattern.compile("^:[^\\s]+\\s(\\d{3})\\s[^\\s]+\\s(.*)");
+    protected static final Pattern IRC_COMMAND_FINDER = Pattern.compile("^:[^\\s]+\\s(\\d{3})\\s.+");
 	protected static final int PARSING_ERROR = -1;
 
 	public static IrcHandlerEvent parseInputMessage(String input, AbstractIrcHandler handler) throws IOException {
