@@ -20,7 +20,7 @@ public final class Kill implements IrcCommand {
   @Override
   public String build() {
     var command = new StringBuilder();
-    command.append("KILL ").append(nick).append(" ").append(comment);
+    command.append("KILL ").append(nick).append(" :").append(comment);
     return command.toString();
   }
 }

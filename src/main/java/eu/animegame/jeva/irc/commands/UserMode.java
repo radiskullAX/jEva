@@ -13,7 +13,7 @@ public final class UserMode implements IrcCommand {
 
   private final String mode;
 
-  private final String setting;
+  private final ModeSetting setting;
 
   /**
    * get a list of modes set for given user
@@ -36,7 +36,7 @@ public final class UserMode implements IrcCommand {
   public UserMode(String nick, String mode, ModeSetting setting) {
     this.nick = nick;
     this.mode = mode;
-    this.setting = setting.getValue();
+    this.setting = setting;
   }
 
   @Override
@@ -44,7 +44,7 @@ public final class UserMode implements IrcCommand {
     var command = new StringBuilder();
     command.append("MODE ").append(nick);
     if (mode != null && setting != null) {
-      command.append(" ").append(setting).append(mode);
+      command.append(" ").append(setting.getValue()).append(mode);
     }
     return command.toString();
   }

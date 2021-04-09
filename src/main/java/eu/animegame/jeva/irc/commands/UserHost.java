@@ -23,7 +23,7 @@ public final class UserHost implements IrcCommand {
   @Override
   public String build() {
     var command = new StringBuilder();
-    command.append("USERHOST :").append(nick);
+    command.append("USERHOST ").append(nick);
     return command.toString();
   }
 
