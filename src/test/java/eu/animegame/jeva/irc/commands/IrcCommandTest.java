@@ -78,12 +78,12 @@ class IrcCommandTest {
     assertEquals(expected, command.build());
   }
 
-  // @Test
+  @Test
   void testSendService() {
     var name = "TestService";
     var info = "This service is a test.";
 
-    command = new Service();
+    command = new Service(name, SERVER, info);
     expected = "SERVICE " + name + " * " + SERVER + " 0 0 :" + info;
     assertEquals(expected, command.build());
   }
@@ -152,9 +152,30 @@ class IrcCommandTest {
     assertEquals(expected, command.build());
   }
 
-  // @Test
+  @Test
   void testSendChannelMode() {
-    // TODO: Implement
+    var mode = "s";
+    var params = "test";
+
+    command = new ChannelMode(CHANNEL, ModeSetting.ADD, mode);
+    expected = "MODE " + CHANNEL + " +" + mode;
+    assertEquals(expected, command.build());
+
+    command = new ChannelMode(CHANNEL, ModeSetting.REMOVE, mode);
+    expected = "MODE " + CHANNEL + " -" + mode;
+    assertEquals(expected, command.build());
+
+    command = new ChannelMode(CHANNEL, ModeSetting.ADD, mode, params);
+    expected = "MODE " + CHANNEL + " +" + mode + " " + params;
+    assertEquals(expected, command.build());
+
+    command = new ChannelMode(CHANNEL, ModeSetting.REMOVE, mode, params);
+    expected = "MODE " + CHANNEL + " -" + mode + " " + params;
+    assertEquals(expected, command.build());
+
+    command = new ChannelMode(CHANNEL, mode);
+    expected = "MODE " + CHANNEL + " " + mode;
+    assertEquals(expected, command.build());
   }
 
   @Test
