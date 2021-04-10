@@ -29,20 +29,17 @@ class IrcMessageParser {
     if (message == null) {
       throw new IOException("Cannot parse null.");
     }
-    var prefix = "";
-    var command = "";
-    var parameters = "";
 
     Matcher matcher = IRC_MESSAGE_PATTERN.matcher(message);
-    if (matcher.matches()) {
-      prefix = matcher.group("prefix");
-      command = matcher.group("command");
-      parameters = matcher.group("parameters");
-      return new BasicIrcEvent(prefix, command, parameters);
-    } else {
+    if (!matcher.matches()) {
       var exception = new UnknownFormatException("Could not match with irc format");
       exception.setUnknownMessage(message);
       throw exception;
     }
+
+    var prefix = matcher.group("prefix");
+    var command = matcher.group("command");
+    var parameters = matcher.group("parameters");
+    return new BasicIrcEvent(prefix, command, parameters);
   }
 }
