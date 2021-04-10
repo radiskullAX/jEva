@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import eu.animegame.jeva.interfaces.IrcHandlerPlugin;
 
 /**
@@ -35,7 +34,6 @@ public class TestHandler {
 				try {
 					m.invoke(list.get(0));
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			});

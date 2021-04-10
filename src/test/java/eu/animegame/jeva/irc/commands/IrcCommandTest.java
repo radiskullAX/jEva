@@ -31,21 +31,21 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendPass() {
+  void testBuildPass() {
     command = new Pass(PASSWORD);
     expected = "PASS " + PASSWORD;
     assertEquals(expected, command.build());
   }
 
   @Test
-  void testSendNick() {
+  void testBuildNick() {
     command = new Nick(NICK);
     expected = "NICK " + NICK;
     assertEquals(expected, command.build());
   }
 
   @Test
-  void testSendUser() {
+  void testBuildUser() {
     var realName = "Real Tester";
     var mode = 4;
 
@@ -55,14 +55,14 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendOper() {
+  void testBuildOper() {
     command = new Oper(NICK, PASSWORD);
     expected = "OPER " + NICK + " " + PASSWORD;
     assertEquals(expected, command.build());
   }
 
   @Test
-  void testSendMode() {
+  void testBuildMode() {
     var mode = "i";
 
     command = new UserMode(NICK);
@@ -79,7 +79,7 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendService() {
+  void testBuildService() {
     var name = "TestService";
     var info = "This service is a test.";
 
@@ -89,7 +89,7 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendQuit() {
+  void testBuildQuit() {
     command = new Quit();
     expected = "QUIT";
     assertEquals(expected, command.build());
@@ -100,14 +100,14 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSQuit() {
+  void testBuildSQuit() {
     command = new SQuit(SERVER, MESSAGE);
     expected = "SQUIT " + SERVER + " :" + MESSAGE;
     assertEquals(expected, command.build());
   }
 
   @Test
-  void testSendJoin() {
+  void testBuildJoin() {
     command = new Join();
     expected = "JOIN 0";
     assertEquals(expected, command.build());
@@ -134,7 +134,7 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendPart() {
+  void testBuildPart() {
     command = new Part(CHANNEL);
     expected = "PART " + CHANNEL;
     assertEquals(expected, command.build());
@@ -153,7 +153,7 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendChannelMode() {
+  void testBuildChannelMode() {
     var mode = "s";
     var params = "test";
 
@@ -179,7 +179,7 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendTopic() {
+  void testBuildTopic() {
     command = new Topic(CHANNEL);
     expected = "TOPIC " + CHANNEL;
     assertEquals(expected, command.build());
@@ -194,7 +194,7 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendNames() {
+  void testBuildNames() {
     command = new Names();
     expected = "NAMES";
     assertEquals(expected, command.build());
@@ -217,7 +217,7 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendList() {
+  void testBuildList() {
     command = new List();
     expected = "LIST";
     assertEquals(expected, command.build());
@@ -240,14 +240,14 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendInvite() {
+  void testBuildInvite() {
     command = new Invite(NICK, CHANNEL);
     expected = "INVITE " + NICK + " " + CHANNEL;
     assertEquals(expected, command.build());
   }
 
   @Test
-  void testSendKick() {
+  void testBuildKick() {
     command = new Kick(CHANNEL, NICK);
     expected = "KICK " + CHANNEL + " " + NICK;
     assertEquals(expected, command.build());
@@ -266,21 +266,21 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendPrivMsg() {
+  void testBuildPrivMsg() {
     command = new PrivMsg(NICK, MESSAGE);
     expected = "PRIVMSG " + NICK + " :" + MESSAGE;
     assertEquals(expected, command.build());
   }
 
   @Test
-  void testSendNotice() {
+  void testBuildNotice() {
     command = new Notice(NICK, MESSAGE);
     expected = "NOTICE " + NICK + " :" + MESSAGE;
     assertEquals(expected, command.build());
   }
 
   @Test
-  void testSendMotd() {
+  void testBuildMotd() {
     command = new Motd();
     expected = "MOTD";
     assertEquals(expected, command.build());
@@ -291,7 +291,7 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendLusers() {
+  void testBuildLusers() {
     command = new Lusers();
     expected = "LUSERS";
     assertEquals(expected, command.build());
@@ -306,7 +306,7 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendVersion() {
+  void testBuildVersion() {
     command = new Version();
     expected = "VERSION";
     assertEquals(expected, command.build());
@@ -317,7 +317,7 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendStats() {
+  void testBuildStats() {
     var query = "m";
 
     command = new Stats(SERVER);
@@ -330,7 +330,7 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendLinks() {
+  void testBuildLinks() {
     command = new Links();
     expected = "LINKS";
     assertEquals(expected, command.build());
@@ -345,7 +345,7 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendTime() {
+  void testBuildTime() {
     command = new Time();
     expected = "TIME";
     assertEquals(expected, command.build());
@@ -356,7 +356,7 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendConnect() {
+  void testBuildConnect() {
     var port = 6668;
 
     command = new Connect(SERVER, port);
@@ -369,7 +369,7 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendTrace() {
+  void testBuildTrace() {
     command = new Trace();
     expected = "TRACE";
     assertEquals(expected, command.build());
@@ -380,7 +380,7 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendAdmin() {
+  void testBuildAdmin() {
     command = new Admin();
     expected = "ADMIN";
     assertEquals(expected, command.build());
@@ -391,14 +391,14 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendInfo() {
+  void testBuildInfo() {
     command = new Info(NICK);
     expected = "INFO " + NICK;
     assertEquals(expected, command.build());
   }
 
   @Test
-  void testSendServList() {
+  void testBuildServList() {
     var type = "bot";
 
     command = new ServList();
@@ -415,14 +415,14 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendSQuery() {
+  void testBuildSQuery() {
     command = new SQuery(NICK, MESSAGE);
     expected = "SQUERY " + NICK + " :" + MESSAGE;
     assertEquals(expected, command.build());
   }
 
   @Test
-  void testSendWho() {
+  void testBuildWho() {
     command = new Who(false);
     expected = "WHO 0";
     assertEquals(expected, command.build());
@@ -441,7 +441,7 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendWhoIs() {
+  void testBuildWhoIs() {
     command = new WhoIs(NICK);
     expected = "WHOIS " + NICK;
     assertEquals(expected, command.build());
@@ -460,7 +460,7 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendWhoWas() {
+  void testBuildWhoWas() {
     var count = 3;
 
     command = new WhoWas(NICK);
@@ -489,14 +489,14 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendKill() {
+  void testBuildKill() {
     command = new Kill(NICK, MESSAGE);
     expected = "KILL " + NICK + " :" + MESSAGE;
     assertEquals(expected, command.build());
   }
 
   @Test
-  void testSendPing() {
+  void testBuildPing() {
     command = new Ping(SERVER);
     expected = "PING " + SERVER;
     assertEquals(expected, command.build());
@@ -507,7 +507,7 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendPong() {
+  void testBuildPong() {
     command = new Pong(MESSAGE);
     expected = "PONG " + MESSAGE;
     assertEquals(expected, command.build());
@@ -518,14 +518,14 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendError() {
+  void testBuildError() {
     command = new Error(MESSAGE);
     expected = "ERROR " + MESSAGE;
     assertEquals(expected, command.build());
   }
 
   @Test
-  void testSendAway() {
+  void testBuildAway() {
     command = new Away();
     expected = "AWAY";
     assertEquals(expected, command.build());
@@ -536,28 +536,28 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendRehash() {
+  void testBuildRehash() {
     command = new Rehash();
     expected = "REHASH";
     assertEquals(expected, command.build());
   }
 
   @Test
-  void testSendDie() {
+  void testBuildDie() {
     command = new Die();
     expected = "DIE";
     assertEquals(expected, command.build());
   }
 
   @Test
-  void testSendRestart() {
+  void testBuildRestart() {
     command = new Restart();
     expected = "RESTART";
     assertEquals(expected, command.build());
   }
 
   @Test
-  void testSendSummon() {
+  void testBuildSummon() {
     command = new Summon(NICK);
     expected = "SUMMON " + NICK;
     assertEquals(expected, command.build());
@@ -572,21 +572,21 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendUsers() {
+  void testBuildUsers() {
     command = new Users(SERVER);
     expected = "USERS " + SERVER;
     assertEquals(expected, command.build());
   }
 
   @Test
-  void testSendOperwall() {
+  void testBuildOperwall() {
     command = new Wallops(MESSAGE);
     expected = "WALLOPS :" + MESSAGE;
     assertEquals(expected, command.build());
   }
 
   @Test
-  void testSendUserhost() {
+  void testBuildUserhost() {
     command = new UserHost(NICK);
     expected = "USERHOST " + NICK;
     assertEquals(expected, command.build());
@@ -597,7 +597,7 @@ class IrcCommandTest {
   }
 
   @Test
-  void testSendIson() {
+  void testBuildIson() {
     command = new Ison(NICK);
     expected = "ISON " + NICK;
     assertEquals(expected, command.build());

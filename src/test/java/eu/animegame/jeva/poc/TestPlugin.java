@@ -21,13 +21,11 @@ public class TestPlugin implements IrcHandlerPlugin {
 
 	@Override
 	public void registerCallbackEvents(IrcHandler handler) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void unregisterCallbackEvents(IrcHandler handler) {
-		// TODO Auto-generated method stub
 
 	}
 
