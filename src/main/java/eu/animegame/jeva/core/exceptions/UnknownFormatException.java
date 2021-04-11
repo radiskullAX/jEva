@@ -1,4 +1,4 @@
-package eu.animegame.jeva.core;
+package eu.animegame.jeva.core.exceptions;
 
 public class UnknownFormatException extends Exception {
 

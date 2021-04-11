@@ -1,8 +1,7 @@
 package eu.animegame.jeva;
 
-import eu.animegame.jeva.plugins.AutoJoinPlugin;
-import eu.animegame.jeva.plugins.BotControllPlugin;
-import eu.animegame.jeva.plugins.ReconnectPlugin;
+import java.util.Properties;
+import eu.animegame.jeva.core.IrcHandler;
 
 /**
  *
@@ -26,13 +25,22 @@ public class ExampleMainClass {
      * "NOTICE AUTH :*** Looking up your hostname";
      * System.out.println(Arrays.toString(RegexHelper.parseStringGroups(pattern, test)));
      */
-    System.getProperties().setProperty("org.slf4j.simpleLogger.defaultLogLevel", "trace");
-    QuakenetHandler client = IrcClientBuilder.create().withAddress(args[0]).withNick("IrcTestBot")
-        .withRealName("A true bot")
-        .withPort(6667).withPlugin(new ReconnectPlugin()).withPlugin(new AutoJoinPlugin(args[1]))
-        .withPlugin(new BotControllPlugin()).build();
 
-    client.start();
+    System.getProperties().setProperty("org.slf4j.simpleLogger.defaultLogLevel", "trace");
+    // QuakenetHandler client = IrcClientBuilder.create().withAddress(args[0]).withNick("IrcTestBot")
+    // .withRealName("A true bot")
+    // .withPort(6667).withPlugin(new ReconnectPlugin()).withPlugin(new AutoJoinPlugin(args[1]))
+    // .withPlugin(new BotControllPlugin()).build();
+    //
+    // client.start();
+
+    var config = new Properties(4);
+    config.put(IrcHandler.PROP_NICK, args[0]);
+    config.put(IrcHandler.PROP_SERVER, args[1]);
+    config.put(IrcHandler.PROP_PORT, args[2]);
+
+    IrcHandler handler = new IrcHandler(config);
+    handler.start();
     /*
      * GUICallback gui = new GUICallback(); gui.addPanel(new CallbackOverview()); InputPanel input = new InputPanel();
      * input.addInputListener(new testInput()); gui.addPanel(input); gui.registerCallbackEvents(ib);

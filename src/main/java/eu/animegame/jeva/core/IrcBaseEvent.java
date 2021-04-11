@@ -2,7 +2,7 @@ package eu.animegame.jeva.core;
 
 import java.util.Optional;
 
-public class BasicIrcEvent {
+public class IrcBaseEvent {
 
   private final Optional<String> prefix;
 
@@ -10,15 +10,15 @@ public class BasicIrcEvent {
 
   private final String parameters;
 
-  public BasicIrcEvent(BasicIrcEvent event) {
+  public IrcBaseEvent(IrcBaseEvent event) {
     this(event.getPrefix(), event.getCommand(), event.getParameters());
   }
 
-  public BasicIrcEvent(String prefix, String command, String parameters) {
+  public IrcBaseEvent(String prefix, String command, String parameters) {
     this(Optional.ofNullable(prefix), command, parameters);
   }
 
-  private BasicIrcEvent(Optional<String> prefix, String command, String parameters) {
+  private IrcBaseEvent(Optional<String> prefix, String command, String parameters) {
     this.prefix = prefix;
     this.command = command;
     this.parameters = parameters;
