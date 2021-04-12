@@ -1,11 +1,13 @@
 package eu.animegame.jeva.core;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import eu.animegame.jeva.core.exceptions.ConnectException;
 import eu.animegame.jeva.core.lifecycle.LifecycleState;
 import eu.animegame.jeva.core.lifecycle.Startup;
 
@@ -44,10 +46,9 @@ public class IrcHandler {
   }
 
   public void setState(LifecycleState state) {
-    var oldState = this.state;
-    this.state = state;
-    LOG.debug("State going to change from '{}' to '{}'", oldState.getClass().getSimpleName(),
+    LOG.debug("State going to change from '{}' to '{}'", this.state.getClass().getSimpleName(),
         state.getClass().getSimpleName());
+    this.state = state;
   }
 
   public void start() {
@@ -71,18 +72,22 @@ public class IrcHandler {
   }
 
   public List<IrcHandlerPlugin> getPlugins() {
-    return plugins;
+    return Collections.unmodifiableList(plugins);
+  }
+
+  public void fireLifecycleState(Consumer<IrcHandlerPlugin> consumer) {
+    plugins.forEach(consumer);
   }
 
   public void lookup() {
     // TODO: implement
   }
 
-  public void createConnection() throws IOException {
+  public void createConnection() throws ConnectException, Exception {
     // TODO: implement
   }
 
-  public String readCommand() {
+  public String readCommand() throws ConnectException {
     // TODO: implement
     return null;
   }

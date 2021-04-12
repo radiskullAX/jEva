@@ -1,9 +1,9 @@
 package eu.animegame.jeva.core.lifecycle;
 
-import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.animegame.jeva.core.IrcHandler;
+import eu.animegame.jeva.core.exceptions.ConnectException;
 
 public class Connect implements LifecycleState {
 
@@ -16,18 +16,14 @@ public class Connect implements LifecycleState {
     try {
       context.createConnection();
       context.setState(new Running());
-      fireLifecycleState(context);
+      context.fireLifecycleState(p -> p.connect(context));
       LOG.info("Established a connection");
-    } catch (IOException ioe) {
-      LOG.warn("Failed to establish a connection", ioe);
+    } catch (ConnectException ce) {
+      LOG.warn("Failed to establish a connection", ce);
       context.setState(new Disconnect());
     } catch (Exception e) {
-      LOG.error("Exception occured", e);
+      LOG.error("Failed to connect", e);
       context.setState(new Shutdown());
     }
-  }
-
-  private void fireLifecycleState(IrcHandler context) {
-    context.getPlugins().stream().forEach(p -> p.connect(context));
   }
 }

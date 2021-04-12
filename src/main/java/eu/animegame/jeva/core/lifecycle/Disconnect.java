@@ -13,15 +13,11 @@ public class Disconnect implements LifecycleState {
     LOG.info("Closing connection and clean up");
     context.setState(new Shutdown());
     try {
-      fireLifecycleState(context);
+      context.fireLifecycleState(p -> p.disconnect(context));
       LOG.info("Finished clean up");
     } catch (Exception e) {
-      LOG.error("Exception occured", e);
+      LOG.error("Failed to disconnect", e);
       context.setState(new Shutdown());
     }
-  }
-
-  private void fireLifecycleState(IrcHandler context) {
-    context.getPlugins().stream().forEach(p -> p.disconnect(context));
   }
 }

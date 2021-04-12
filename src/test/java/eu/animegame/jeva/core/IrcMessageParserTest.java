@@ -1,7 +1,6 @@
 package eu.animegame.jeva.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import java.io.IOException;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -71,7 +70,7 @@ class IrcMessageParserTest {
 
   @Test
   void testParseNoMessage() {
-    Assertions.assertThrows(IOException.class, () -> IrcMessageParser.toIrcEvent(null));
+    Assertions.assertThrows(JEvaException.class, () -> IrcMessageParser.toIrcEvent(null));
   }
 
   @Test

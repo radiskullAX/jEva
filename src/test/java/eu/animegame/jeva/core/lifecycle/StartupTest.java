@@ -1,15 +1,12 @@
 package eu.animegame.jeva.core.lifecycle;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.Properties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.ArgumentCaptor;
 import eu.animegame.jeva.core.IrcHandler;
 
 class StartupTest {
@@ -30,9 +27,7 @@ class StartupTest {
     when(handler.getConfiguration()).thenReturn(config);
     state.run(handler);
 
-    ArgumentCaptor<LifecycleState> captor = ArgumentCaptor.forClass(LifecycleState.class);
-    verify(handler).setState(captor.capture());
-    assertEquals(captor.getValue().getClass(), Initialize.class);
+    LifecycleHelper.verifySetState(handler, Initialize.class);
   }
 
   @ParameterizedTest
@@ -44,9 +39,7 @@ class StartupTest {
     when(handler.getConfiguration()).thenReturn(config);
     state.run(handler);
 
-    ArgumentCaptor<LifecycleState> captor = ArgumentCaptor.forClass(LifecycleState.class);
-    verify(handler).setState(captor.capture());
-    assertEquals(captor.getValue().getClass(), Shutdown.class);
+    LifecycleHelper.verifySetState(handler, Shutdown.class);
   }
 
   private Properties buildConfig() {

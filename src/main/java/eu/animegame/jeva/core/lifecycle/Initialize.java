@@ -14,18 +14,13 @@ public class Initialize implements LifecycleState {
 
     try {
       context.lookup();
-
-      fireLifecycleState(context);
+      context.fireLifecycleState(p -> p.initialize(context));
 
       context.setState(new Connect());
       LOG.info("Finished to initiliaze plugins");
     } catch (Exception e) {
-      LOG.error("Failed to initialize plugins", e);
+      LOG.error("Failed to initialize", e);
       context.setState(new Shutdown());
     }
-  }
-
-  private void fireLifecycleState(IrcHandler context) {
-    context.getPlugins().stream().forEach(p -> p.initialize(context));
   }
 }

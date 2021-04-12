@@ -12,15 +12,11 @@ public class Shutdown implements LifecycleState {
   public void run(IrcHandler context) {
     LOG.info("Prepare to stop engine");
     try {
-      fireLifecycleState(context);
+      context.fireLifecycleState(p -> p.shutdown(context));
     } catch (Exception e) {
-      LOG.error("Exception occured", e);
+      LOG.error("Failed to shut down plugins", e);
     }
     LOG.info("Engine stopped");
     context.setState(new Startup());
-  }
-
-  private void fireLifecycleState(IrcHandler context) {
-    context.getPlugins().stream().forEach(p -> p.shutdown(context));
   }
 }

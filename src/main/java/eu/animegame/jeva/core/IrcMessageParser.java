@@ -26,6 +26,8 @@ public class IrcMessageParser {
       Pattern.compile(
           "(?>:(?<prefix>[\\S]+)\\s)?(?<command>\\w+)\\s(?<parameters>.*)");
 
+  private IrcMessageParser() {}
+
   public static IrcBaseEvent toIrcEvent(String message) throws JEvaException, UnknownFormatException {
     if (message == null) {
       throw new JEvaException("Cannot parse null.");
