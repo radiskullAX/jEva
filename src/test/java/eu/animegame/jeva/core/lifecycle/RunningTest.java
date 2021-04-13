@@ -6,29 +6,34 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import eu.animegame.jeva.core.IrcHandler;
 import eu.animegame.jeva.core.exceptions.ConnectException;
 
 class RunningTest {
 
+  private static final String MESSAGE = "PING :123456789";
+
   private IrcHandler handler = mock(IrcHandler.class);
 
-  private LifecycleState state;
+  private LifecycleState state = new Running();
 
-  @BeforeEach
-  void init() {
-    state = new Running();
+  @Test
+  void testIrcEventIsFired() throws ConnectException {
+    when(handler.readCommand()).thenReturn(MESSAGE);
+    state.run(handler);
+
+    verify(handler).fireIrcEvent(any());
+
+    verify(handler, never()).setState(any());
   }
 
   @Test
-  void testRunSuccessful() throws ConnectException, Exception {
-    when(handler.readCommand()).thenReturn("PING :123456789");
+  void testReadCommandSuccessful() throws ConnectException, Exception {
+    when(handler.readCommand()).thenReturn(MESSAGE);
     state.run(handler);
 
     verify(handler).readCommand();
-    verify(handler).fireIrcEvent(any());
 
     verify(handler, never()).setState(any());
   }
@@ -50,7 +55,7 @@ class RunningTest {
   }
 
   @Test
-  void testReadFails() throws ConnectException, Exception {
+  void testReadCommandFails() throws ConnectException, Exception {
     state.run(handler);
 
     LifecycleHelper.verifySetState(handler, Shutdown.class);

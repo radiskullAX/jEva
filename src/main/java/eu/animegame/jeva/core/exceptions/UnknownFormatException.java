@@ -1,6 +1,6 @@
 package eu.animegame.jeva.core.exceptions;
 
-public class UnknownFormatException extends Exception {
+public class UnknownFormatException extends JEvaException {
 
   private static final long serialVersionUID = 1L;
 

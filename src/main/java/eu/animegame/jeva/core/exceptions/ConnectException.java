@@ -1,6 +1,6 @@
 package eu.animegame.jeva.core.exceptions;
 
-public class ConnectException extends Exception {
+public class ConnectException extends JEvaException {
 
   public ConnectException() {
   }

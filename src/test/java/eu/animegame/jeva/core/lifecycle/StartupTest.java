@@ -21,7 +21,7 @@ class StartupTest {
   }
 
   @Test
-  public void testRunWithCorrectParameters() {
+  public void testParametersAreSet() {
     var config = buildConfig();
 
     when(handler.getConfiguration()).thenReturn(config);
@@ -32,7 +32,7 @@ class StartupTest {
 
   @ParameterizedTest
   @ValueSource(strings = {IrcHandler.PROP_NICK, IrcHandler.PROP_SERVER, IrcHandler.PROP_PORT})
-  public void testRunWithMissingParameters(String parameter) {
+  public void testParameterIsMissing(String parameter) {
     var config = buildConfig();
     config.remove(parameter);
 

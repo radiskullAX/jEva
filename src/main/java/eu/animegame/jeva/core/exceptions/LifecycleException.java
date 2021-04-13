@@ -1,6 +1,6 @@
 package eu.animegame.jeva.core.exceptions;
 
-public class LifecycleException extends Exception {
+public class LifecycleException extends JEvaException {
 
   private static final long serialVersionUID = 1L;
 

@@ -93,7 +93,7 @@ public class IrcHandler {
   }
 
   public void fireIrcEvent(IrcBaseEvent event) {
-
+    // TODO: implement
   }
 
   public void sendCommand(IrcCommand command) {
