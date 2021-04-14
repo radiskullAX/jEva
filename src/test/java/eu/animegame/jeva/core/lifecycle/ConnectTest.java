@@ -4,8 +4,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import java.util.Properties;
 import org.junit.jupiter.api.Test;
 import eu.animegame.jeva.core.IrcHandler;
+import eu.animegame.jeva.core.IrcHandlerPlugin;
 import eu.animegame.jeva.core.exceptions.ConnectException;
 
 class ConnectTest {
@@ -15,12 +17,19 @@ class ConnectTest {
   private LifecycleState state = new Connect();
 
   @Test
-  void testPluginsAreNoticed() {
+  void testSetNextLifecycle() {
     state.run(handler);
-
-    verify(handler).fireLifecycleState(any());
-
     LifecycleHelper.verifySetState(handler, Running.class);
+  }
+
+  @Test
+  void testPluginsAreNoticed() {
+    IrcHandler realHandler = new IrcHandler(new Properties());
+    IrcHandlerPlugin plugin = mock(IrcHandlerPlugin.class);
+    realHandler.addPlugin(plugin);
+    state.run(realHandler);
+
+    verify(plugin).connect(realHandler);
   }
 
   @Test

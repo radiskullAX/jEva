@@ -3,7 +3,6 @@ package eu.animegame.jeva.core.lifecycle;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.util.Properties;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -13,15 +12,10 @@ class StartupTest {
 
   private IrcHandler handler = mock(IrcHandler.class);
 
-  private LifecycleState state;
-
-  @BeforeEach
-  void init() {
-    state = new Startup();
-  }
+  private LifecycleState state = new Startup();
 
   @Test
-  public void testParametersAreSet() {
+  public void testSetNextLifecycle() {
     var config = buildConfig();
 
     when(handler.getConfiguration()).thenReturn(config);

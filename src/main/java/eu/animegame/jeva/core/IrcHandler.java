@@ -47,6 +47,8 @@ public class IrcHandler {
 
   private boolean stop = false;
 
+  private boolean started = false;
+
   public IrcHandler(Properties config) {
     this.config = config;
     this.state = new Startup();
@@ -64,9 +66,11 @@ public class IrcHandler {
   }
 
   public void start() {
+    started = true;
     do {
       state.run(this);
     } while (!isStopped());
+    started = false;
     // reset lifecycle in case we stopped unexpectedly
     setState(new Startup());
   }
@@ -77,6 +81,10 @@ public class IrcHandler {
 
   public void stop() {
     this.stop = true;
+  }
+
+  public boolean isRunning() {
+    return started;
   }
 
   public void addPlugin(IrcHandlerPlugin plugin) {
@@ -141,7 +149,8 @@ public class IrcHandler {
     try {
       entry.method.invoke(entry.plugin, event);
     } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-      e.printStackTrace();
+      LOG.warn("Could not invoke method '{}' for event '{}'", entry.method.getName(), event.getClass().getSimpleName(),
+          e);
     }
   }
 
