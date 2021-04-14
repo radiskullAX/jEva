@@ -2,6 +2,8 @@ package eu.animegame.jeva.core.exceptions;
 
 public class ConnectException extends JEvaException {
 
+  private static final long serialVersionUID = 1L;
+
   public ConnectException() {
   }
 

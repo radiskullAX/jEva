@@ -25,6 +25,11 @@ public final class ChannelMode implements IrcCommand {
     this(channel, setting, mode, null);
   }
 
+  /**
+   * channel modes specified in RFC 2811.
+   * 
+   * @see <a href="https://tools.ietf.org/html/rfc2811#section-4">RFC 2811 s 4</a>
+   */
   public ChannelMode(String channel, ModeSetting setting, String mode, String parameters) {
     this.channel = channel;
     this.setting = setting;

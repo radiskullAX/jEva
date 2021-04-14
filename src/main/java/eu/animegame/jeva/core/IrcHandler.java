@@ -1,10 +1,18 @@
 package eu.animegame.jeva.core;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.animegame.jeva.core.exceptions.ConnectException;
@@ -33,7 +41,11 @@ public class IrcHandler {
 
   private final Properties config;
 
+  private Map<String, List<CallbackEntry>> callbacks = new HashMap<>();
+
   private LifecycleState state;
+
+  private boolean stop = false;
 
   public IrcHandler(Properties config) {
     this.config = config;
@@ -54,11 +66,17 @@ public class IrcHandler {
   public void start() {
     do {
       state.run(this);
-    } while (!state.getClass().equals(Startup.class));
+    } while (!isStopped());
+    // reset lifecycle in case we stopped unexpectedly
+    setState(new Startup());
+  }
+
+  private boolean isStopped() {
+    return stop || state.getClass().equals(Startup.class) || Thread.interrupted();
   }
 
   public void stop() {
-    // TODO: implement
+    this.stop = true;
   }
 
   public void addPlugin(IrcHandlerPlugin plugin) {
@@ -80,7 +98,27 @@ public class IrcHandler {
   }
 
   public void lookup() {
-    // TODO: implement
+    callbacks = plugins.stream()
+        .map(this::toListOfCallbacks)
+        .flatMap(map -> map.entrySet().stream())
+        .collect(Collectors.toMap(Entry::getKey, Entry::getValue, this::mergeLists));
+
+    LOG.info("Found {} methods for {} irc commands", callbacks.values().stream().mapToInt(l -> l.size()).sum(),
+        callbacks.size());
+    LOG.debug("Commands are: {}", callbacks.keySet().stream().collect(Collectors.joining(",")));
+  }
+
+  private List<CallbackEntry> mergeLists(List<CallbackEntry> leftList, List<CallbackEntry> rightList) {
+    leftList.addAll(rightList);
+    return leftList;
+  }
+
+  private Map<String, List<CallbackEntry>> toListOfCallbacks(IrcHandlerPlugin plugin) {
+    return Stream.of(plugin.getClass().getMethods())
+        .filter(m -> Objects.nonNull(m.getAnnotation(IrcEventAcceptor.class)))
+        .map(m -> new CallbackEntry(plugin, m))
+        .collect(
+            Collectors.groupingBy(cbe -> cbe.method.getAnnotation(IrcEventAcceptor.class).command().toUpperCase()));
   }
 
   public void createConnection() throws ConnectException, Exception {
@@ -92,8 +130,19 @@ public class IrcHandler {
     return null;
   }
 
-  public void fireIrcEvent(IrcBaseEvent event) {
-    // TODO: implement
+  public void fireIrcEvent(final IrcBaseEvent event) {
+    List<CallbackEntry> entries = callbacks.get(event.getCommand());
+    if (entries != null) {
+      entries.stream().forEach(m -> invokeMethod(m, event));
+    }
+  }
+
+  private void invokeMethod(CallbackEntry entry, IrcBaseEvent event) {
+    try {
+      entry.method.invoke(entry.plugin, event);
+    } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+      e.printStackTrace();
+    }
   }
 
   public void sendCommand(IrcCommand command) {
@@ -102,4 +151,15 @@ public class IrcHandler {
     }
   }
 
+  private class CallbackEntry {
+
+    private final IrcHandlerPlugin plugin;
+
+    private final Method method;
+
+    public CallbackEntry(IrcHandlerPlugin plugin, Method method) {
+      this.plugin = plugin;
+      this.method = method;
+    }
+  }
 }
