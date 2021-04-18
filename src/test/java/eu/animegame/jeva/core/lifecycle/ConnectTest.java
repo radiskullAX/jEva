@@ -4,12 +4,16 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import java.util.Properties;
 import org.junit.jupiter.api.Test;
+import eu.animegame.jeva.core.Connection;
 import eu.animegame.jeva.core.IrcHandler;
 import eu.animegame.jeva.core.IrcHandlerPlugin;
 import eu.animegame.jeva.core.exceptions.ConnectException;
 
+/**
+ *
+ * @author radiskull
+ */
 class ConnectTest {
 
   private IrcHandler handler = mock(IrcHandler.class);
@@ -19,12 +23,13 @@ class ConnectTest {
   @Test
   void testSetNextLifecycle() {
     state.run(handler);
-    LifecycleHelper.verifySetState(handler, Running.class);
+    LifecycleHelper.verifySetState(handler, Read.class);
   }
 
   @Test
   void testPluginsAreNoticed() {
-    IrcHandler realHandler = new IrcHandler(new Properties());
+    Connection connection = mock(Connection.class);
+    IrcHandler realHandler = new IrcHandler(connection);
     IrcHandlerPlugin plugin = mock(IrcHandlerPlugin.class);
     realHandler.addPlugin(plugin);
     state.run(realHandler);
@@ -36,9 +41,9 @@ class ConnectTest {
   void testConnectSuccessful() throws ConnectException, Exception {
     state.run(handler);
 
-    verify(handler).createConnection();
+    verify(handler).connect();
 
-    LifecycleHelper.verifySetState(handler, Running.class);
+    LifecycleHelper.verifySetState(handler, Read.class);
   }
 
   @Test
@@ -52,7 +57,7 @@ class ConnectTest {
 
   @Test
   void testConnectfails() throws ConnectException, Exception {
-    doThrow(new ConnectException()).when(handler).createConnection();
+    doThrow(new ConnectException()).when(handler).connect();
 
     state.run(handler);
 
@@ -61,7 +66,7 @@ class ConnectTest {
 
   @Test
   void testConnectionfails() throws ConnectException, Exception {
-    doThrow(new Exception()).when(handler).createConnection();
+    doThrow(new Exception()).when(handler).connect();
 
     state.run(handler);
 

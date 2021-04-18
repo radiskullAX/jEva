@@ -6,6 +6,10 @@ import org.junit.jupiter.api.Test;
 import eu.animegame.jeva.core.IrcCommand;
 import eu.animegame.jeva.irc.ModeSetting;
 
+/**
+ *
+ * @author radiskull
+ */
 class IrcCommandTest {
 
   private static final String NICK = "Tester";

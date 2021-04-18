@@ -5,6 +5,10 @@ import org.slf4j.LoggerFactory;
 import eu.animegame.jeva.core.IrcHandler;
 import eu.animegame.jeva.core.exceptions.ConnectException;
 
+/**
+ *
+ * @author radiskull
+ */
 public class Connect implements LifecycleState {
 
   private static final Logger LOG = LoggerFactory.getLogger(Connect.class);
@@ -14,8 +18,8 @@ public class Connect implements LifecycleState {
     LOG.info("Try to establish connection");
 
     try {
-      context.createConnection();
-      context.setState(new Running());
+      context.connect();
+      context.setState(new Read());
       context.fireLifecycleState(p -> p.connect(context));
       LOG.info("Established a connection");
     } catch (ConnectException ce) {

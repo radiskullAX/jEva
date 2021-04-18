@@ -1,5 +1,9 @@
 package eu.animegame.jeva.core.exceptions;
 
+/**
+ *
+ * @author radiskull
+ */
 public class JEvaException extends Exception {
 
   private static final long serialVersionUID = 1L;

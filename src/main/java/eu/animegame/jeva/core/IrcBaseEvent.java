@@ -2,6 +2,10 @@ package eu.animegame.jeva.core;
 
 import java.util.Optional;
 
+/**
+ *
+ * @author radiskull
+ */
 public class IrcBaseEvent {
 
   private final Optional<String> prefix;
@@ -10,18 +14,25 @@ public class IrcBaseEvent {
 
   private final String parameters;
 
+  private final String source;
+
   public IrcBaseEvent(IrcBaseEvent event) {
-    this(event.getPrefix(), event.getCommand(), event.getParameters());
+    this(event.getPrefix(), event.getCommand(), event.getParameters(), event.getSource());
   }
 
-  public IrcBaseEvent(String prefix, String command, String parameters) {
-    this(Optional.ofNullable(prefix), command, parameters);
+  public IrcBaseEvent(String command, String parameters, String source) {
+    this(Optional.empty(), command, parameters, source);
   }
 
-  private IrcBaseEvent(Optional<String> prefix, String command, String parameters) {
+  public IrcBaseEvent(String prefix, String command, String parameters, String source) {
+    this(Optional.ofNullable(prefix), command, parameters, source);
+  }
+
+  private IrcBaseEvent(Optional<String> prefix, String command, String parameters, String source) {
     this.prefix = prefix;
     this.command = command;
     this.parameters = parameters;
+    this.source = source;
   }
 
   public Optional<String> getPrefix() {
@@ -37,9 +48,6 @@ public class IrcBaseEvent {
   }
 
   public String getSource() {
-    var source = new StringBuilder();
-    prefix.ifPresent(pre -> source.append(":").append(pre).append(" "));
-    source.append(command).append(" ").append(parameters);
-    return source.toString();
+    return source;
   }
 }

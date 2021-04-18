@@ -9,7 +9,7 @@ import eu.animegame.jeva.core.exceptions.UnknownFormatException;
  *
  * @author radiskull
  */
-public class IrcMessageParser {
+public class IrcCommandParser {
 
   /**
    * This pattern should match to all messages received from a server. Each group has a name, explained below.<br>
@@ -26,7 +26,7 @@ public class IrcMessageParser {
       Pattern.compile(
           "(?>:(?<prefix>[\\S]+)\\s)?(?<command>\\w+)\\s(?<parameters>.*)");
 
-  private IrcMessageParser() {}
+  private IrcCommandParser() {}
 
   public static IrcBaseEvent toIrcEvent(String message) throws JEvaException, UnknownFormatException {
     if (message == null) {
@@ -43,6 +43,6 @@ public class IrcMessageParser {
     var prefix = matcher.group("prefix");
     var command = matcher.group("command");
     var parameters = matcher.group("parameters");
-    return new IrcBaseEvent(prefix, command, parameters);
+    return new IrcBaseEvent(prefix, command, parameters, message);
   }
 }

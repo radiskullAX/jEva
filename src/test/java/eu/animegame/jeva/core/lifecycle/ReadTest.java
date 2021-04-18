@@ -10,16 +10,20 @@ import org.junit.jupiter.api.Test;
 import eu.animegame.jeva.core.IrcHandler;
 import eu.animegame.jeva.core.exceptions.ConnectException;
 
-class RunningTest {
+/**
+ *
+ * @author radiskull
+ */
+class ReadTest {
 
   private static final String MESSAGE = "PING :123456789";
 
   private IrcHandler handler = mock(IrcHandler.class);
 
-  private LifecycleState state = new Running();
+  private LifecycleState state = new Read();
 
   @Test
-  void testIrcEventIsFired() throws ConnectException {
+  void testIrcEventIsFired() throws ConnectException, Exception {
     when(handler.readCommand()).thenReturn(MESSAGE);
     state.run(handler);
 

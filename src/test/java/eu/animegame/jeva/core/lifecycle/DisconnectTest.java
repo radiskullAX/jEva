@@ -4,11 +4,15 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import java.util.Properties;
 import org.junit.jupiter.api.Test;
+import eu.animegame.jeva.core.Connection;
 import eu.animegame.jeva.core.IrcHandler;
 import eu.animegame.jeva.core.IrcHandlerPlugin;
 
+/**
+ *
+ * @author radiskull
+ */
 class DisconnectTest {
 
   private IrcHandler handler = mock(IrcHandler.class);
@@ -23,7 +27,8 @@ class DisconnectTest {
 
   @Test
   void testPluginsAreNoticed() {
-    IrcHandler realHandler = new IrcHandler(new Properties());
+    Connection connection = mock(Connection.class);
+    IrcHandler realHandler = new IrcHandler(connection);
     IrcHandlerPlugin plugin = mock(IrcHandlerPlugin.class);
     realHandler.addPlugin(plugin);
     state.run(realHandler);

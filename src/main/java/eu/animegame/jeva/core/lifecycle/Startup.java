@@ -5,6 +5,10 @@ import org.slf4j.LoggerFactory;
 import eu.animegame.jeva.core.IrcHandler;
 import eu.animegame.jeva.core.exceptions.LifecycleException;
 
+/**
+ *
+ * @author radiskull
+ */
 public class Startup implements LifecycleState {
 
   private static final Logger LOG = LoggerFactory.getLogger(Startup.class);

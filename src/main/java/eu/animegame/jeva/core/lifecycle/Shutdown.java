@@ -4,6 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.animegame.jeva.core.IrcHandler;
 
+/**
+ *
+ * @author radiskull
+ */
 public class Shutdown implements LifecycleState {
 
   private static final Logger LOG = LoggerFactory.getLogger(Connect.class);

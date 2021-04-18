@@ -1,7 +1,9 @@
 package eu.animegame.jeva;
 
 import java.util.Properties;
+import eu.animegame.jeva.core.Connection;
 import eu.animegame.jeva.core.IrcHandler;
+import eu.animegame.jeva.core.exceptions.ConnectException;
 
 /**
  *
@@ -39,7 +41,32 @@ public class ExampleMainClass {
     config.put(IrcHandler.PROP_SERVER, args[1]);
     config.put(IrcHandler.PROP_PORT, args[2]);
 
-    IrcHandler handler = new IrcHandler(config);
+    IrcHandler handler = new IrcHandler(config, new Connection() {
+
+      @Override
+      public boolean write(String msg) throws Exception {
+        return false;
+      }
+
+      @Override
+      public void setConfig(Properties config) {
+      }
+
+      @Override
+      public String read() throws ConnectException, Exception {
+        return null;
+      }
+
+      @Override
+      public boolean disconnect() throws Exception {
+        return false;
+      }
+
+      @Override
+      public boolean connect() throws ConnectException, Exception {
+        return false;
+      }
+    });
     handler.start();
     /*
      * GUICallback gui = new GUICallback(); gui.addPanel(new CallbackOverview()); InputPanel input = new InputPanel();

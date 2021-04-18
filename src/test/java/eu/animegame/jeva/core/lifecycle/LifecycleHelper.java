@@ -6,6 +6,10 @@ import static org.mockito.Mockito.verify;
 import org.mockito.ArgumentCaptor;
 import eu.animegame.jeva.core.IrcHandler;
 
+/**
+ *
+ * @author radiskull
+ */
 public class LifecycleHelper {
 
   private LifecycleHelper() {}

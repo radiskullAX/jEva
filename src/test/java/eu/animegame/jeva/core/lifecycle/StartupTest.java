@@ -8,6 +8,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import eu.animegame.jeva.core.IrcHandler;
 
+/**
+ *
+ * @author radiskull
+ */
 class StartupTest {
 
   private IrcHandler handler = mock(IrcHandler.class);

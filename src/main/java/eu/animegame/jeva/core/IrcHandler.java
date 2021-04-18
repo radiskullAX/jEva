@@ -41,16 +41,23 @@ public class IrcHandler {
 
   private final Properties config;
 
+  private final Connection connection;
+
   private Map<String, List<CallbackEntry>> callbacks = new HashMap<>();
 
   private LifecycleState state;
 
-  private boolean stop = false;
+  private boolean stopped = false;
 
   private boolean started = false;
 
-  public IrcHandler(Properties config) {
+  public IrcHandler(Connection connection) {
+    this(new Properties(), connection);
+  }
+
+  public IrcHandler(Properties config, Connection connection) {
     this.config = config;
+    this.connection = connection;
     this.state = new Startup();
     this.plugins = new ArrayList<>();
   }
@@ -65,22 +72,36 @@ public class IrcHandler {
     this.state = state;
   }
 
+  public String getState() {
+    return state.getClass().getSimpleName();
+  }
+
   public void start() {
-    started = true;
-    do {
-      state.run(this);
-    } while (!isStopped());
-    started = false;
-    // reset lifecycle in case we stopped unexpectedly
-    setState(new Startup());
+    try {
+      started = true;
+      do {
+        state.run(this);
+      } while (!isStopped());
+
+      // reset lifecycle in case we stopped unexpectedly
+      setState(new Startup());
+      started = false;
+      stopped = false;
+    } finally {
+      try {
+        connection.disconnect();
+      } catch (Exception e) {
+        LOG.warn("Failed to close connection", e);
+      }
+    }
   }
 
   private boolean isStopped() {
-    return stop || state.getClass().equals(Startup.class) || Thread.interrupted();
+    return stopped || state.getClass().equals(Startup.class) || Thread.interrupted();
   }
 
   public void stop() {
-    this.stop = true;
+    this.stopped = true;
   }
 
   public boolean isRunning() {
@@ -129,13 +150,26 @@ public class IrcHandler {
             Collectors.groupingBy(cbe -> cbe.method.getAnnotation(IrcEventAcceptor.class).command().toUpperCase()));
   }
 
-  public void createConnection() throws ConnectException, Exception {
-    // TODO: implement
+  public void connect() throws ConnectException, Exception {
+    connection.connect();
   }
 
-  public String readCommand() throws ConnectException {
-    // TODO: implement
-    return null;
+  public void disconnect() throws Exception {
+    connection.disconnect();
+  }
+
+  public String readCommand() throws ConnectException, Exception {
+    return connection.read();
+  }
+
+  public void sendCommand(IrcCommand command) {
+    if (command != null) {
+      try {
+      connection.write(command.build());
+      } catch (Exception e) {
+        LOG.warn("Could not send message to server", e);
+      }
+    }
   }
 
   public void fireIrcEvent(final IrcBaseEvent event) {
@@ -151,12 +185,6 @@ public class IrcHandler {
     } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
       LOG.warn("Could not invoke method '{}' for event '{}'", entry.method.getName(), event.getClass().getSimpleName(),
           e);
-    }
-  }
-
-  public void sendCommand(IrcCommand command) {
-    if (command != null) {
-      // connection.write(command.build());
     }
   }
 

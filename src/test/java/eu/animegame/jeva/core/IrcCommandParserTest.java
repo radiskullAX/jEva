@@ -9,7 +9,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 import eu.animegame.jeva.core.exceptions.JEvaException;
 import eu.animegame.jeva.core.exceptions.UnknownFormatException;
 
-class IrcMessageParserTest {
+/**
+ *
+ * @author radiskull
+ */
+class IrcCommandParserTest {
 
   private final static String MESSAGE = "This is a Testmessage";
 
@@ -23,11 +27,12 @@ class IrcMessageParserTest {
     var parameter = " :" + MESSAGE;
     var message = buildMessage(null, command, parameter);
 
-    var ircEvent = IrcMessageParser.toIrcEvent(message);
+    var ircEvent = IrcCommandParser.toIrcEvent(message);
 
     assertEquals(ircEvent.getPrefix(), Optional.empty());
     assertEquals(ircEvent.getCommand(), command);
     assertEquals(ircEvent.getParameters(), parameter);
+    assertEquals(ircEvent.getSource(), message);
   }
 
   @ParameterizedTest
@@ -35,11 +40,12 @@ class IrcMessageParserTest {
   void testParseCommands(String command) throws JEvaException, UnknownFormatException {
     var message = buildMessage(SERVER, command, MESSAGE);
 
-    var ircEvent = IrcMessageParser.toIrcEvent(message);
+    var ircEvent = IrcCommandParser.toIrcEvent(message);
 
     assertEquals(ircEvent.getPrefix().get(), SERVER);
     assertEquals(ircEvent.getCommand(), command);
     assertEquals(ircEvent.getParameters(), MESSAGE);
+    assertEquals(ircEvent.getSource(), message);
   }
 
   @ParameterizedTest
@@ -48,11 +54,12 @@ class IrcMessageParserTest {
   void testParsePrefix(String prefix) throws JEvaException, UnknownFormatException {
     var message = buildMessage(prefix, COMMAND, MESSAGE);
 
-    var ircEvent = IrcMessageParser.toIrcEvent(message);
+    var ircEvent = IrcCommandParser.toIrcEvent(message);
 
     assertEquals(ircEvent.getPrefix().get(), prefix);
     assertEquals(ircEvent.getCommand(), COMMAND);
     assertEquals(ircEvent.getParameters(), MESSAGE);
+    assertEquals(ircEvent.getSource(), message);
   }
 
   @ParameterizedTest
@@ -61,23 +68,24 @@ class IrcMessageParserTest {
   void testParseParameter(String parameter) throws JEvaException, UnknownFormatException {
     var message = buildMessage(SERVER, COMMAND, parameter);
 
-    var ircEvent = IrcMessageParser.toIrcEvent(message);
+    var ircEvent = IrcCommandParser.toIrcEvent(message);
 
     assertEquals(ircEvent.getPrefix().get(), SERVER);
     assertEquals(ircEvent.getCommand(), COMMAND);
     assertEquals(ircEvent.getParameters(), parameter);
+    assertEquals(ircEvent.getSource(), message);
   }
 
   @Test
   void testParseNoMessage() {
-    Assertions.assertThrows(JEvaException.class, () -> IrcMessageParser.toIrcEvent(null));
+    Assertions.assertThrows(JEvaException.class, () -> IrcCommandParser.toIrcEvent(null));
   }
 
   @Test
   void testParseMessageWithUnknownFormat() {
     var message = "Yolo!";
     var unknownMessage =
-        Assertions.assertThrows(UnknownFormatException.class, () -> IrcMessageParser.toIrcEvent(message))
+        Assertions.assertThrows(UnknownFormatException.class, () -> IrcCommandParser.toIrcEvent(message))
             .getUnknownMessage();
     assertEquals(message, unknownMessage);
   }
