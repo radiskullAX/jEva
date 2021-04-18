@@ -1,13 +1,9 @@
-package eu.animegame.jeva.interfaces;
+package eu.animegame.jeva.core;
 
 /**
  * @author radiskull
  */
 public interface IrcHandlerPlugin {
-
-	public void registerCallbackEvents(IrcHandler handler);
-
-	public void unregisterCallbackEvents(IrcHandler handler);
 
     /**
      * Register this plugin as a service for other plugins within the bot to use.<br>
@@ -18,4 +14,12 @@ public interface IrcHandlerPlugin {
     public default boolean registerAsService() {
       return false;
     }
+
+    public default void initialize(IrcHandler handler) {};
+
+    public default void connect(IrcHandler handler) {};
+
+    public default void disconnect(IrcHandler handler) {};
+
+    public default void shutdown(IrcHandler handler) {};
 }

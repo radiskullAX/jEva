@@ -1,7 +1,6 @@
-package eu.animegame.jeva.poc;
+package eu.animegame.jeva.core;
 
 import static java.lang.annotation.ElementType.METHOD;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -12,6 +11,8 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(METHOD)
-public @interface IrcEvent {
-	String type() default "";
+public @interface IrcEventAcceptor {
+	String command() default "";
+
+    Class<? extends IrcBaseEvent> clazz() default IrcBaseEvent.class;
 }

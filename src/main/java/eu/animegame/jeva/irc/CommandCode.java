@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package eu.animegame.jeva.utils;
+package eu.animegame.jeva.irc;
 
 /**
  *
  * @author radiskull
  */
-public class IrcCommandCode {
+public class CommandCode {
 
 	public final static int RPL_WELCOME = 1;
 	public final static int RPL_YOURHOST = 2;
