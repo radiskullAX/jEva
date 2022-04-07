@@ -27,6 +27,8 @@ public class IrcHandler {
 
   public final static String PROP_NICK = "jeva.irc.nick";
 
+  public final static String PROP_PASSWORD = "jeva.irc.password";
+
   public final static String PROP_REAL_NAME = "jeva.irc.realName";
 
   public final static String PROP_SERVER = "jeva.irc.server";

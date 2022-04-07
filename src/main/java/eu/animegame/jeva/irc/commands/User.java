@@ -10,18 +10,18 @@ public final class User implements IrcCommand {
 
   private final String nick;
 
-  private final int mode;
+  private final String mode;
 
   private final String realName;
 
   /**
-   * modes: 2 (w) / 4 (i) / 6 (wi)
+   * modes: 4 (w) / 8 (i) / 12 (wi)
    * 
    * @param nick
    * @param mode
    * @param realName
    */
-  public User(String nick, int mode, String realName) {
+  public User(String nick, String mode, String realName) {
     this.nick = nick;
     this.mode = mode;
     this.realName = realName;

@@ -1,96 +1,65 @@
 package eu.animegame.jeva.plugins;
 
-import java.util.regex.Pattern;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import eu.animegame.jeva.events.IrcHandlerEvent;
-import eu.animegame.jeva.events.IrcHandlerEventType;
-import eu.animegame.jeva.interfaces.IrcEventCallback;
-import eu.animegame.jeva.interfaces.IrcHandler;
-import eu.animegame.jeva.interfaces.IrcHandlerPlugin;
-import eu.animegame.jeva.utils.RegexHelper;
-import eu.animegame.jeva.utils.StringHelper;
+import eu.animegame.jeva.core.IrcEventAcceptor;
+import eu.animegame.jeva.core.IrcHandler;
+import eu.animegame.jeva.core.IrcHandlerPlugin;
+import eu.animegame.jeva.irc.commands.Join;
+import eu.animegame.jeva.irc.commands.Part;
+import eu.animegame.jeva.irc.events.PrivMsgEvent;
 
 /**
  *
  * @author radiskull
  */
-public class BotControllPlugin implements IrcEventCallback, IrcHandlerPlugin {
+public class BotControllPlugin implements IrcHandlerPlugin {
 
-	protected static Logger LOG = LoggerFactory.getLogger(BotControllPlugin.class);
-	private static final Pattern COMMAND_PATTERN = Pattern.compile("^:@(join|quit|leave|say|disconnect).*");
-	private static final Pattern SAY_PARSE_PATTERN = Pattern.compile("^:@say\\s(#[\\p{Punct}\\w]+)\\s(.+)");
-	protected String quitMessage;
-	protected String joinMessage;
-	protected String leaveMessage;
+  protected static Logger LOG = LoggerFactory.getLogger(BotControllPlugin.class);
 
-	public BotControllPlugin() {
-		this("", "", "");
-	}
+  @IrcEventAcceptor(command = "PRIVMSG", clazz = PrivMsgEvent.class)
+  public void parseInput(PrivMsgEvent event, IrcHandler handler) {
+    if (event.getMessage().startsWith("!")) {
+      var message = event.getMessage();
+      var index = message.indexOf(0x20);
+      var command = message.substring(1, index);
+      executeCommand(command, event, handler);
+    }
+  }
 
-	public BotControllPlugin(String quitMessage, String joinMessage, String leaveMessage) {
-		this.quitMessage = quitMessage;
-		this.joinMessage = joinMessage;
-		this.leaveMessage = leaveMessage;
-	}
+  private void executeCommand(String command, PrivMsgEvent event, IrcHandler handler) {
+    switch (command) {
+      case "leave":
+        executeLeave(handler, event);
+        break;
+      case "quit":
+        executeQuit(handler, event);
+        break;
+      case "join":
+        executeJoin(handler, event);
+        break;
+    }
+  }
 
-	@Override
-	public void callback(IrcHandlerEvent ie) {
-		String command = RegexHelper.parseString(COMMAND_PATTERN, ie.getMessage());
-		if (!command.isEmpty()) {
-			LOG.trace("Found matching command \"{}\" continue parsing", command);
-			parseInput(command, ie);
-		}
-	}
+  private void executeJoin(IrcHandler handler, PrivMsgEvent event) {
+    var message = event.getMessage();
+    var firstSpace = message.indexOf(0x20);
+    var channels = message.substring(firstSpace);
+    // TODO: this has to be done better
+    handler.sendCommand(new Join(channels));
+    LOG.info("joining channel(s) {} on command of user {}", channels, event.getNickname());
+  }
 
-	public void parseInput(String command, IrcHandlerEvent ie) {
-		switch (command) {
-		case "leave": {
-			ie.getHandler().sendPart(ie.getChannel(), leaveMessage);
-			LOG.info("leaving channel {} on command of user {}", ie.getChannel(), ie.getSender());
-		}
-			break;
-		case "quit": {
-			LOG.info("quit irc on command of user {}", ie.getSender());
-			ie.getHandler().sendQuit(quitMessage);
-		}
-			break;
-		case "join": {
-			String channel = StringHelper.split(ie.getMessage(), " ")[1];
-			ie.getHandler().sendJoin(channel, joinMessage);
-			LOG.info("joining channel {} on command of user {}", channel, ie.getSender());
-		}
-			break;
-		case "disconnect": {
-			LOG.info("recieved hardkill command from user {}", ie.getSender());
-			ie.getHandler().disconnect();
-		}
-			break;
-		case "say": {
-			String[] data = RegexHelper.parseStringGroups(SAY_PARSE_PATTERN, ie.getMessage());
-			if (data.length > 1) {
-				String channel = data[0];
-				String message = data[1];
-				ie.getHandler().sendPrivMsg(channel, message);
-				LOG.info("user {} tells me to say the following message \"{}\" in the channel {}", ie.getSender(),
-						message, channel);
-			} else {
-				ie.getHandler().sendPrivMsg(ie.getSender(), "incorrect Input!");
-			}
-		}
-			break;
-		}
-	}
+  private void executeQuit(IrcHandler handler, PrivMsgEvent event) {
+    // TODO: have to think about it.
+    handler.stop();
+    LOG.info("quit irc on command of user {}", event.getNickname());
+  }
 
-	@Override
-	public void registerCallbackEvents(IrcHandler handler) {
-		handler.addIrcEventCallback(IrcHandlerEventType.PRIVMSG, this);
-	}
+  private void executeLeave(IrcHandler handler, PrivMsgEvent event) {
+    handler.sendCommand(new Part(event.getChannel()));
+    LOG.info("leaving channel {} on command of user {}", event.getChannel(), event.getNickname());
+  }
 
-	@Override
-	public void unregisterCallbackEvents(IrcHandler handler) {
-		handler.removeIrcEventCallback(IrcHandlerEventType.PRIVMSG, this);
-	}
+
 }

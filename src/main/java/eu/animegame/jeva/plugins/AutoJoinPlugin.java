@@ -1,13 +1,16 @@
 package eu.animegame.jeva.plugins;
 
+import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import eu.animegame.jeva.events.IrcHandlerEvent;
-import eu.animegame.jeva.events.IrcHandlerEventType;
-import eu.animegame.jeva.interfaces.IrcEventCallback;
-import eu.animegame.jeva.interfaces.IrcHandler;
-import eu.animegame.jeva.interfaces.IrcHandlerPlugin;
+import eu.animegame.jeva.core.IrcBaseEvent;
+import eu.animegame.jeva.core.IrcEventAcceptor;
+import eu.animegame.jeva.core.IrcHandler;
+import eu.animegame.jeva.core.IrcHandlerPlugin;
+import eu.animegame.jeva.irc.CommandCode;
+import eu.animegame.jeva.irc.commands.Join;
+import eu.animegame.jeva.irc.events.InviteEvent;
+import eu.animegame.jeva.irc.events.KickEvent;
 
 /**
  *
@@ -15,64 +18,35 @@ import eu.animegame.jeva.interfaces.IrcHandlerPlugin;
  */
 public class AutoJoinPlugin implements IrcHandlerPlugin {
 
-	protected static Logger LOG = LoggerFactory.getLogger(AutoJoinPlugin.class);
-	private String[] channels;
-	private ConnectedCallback autoConnect;
-	private InviteCallback autoInvite;
-	private KickCallback autoRejoin;
+  private static Logger LOG = LoggerFactory.getLogger(AutoJoinPlugin.class);
 
-	public AutoJoinPlugin(String... channel) {
-		this.channels = channel;
-		autoConnect = new ConnectedCallback();
-		autoInvite = new InviteCallback();
-		autoRejoin = new KickCallback();
-	}
+  private String[] channels;
 
-	@Override
-	public void registerCallbackEvents(IrcHandler handler) {
-		handler.addIrcEventCallback(IrcHandlerEventType.CONNECTED, autoConnect);
-		handler.addIrcEventCallback(IrcHandlerEventType.KICK, autoRejoin);
-		handler.addIrcEventCallback(IrcHandlerEventType.INVITE, autoInvite);
-	}
+  public AutoJoinPlugin(String... channel) {
+    this.channels = channel;
+  }
 
-	@Override
-	public void unregisterCallbackEvents(IrcHandler handler) {
-		handler.removeIrcEventCallback(IrcHandlerEventType.CONNECTED, autoConnect);
-		handler.removeIrcEventCallback(IrcHandlerEventType.KICK, autoRejoin);
-		handler.removeIrcEventCallback(IrcHandlerEventType.INVITE, autoInvite);
-	}
+  @IrcEventAcceptor(command = CommandCode.RPL_WELCOME)
+  public void joinChannels(IrcBaseEvent event, IrcHandler handler) {
+    LOG.info("Joining Channels {}", Arrays.toString(channels));
+    handler.sendCommand(new Join(channels));
+  }
 
-	class ConnectedCallback implements IrcEventCallback {
+  @IrcEventAcceptor(command = "KICK", clazz = KickEvent.class)
+  public void rejoinChannel(KickEvent event, IrcHandler handler) {
+    var nick = handler.getConfiguration().getProperty(IrcHandler.PROP_NICK);
+    if (nick.equals(event.getKickedUser())) {
+      LOG.info("Kicked from channel {}, trying to rejoin", event.getChannel());
+      handler.sendCommand(new Join(event.getChannel()));
+    }
+  }
 
-		@Override
-		public void callback(IrcHandlerEvent ie) {
-			for (String channel : channels) {
-				channel = channel.startsWith("#") ? channel : "#" + channel;
-				ie.getHandler().sendJoin(channel, "");
-				LOG.info("Joining Channel {}.", channel);
-			}
-		}
-	}
-
-	class InviteCallback implements IrcEventCallback {
-
-		@Override
-		public void callback(IrcHandlerEvent ie) {
-			LOG.info("Got invitation from {} joining channel {}.", ie.getSender(), ie.getChannel());
-			ie.getHandler().sendJoin(ie.getChannel(), "");
-		}
-
-	}
-
-	class KickCallback implements IrcEventCallback {
-
-		@Override
-		public void callback(IrcHandlerEvent ie) {
-			if (ie.getMessage().contains(ie.getHandler().getNick())) {
-				LOG.info("Kicked from channel {}, rejoin immediately.", ie.getChannel());
-				ie.getHandler().sendJoin(ie.getChannel(), "");
-			}
-		}
-
-	}
+  @IrcEventAcceptor(command = "INVITE", clazz = InviteEvent.class)
+  public void joinInvitation(InviteEvent event, IrcHandler handler) {
+    var nick = handler.getConfiguration().getProperty(IrcHandler.PROP_NICK);
+    if (nick.equals(event.getInvitedUser())) {
+      LOG.info("Received invitation from {}, joining channel {}", event.getNickname(), event.getChannel());
+      handler.sendCommand(new Join(event.getChannel()));
+    }
+  }
 }

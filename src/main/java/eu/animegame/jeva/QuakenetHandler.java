@@ -1,27 +1,15 @@
 package eu.animegame.jeva;
 
 import java.util.Properties;
-
 import eu.animegame.jeva.events.IrcHandlerEvent;
 import eu.animegame.jeva.events.IrcHandlerEventType;
 import eu.animegame.jeva.interfaces.Connection;
-import eu.animegame.jeva.plugins.AuthenticationPlugin;
-import eu.animegame.jeva.plugins.CloseConnectionPlugin;
-import eu.animegame.jeva.plugins.ConnectPlugin;
-import eu.animegame.jeva.plugins.NickChangePlugin;
-import eu.animegame.jeva.plugins.PingPlugin;
 
 /**
  *
  * @author radiskull
  */
 public class QuakenetHandler extends AbstractIrcHandler {
-
-	private ConnectPlugin connectPlugin = new ConnectPlugin();
-	private PingPlugin pingPlugin = new PingPlugin();
-	private NickChangePlugin nickChangePlugin = new NickChangePlugin();
-	private AuthenticationPlugin authenticationPlugin = new AuthenticationPlugin();
-	private CloseConnectionPlugin closeConnectionPlugin = new CloseConnectionPlugin();
 
 	public QuakenetHandler(Connection connection, Properties props) {
 		super(connection, props);
@@ -72,11 +60,11 @@ public class QuakenetHandler extends AbstractIrcHandler {
 	}
 
 	private void registerPlugins() {
-		addIrcHandlerPlugin(connectPlugin);
-		addIrcHandlerPlugin(closeConnectionPlugin);
-		addIrcHandlerPlugin(nickChangePlugin);
-		addIrcHandlerPlugin(pingPlugin);
-		addIrcHandlerPlugin(authenticationPlugin);
+      // addIrcHandlerPlugin(connectPlugin);
+        // addIrcHandlerPlugin(closeConnectionPlugin);
+        // addIrcHandlerPlugin(nickChangePlugin);
+        // addIrcHandlerPlugin(pingPlugin);
+        // addIrcHandlerPlugin(authenticationPlugin);
 	}
 
 	private void unregisterAllPlugins() {

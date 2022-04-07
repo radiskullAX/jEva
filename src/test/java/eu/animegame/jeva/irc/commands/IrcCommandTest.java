@@ -51,7 +51,7 @@ class IrcCommandTest {
   @Test
   void testBuildUser() {
     var realName = "Real Tester";
-    var mode = 4;
+    var mode = "4";
 
     command = new User(NICK, mode, realName);
     expected = "USER " + NICK + " " + mode + " * :" + realName;
