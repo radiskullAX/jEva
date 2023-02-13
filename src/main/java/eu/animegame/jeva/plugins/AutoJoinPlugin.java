@@ -16,12 +16,15 @@ import eu.animegame.jeva.irc.events.KickEvent;
  *
  * @author radiskull
  */
+// TODO: Make 3 plugins out of this one
+@Deprecated
 public class AutoJoinPlugin implements IrcHandlerPlugin {
 
   private static Logger LOG = LoggerFactory.getLogger(AutoJoinPlugin.class);
 
   private String[] channels;
 
+  // TODO: also have a look into the config file (probably in the initialize lifecycle)
   public AutoJoinPlugin(String... channel) {
     this.channels = channel;
   }

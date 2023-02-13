@@ -20,4 +20,6 @@ public enum ModeSetting {
   public String getValue() {
     return value;
   }
+
+  // TODO: overwrite toString() and return the right value
 }

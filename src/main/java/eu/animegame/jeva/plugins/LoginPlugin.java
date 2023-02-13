@@ -1,20 +1,45 @@
 package eu.animegame.jeva.plugins;
 
+import java.util.Properties;
 import eu.animegame.jeva.core.IrcHandler;
 import eu.animegame.jeva.core.IrcHandlerPlugin;
+import eu.animegame.jeva.core.lifecycle.Initialize;
 import eu.animegame.jeva.irc.commands.Nick;
 import eu.animegame.jeva.irc.commands.Pass;
 import eu.animegame.jeva.irc.commands.User;
 
 /**
  *
- * First step: send PASS if necessary<br>
- * Second step: send IRC nickname<br>
- * Third step: send user information<br>
+ * This plugin initializes a connection to an irc server by sending credentials.<br>
+ * In the {@link Initialize} lifecycle, following parameters from the config will be checked: <br>
+ * <ul>
+ * <li>eva.irc.nick</li>
+ * <li>jeva.irc.server</li>
+ * <li>jeva.irc.port</li>
+ * </ul>
+ * If either one of those parameters is not set, a {@link RuntimeException} will be thrown and ending the whole
+ * lifecycle.<br>
  * 
  * @author radiskull
  */
 public class LoginPlugin implements IrcHandlerPlugin {
+
+  @Override
+  public void initialize(IrcHandler handler) {
+    var config = handler.getConfiguration();
+    // TODO: Create a own configuration class, have all parameters and validation methods in there
+    validateProperty(IrcHandler.PROP_NICK, config);
+    validateProperty(IrcHandler.PROP_SERVER, config);
+    validateProperty(IrcHandler.PROP_PORT, config);
+  }
+
+  private void validateProperty(String parameter, Properties config) {
+    var value = config.getProperty(parameter);
+    if (value == null || value.isBlank()) {
+      // TODO: Throw a better exception, think about exception hierarchy
+      throw new RuntimeException("Parameter '" + parameter + "' is not set! Please set the property in the config");
+    }
+  }
 
   @Override
   public void connect(IrcHandler handler) {
@@ -25,9 +50,10 @@ public class LoginPlugin implements IrcHandlerPlugin {
     var mode = config.getProperty(IrcHandler.PROP_MODE, "8");
     var realName = config.getProperty(IrcHandler.PROP_REAL_NAME, "jEva");
 
-    if (password != null) {
+    if (password != null && !password.isBlank()) {
       handler.sendCommand(new Pass(password));
     }
+    // TODO: handling problems when the nick is already in use
     handler.sendCommand(new Nick(nick));
     handler.sendCommand(new User(nick, mode, realName));
   }

@@ -3,21 +3,24 @@ package eu.animegame.jeva.plugins;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import eu.animegame.jeva.core.IrcBaseEvent;
 import eu.animegame.jeva.core.IrcHandler;
 import eu.animegame.jeva.irc.commands.Pong;
 
-class PingPluginTest {
+class PingPluginTest extends PluginBaseTest<PingPlugin> {
 
-  PingPlugin plugin = new PingPlugin();
+  @BeforeEach
+  void before() {
+    plugin = new PingPlugin();
+    handler = mock(IrcHandler.class);
+  }
 
   @Test
-  void test() {
+  void sendSuccessfulPong() {
     IrcBaseEvent event = new IrcBaseEvent("PING", "1234", "source");
-    IrcHandler handler = mock(IrcHandler.class);
-
     plugin.sendPong(event, handler);
 
     ArgumentCaptor<Pong> captor = ArgumentCaptor.forClass(Pong.class);

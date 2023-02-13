@@ -13,9 +13,11 @@ import eu.animegame.jeva.irc.events.PrivMsgEvent;
  *
  * @author radiskull
  */
-public class BotControllPlugin implements IrcHandlerPlugin {
+// TODO: probably remove this plugin completely
+@Deprecated
+public class BotControlPlugin implements IrcHandlerPlugin {
 
-  protected static Logger LOG = LoggerFactory.getLogger(BotControllPlugin.class);
+  protected static Logger LOG = LoggerFactory.getLogger(BotControlPlugin.class);
 
   @IrcEventAcceptor(command = "PRIVMSG", clazz = PrivMsgEvent.class)
   public void parseInput(PrivMsgEvent event, IrcHandler handler) {
@@ -51,7 +53,7 @@ public class BotControllPlugin implements IrcHandlerPlugin {
   }
 
   private void executeQuit(IrcHandler handler, PrivMsgEvent event) {
-    // TODO: have to think about it.
+    // TODO: Easiest way would be to throw an exception to the lifecycle
     handler.stop();
     LOG.info("quit irc on command of user {}", event.getNickname());
   }
