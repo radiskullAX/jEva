@@ -16,8 +16,8 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.animegame.jeva.core.exceptions.ConnectException;
+import eu.animegame.jeva.core.lifecycle.Initialize;
 import eu.animegame.jeva.core.lifecycle.LifecycleState;
-import eu.animegame.jeva.core.lifecycle.Startup;
 
 /**
  *
@@ -60,7 +60,7 @@ public class IrcHandler {
   public IrcHandler(Properties config, Connection connection) {
     this.config = config;
     this.connection = connection;
-    this.state = new Startup();
+    this.state = new Initialize();
     this.plugins = new ArrayList<>();
   }
 
@@ -86,7 +86,7 @@ public class IrcHandler {
       } while (!isStopped());
 
       // reset lifecycle in case we stopped unexpectedly
-      setState(new Startup());
+      setState(new Initialize());
       started = false;
       stopped = false;
     } finally {
@@ -99,7 +99,7 @@ public class IrcHandler {
   }
 
   private boolean isStopped() {
-    return stopped || state.getClass().equals(Startup.class) || Thread.interrupted();
+    return stopped || state.getClass().equals(Initialize.class) || Thread.interrupted();
   }
 
   public void stop() {
@@ -128,6 +128,7 @@ public class IrcHandler {
     plugins.forEach(consumer);
   }
 
+  // TODO: maybe do this when a plugin gets registered, this will be needed for plug & play
   public void lookup() {
     callbacks = plugins.stream()
         .map(this::toListOfCallbacks)

@@ -14,7 +14,8 @@ public class Initialize implements LifecycleState {
 
   @Override
   public void run(IrcHandler context) {
-    LOG.info("Looking up and initialize plugins");
+    LOG.info("Engine startup");
+    LOG.info("Looking up and initializing plugins");
 
     try {
       context.lookup();

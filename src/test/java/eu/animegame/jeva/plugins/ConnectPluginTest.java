@@ -1,8 +1,8 @@
 package eu.animegame.jeva.plugins;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -17,14 +17,17 @@ import org.mockito.ArgumentCaptor;
 import eu.animegame.jeva.core.IrcCommand;
 import eu.animegame.jeva.core.IrcHandler;
 
-class LoginPluginTest extends PluginBaseTest<LoginPlugin> {
+class ConnectPluginTest extends PluginBaseTest<ConnectPlugin> {
 
   private Properties config;
 
+  public ConnectPluginTest() {
+    plugin = new ConnectPlugin();
+    handler = mock(IrcHandler.class);
+  }
+
   @BeforeEach
   void before() {
-    plugin = new LoginPlugin();
-    handler = mock(IrcHandler.class);
     config = buildConfig();
     doReturn(config).when(handler).getConfiguration();
   }
@@ -41,7 +44,20 @@ class LoginPluginTest extends PluginBaseTest<LoginPlugin> {
   }
 
   @Test
-  void sendSuccessfulAuthWithoutPassword() {
+  void connect() {
+    plugin.connect(handler);
+
+    ArgumentCaptor<IrcCommand> commandCaptor = ArgumentCaptor.forClass(IrcCommand.class);
+    verify(handler, times(3)).sendCommand(commandCaptor.capture());
+
+    List<IrcCommand> commands = commandCaptor.getAllValues();
+    assertEquals("PASS SuperSecret", commands.get(0).build());
+    assertEquals("NICK TestBot", commands.get(1).build());
+    assertEquals("USER TestBot 12 * :TestUser", commands.get(2).build());
+  }
+
+  @Test
+  void connectWithoutPassword() {
     config.remove(IrcHandler.PROP_PASSWORD);
     plugin.connect(handler);
 
@@ -54,7 +70,7 @@ class LoginPluginTest extends PluginBaseTest<LoginPlugin> {
   }
 
   @Test
-  void sendSuccessfulAuthWithStandardValues() {
+  void connectWithStandardValues() {
     config.remove(IrcHandler.PROP_PASSWORD);
     config.remove(IrcHandler.PROP_MODE);
     config.remove(IrcHandler.PROP_REAL_NAME);
@@ -69,39 +85,23 @@ class LoginPluginTest extends PluginBaseTest<LoginPlugin> {
   }
 
   @Test
-  void sendSuccessfulAuth() {
-    plugin.connect(handler);
-
-    ArgumentCaptor<IrcCommand> commandCaptor = ArgumentCaptor.forClass(IrcCommand.class);
-    verify(handler, times(3)).sendCommand(commandCaptor.capture());
-
-    List<IrcCommand> commands = commandCaptor.getAllValues();
-    assertEquals("PASS SuperSecret", commands.get(0).build());
-    assertEquals("NICK TestBot", commands.get(1).build());
-    assertEquals("USER TestBot 12 * :TestUser", commands.get(2).build());
+  void initialize() {
+    assertDoesNotThrow(() -> plugin.initialize(handler));
   }
 
   @ParameterizedTest
   @ValueSource(strings = {IrcHandler.PROP_NICK, IrcHandler.PROP_SERVER, IrcHandler.PROP_PORT})
-  void throwExceptionForNullConfigParameter(String param) {
-    try {
-      config.remove(param);
-      plugin.initialize(handler);
-      fail("Expected Exception was not thrown");
-    } catch (RuntimeException e) {
-      assertNotNull(e);
-    }
+  void initializeWithNullProperties(String param) {
+    config.remove(param);
+
+    assertThrows(RuntimeException.class, () -> plugin.initialize(handler));
   }
 
   @ParameterizedTest
   @ValueSource(strings = {IrcHandler.PROP_NICK, IrcHandler.PROP_SERVER, IrcHandler.PROP_PORT})
-  void throwExceptionForEmptyConfigParameter(String param) {
-    try {
-      config.put(param, "");
-      plugin.initialize(handler);
-      fail("Expected Exception was not thrown");
-    } catch (RuntimeException e) {
-      assertNotNull(e);
-    }
+  void initializeWithEmptyProperties(String param) {
+    config.put(param, "");
+
+    assertThrows(RuntimeException.class, () -> plugin.initialize(handler));
   }
 }

@@ -2,6 +2,7 @@ package eu.animegame.jeva.irc.commands;
 
 import static java.util.stream.Collectors.joining;
 import java.util.Arrays;
+import java.util.List;
 import eu.animegame.jeva.core.IrcCommand;
 
 /**
@@ -15,15 +16,19 @@ public final class Join implements IrcCommand {
   private final String password;
 
   public Join() {
-    this("0", null);
+    this("0", "");
   }
 
   public Join(String channel) {
-    this(channel, null);
+    this(channel, "");
   }
 
   public Join(String[] channels) {
-    this(Arrays.stream(channels).collect(joining(",")), null);
+    this(Arrays.stream(channels).collect(joining(",")), "");
+  }
+
+  public Join(List<String> channels) {
+    this(channels.stream().collect(joining(",")), "");
   }
 
   /**
@@ -36,6 +41,16 @@ public final class Join implements IrcCommand {
     this(Arrays.stream(channels).collect(joining(",")), Arrays.stream(passwords).collect(joining(",")));
   }
 
+  /**
+   * channels with passwords should come first
+   * 
+   * @param channels
+   * @param keys
+   */
+  public Join(List<String> channels, List<String> passwords) {
+    this(channels.stream().collect(joining(",")), passwords.stream().collect(joining(",")));
+  }
+
   public Join(String channel, String password) {
     this.channel = channel;
     this.password = password;
@@ -45,7 +60,7 @@ public final class Join implements IrcCommand {
   public String build() {
     var command = new StringBuilder();
     command.append("JOIN ").append(channel);
-    if (password != null) {
+    if (!password.isBlank()) {
       command.append(" ").append(password);
     }
     return command.toString();

@@ -21,6 +21,6 @@ public class Shutdown implements LifecycleState {
       LOG.error("Failed to shut down plugins", e);
     }
     LOG.info("Engine stopped");
-    context.setState(new Startup());
+    context.setState(new Initialize());
   }
 }

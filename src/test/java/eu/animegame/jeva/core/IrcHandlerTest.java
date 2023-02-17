@@ -16,9 +16,9 @@ import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import eu.animegame.jeva.core.lifecycle.Initialize;
 import eu.animegame.jeva.core.lifecycle.LifecycleState;
 import eu.animegame.jeva.core.lifecycle.Shutdown;
-import eu.animegame.jeva.core.lifecycle.Startup;
 import eu.animegame.jeva.irc.commands.Pong;
 
 /**
@@ -27,7 +27,7 @@ import eu.animegame.jeva.irc.commands.Pong;
  */
 class IrcHandlerTest {
 
-  private static final String STARTUP_STATE = "Startup";
+  private static final String STARTUP_STATE = "Initialize";
 
   private IrcHandler handler;
 
@@ -202,7 +202,7 @@ class IrcHandlerTest {
     Thread.sleep(10);
 
     assertEquals(true, handler.isRunning());
-    handler.setState(new Startup());
+    handler.setState(new Initialize());
     countDownLatch.await();
     assertEquals(false, handler.isRunning());
   }

@@ -22,7 +22,7 @@ class ShutdownTest {
   @Test
   void testSetNextLifecycle() {
     state.run(handler);
-    LifecycleHelper.verifySetState(handler, Startup.class);
+    LifecycleHelper.verifySetState(handler, Initialize.class);
   }
 
   @Test
@@ -42,6 +42,6 @@ class ShutdownTest {
 
     state.run(handler);
 
-    LifecycleHelper.verifySetState(handler, Startup.class);
+    LifecycleHelper.verifySetState(handler, Initialize.class);
   }
 }
