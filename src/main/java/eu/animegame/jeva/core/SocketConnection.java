@@ -49,8 +49,8 @@ public class SocketConnection implements Connection {
   @Override
   public boolean connect() throws ConnectException, Exception {
     try {
-      var address = config.getProperty(IrcHandler.PROP_SERVER);
-      var port = Integer.parseInt(config.getProperty(IrcHandler.PROP_PORT));
+      var address = config.getProperty(IrcConfig.PROP_SERVER);
+      var port = Integer.parseInt(config.getProperty(IrcConfig.PROP_PORT));
       LOG.debug("Create socket for address \"{}:{}\"", address, port);
 
       socket = createSocket(address, port);

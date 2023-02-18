@@ -1,6 +1,8 @@
 package eu.animegame.jeva.plugins;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -9,11 +11,16 @@ import java.util.Properties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import eu.animegame.jeva.core.IrcConfig;
 import eu.animegame.jeva.core.IrcHandler;
+import eu.animegame.jeva.core.exceptions.InitializationException;
+import eu.animegame.jeva.core.exceptions.MissingParameterException;
 import eu.animegame.jeva.irc.commands.Join;
 import eu.animegame.jeva.irc.events.KickEvent;
 
 class ReJoinPluginTest extends PluginBaseTest<ReJoinPlugin> {
+
+  private static final String NICK = IrcConfig.PROP_NICK;
 
   private static final String USER = "IrcBot";
 
@@ -21,23 +28,26 @@ class ReJoinPluginTest extends PluginBaseTest<ReJoinPlugin> {
 
   private KickEvent event;
 
-  private Properties config;
+  private Properties properties;
+
+  private IrcConfig config;
 
   private ReJoinPluginTest() {
     plugin = new ReJoinPlugin();
+    properties = new Properties();
+    config = new IrcConfig();
     handler = mock(IrcHandler.class);
     event = mock(KickEvent.class);
-    config = new Properties();
   }
 
   @BeforeEach
   void before() {
-    config.put(IrcHandler.PROP_NICK, USER);
+    properties.put(NICK, USER);
   }
 
   @Test
   void rejoinChannel() {
-    when(handler.getConfiguration()).thenReturn(config);
+    when(handler.getConfigProperties()).thenReturn(properties);
     when(event.getKickedUser()).thenReturn(USER);
     when(event.getChannel()).thenReturn(CHANNEL);
 
@@ -53,7 +63,7 @@ class ReJoinPluginTest extends PluginBaseTest<ReJoinPlugin> {
 
   @Test
   void rejoinChannelWithWrongUser() {
-    when(handler.getConfiguration()).thenReturn(config);
+    when(handler.getConfigProperties()).thenReturn(properties);
     when(event.getKickedUser()).thenReturn("AnotherUser");
     when(event.getChannel()).thenReturn(CHANNEL);
 
@@ -63,4 +73,20 @@ class ReJoinPluginTest extends PluginBaseTest<ReJoinPlugin> {
     verify(handler, never()).sendCommand(captor.capture());
   }
 
+  @Test
+  void initialize() {
+    config.getProperties().put(NICK, USER);
+    when(handler.getConfig()).thenReturn(config);
+
+    assertDoesNotThrow(() -> plugin.initialize(handler));
+  }
+
+  @Test
+  void initializeThrowsException() {
+    when(handler.getConfig()).thenReturn(config);
+    
+    Throwable actual = assertThrows(InitializationException.class, () -> plugin.initialize(handler));
+    
+    assertEquals(MissingParameterException.class, actual.getCause().getClass());
+  }
 }

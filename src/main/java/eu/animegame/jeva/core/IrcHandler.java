@@ -25,23 +25,11 @@ import eu.animegame.jeva.core.lifecycle.LifecycleState;
  */
 public class IrcHandler {
 
-  public final static String PROP_NICK = "jeva.irc.nick";
-
-  public final static String PROP_PASSWORD = "jeva.irc.password";
-
-  public final static String PROP_REAL_NAME = "jeva.irc.realName";
-
-  public final static String PROP_SERVER = "jeva.irc.server";
-
-  public final static String PROP_PORT = "jeva.irc.port";
-
-  public final static String PROP_MODE = "jeva.irc.mode";
-
   private final static Logger LOG = LoggerFactory.getLogger(IrcHandler.class);
 
   private final List<IrcHandlerPlugin> plugins;
 
-  private final Properties config;
+  private final IrcConfig config;
 
   private final Connection connection;
 
@@ -53,19 +41,23 @@ public class IrcHandler {
 
   private boolean started = false;
 
-  public IrcHandler(Connection connection) {
-    this(new Properties(), connection);
+  public IrcHandler(String... args) {
+    this(new SocketConnection(), args);
   }
 
-  public IrcHandler(Properties config, Connection connection) {
-    this.config = config;
+  public IrcHandler(Connection connection, String... args) {
+    this.config = new IrcConfig(args);
     this.connection = connection;
     this.state = new Initialize();
     this.plugins = new ArrayList<>();
   }
 
-  public Properties getConfiguration() {
+  public IrcConfig getConfig() {
     return config;
+  }
+
+  public Properties getConfigProperties() {
+    return config.getProperties();
   }
 
   public void setState(LifecycleState state) {

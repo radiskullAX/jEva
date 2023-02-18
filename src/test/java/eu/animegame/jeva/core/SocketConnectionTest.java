@@ -57,8 +57,8 @@ class SocketConnectionTest {
   @BeforeEach
   public void init() {
     Properties config = new Properties();
-    config.put(IrcHandler.PROP_SERVER, SERVER);
-    config.put(IrcHandler.PROP_PORT, PORT);
+    config.put(IrcConfig.PROP_SERVER, SERVER);
+    config.put(IrcConfig.PROP_PORT, PORT);
 
     spyConnection.setConfig(config);
   }

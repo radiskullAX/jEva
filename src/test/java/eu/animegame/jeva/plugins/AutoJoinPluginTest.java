@@ -166,7 +166,7 @@ class AutoJoinPluginTest extends PluginBaseTest<AutoJoinPlugin> {
 
   @Test
   void initialize() {
-    when(handler.getConfiguration()).thenReturn(config);
+    when(handler.getConfigProperties()).thenReturn(config);
     config.put(AutoJoinPlugin.PROP_CHANNELS, "#test,#super secret,#channel");
 
     plugin.initialize(handler);
@@ -177,7 +177,7 @@ class AutoJoinPluginTest extends PluginBaseTest<AutoJoinPlugin> {
 
   @Test
   void initializeWithWhitespaces() {
-    when(handler.getConfiguration()).thenReturn(config);
+    when(handler.getConfigProperties()).thenReturn(config);
     config.put(AutoJoinPlugin.PROP_CHANNELS, "  #test1 , #test2,  #test3  ,#test4   pw,#test5  ");
 
     plugin.initialize(handler);
@@ -188,7 +188,7 @@ class AutoJoinPluginTest extends PluginBaseTest<AutoJoinPlugin> {
 
   @Test
   void initializeWithMissingConfigProperty() {
-    when(handler.getConfiguration()).thenReturn(config);
+    when(handler.getConfigProperties()).thenReturn(config);
 
     assertDoesNotThrow(() -> plugin.initialize(handler));
     

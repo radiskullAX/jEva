@@ -6,7 +6,7 @@ package eu.animegame.jeva.core.exceptions;
  */
 public class JEvaException extends Exception {
 
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = -8288612328564448007L;
 
   public JEvaException() {
   }

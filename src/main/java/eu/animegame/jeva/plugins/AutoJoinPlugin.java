@@ -67,7 +67,7 @@ public class AutoJoinPlugin implements IrcHandlerPlugin {
   @Override
   public void initialize(IrcHandler handler) {
     LOG.info("read values from config");
-    var channels = handler.getConfiguration().getProperty(PROP_CHANNELS, "");
+    var channels = handler.getConfigProperties().getProperty(PROP_CHANNELS, "");
     LOG.debug("property {} is set in config: {}", PROP_CHANNELS, !channels.isBlank());
     Arrays.stream(channels.split("\\s*,\\s*"))
         .map(String::strip) //

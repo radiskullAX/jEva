@@ -15,32 +15,52 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import eu.animegame.jeva.core.IrcCommand;
+import eu.animegame.jeva.core.IrcConfig;
 import eu.animegame.jeva.core.IrcHandler;
+import eu.animegame.jeva.core.exceptions.InitializationException;
+import eu.animegame.jeva.core.exceptions.MissingParameterException;
 
 class ConnectPluginTest extends PluginBaseTest<ConnectPlugin> {
 
-  private Properties config;
+  private static final String NICK = IrcConfig.PROP_NICK;
+
+  private static final String PASSWORD = IrcConfig.PROP_PASSWORD;
+
+  private static final String MODE = IrcConfig.PROP_MODE;
+
+  private static final String REAL_NAME = IrcConfig.PROP_REAL_NAME;
+
+  private static final String PORT = IrcConfig.PROP_PORT;
+
+  private static final String SERVER = IrcConfig.PROP_SERVER;
+
+  private IrcConfig config;
 
   public ConnectPluginTest() {
     plugin = new ConnectPlugin();
+    config = new IrcConfig();
     handler = mock(IrcHandler.class);
   }
 
   @BeforeEach
   void before() {
-    config = buildConfig();
-    doReturn(config).when(handler).getConfiguration();
+    buildConfigProperties();
+    doReturn(config.getProperties()).when(handler).getConfigProperties();
+    doReturn(config).when(handler).getConfig();
   }
 
-  private Properties buildConfig() {
-    var config = new Properties();
-    config.put(IrcHandler.PROP_NICK, "TestBot");
-    config.put(IrcHandler.PROP_PASSWORD, "SuperSecret");
-    config.put(IrcHandler.PROP_MODE, "12");
-    config.put(IrcHandler.PROP_REAL_NAME, "TestUser");
-    config.put(IrcHandler.PROP_PORT, "6665");
-    config.put(IrcHandler.PROP_SERVER, "irc.animegame.eu");
-    return config;
+  private void buildConfigProperties() {
+    var props = getConfigProps();
+    props.put(NICK, "TestBot");
+    props.put(PASSWORD, "SuperSecret");
+    props.put(MODE, "12");
+    props.put(REAL_NAME, "TestUser");
+    props.put(PORT, "6665");
+    props.put(SERVER, "irc.animegame.eu");
+  }
+
+  private Properties getConfigProps() {
+    return config.getProperties();
   }
 
   @Test
@@ -58,7 +78,7 @@ class ConnectPluginTest extends PluginBaseTest<ConnectPlugin> {
 
   @Test
   void connectWithoutPassword() {
-    config.remove(IrcHandler.PROP_PASSWORD);
+    getConfigProps().remove(PASSWORD);
     plugin.connect(handler);
 
     ArgumentCaptor<IrcCommand> commandCaptor = ArgumentCaptor.forClass(IrcCommand.class);
@@ -71,9 +91,9 @@ class ConnectPluginTest extends PluginBaseTest<ConnectPlugin> {
 
   @Test
   void connectWithStandardValues() {
-    config.remove(IrcHandler.PROP_PASSWORD);
-    config.remove(IrcHandler.PROP_MODE);
-    config.remove(IrcHandler.PROP_REAL_NAME);
+    getConfigProps().remove(PASSWORD);
+    getConfigProps().remove(MODE);
+    getConfigProps().remove(REAL_NAME);
     plugin.connect(handler);
 
     ArgumentCaptor<IrcCommand> commandCaptor = ArgumentCaptor.forClass(IrcCommand.class);
@@ -90,18 +110,22 @@ class ConnectPluginTest extends PluginBaseTest<ConnectPlugin> {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {IrcHandler.PROP_NICK, IrcHandler.PROP_SERVER, IrcHandler.PROP_PORT})
+  @ValueSource(strings = {NICK, SERVER, PORT})
   void initializeWithNullProperties(String param) {
-    config.remove(param);
+    getConfigProps().remove(param);
 
-    assertThrows(RuntimeException.class, () -> plugin.initialize(handler));
+    Throwable actual = assertThrows(InitializationException.class, () -> plugin.initialize(handler));
+
+    assertEquals(MissingParameterException.class, actual.getCause().getClass());
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {IrcHandler.PROP_NICK, IrcHandler.PROP_SERVER, IrcHandler.PROP_PORT})
+  @ValueSource(strings = {NICK, SERVER, PORT})
   void initializeWithEmptyProperties(String param) {
-    config.put(param, "");
+    getConfigProps().put(param, "");
 
-    assertThrows(RuntimeException.class, () -> plugin.initialize(handler));
+    Throwable actual = assertThrows(InitializationException.class, () -> plugin.initialize(handler));
+
+    assertEquals(MissingParameterException.class, actual.getCause().getClass());
   }
 }

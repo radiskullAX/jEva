@@ -1,10 +1,12 @@
 package eu.animegame.jeva.plugins;
 
-import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import eu.animegame.jeva.core.IrcConfig;
 import eu.animegame.jeva.core.IrcHandler;
 import eu.animegame.jeva.core.IrcHandlerPlugin;
+import eu.animegame.jeva.core.exceptions.InitializationException;
+import eu.animegame.jeva.core.exceptions.MissingParameterException;
 import eu.animegame.jeva.core.lifecycle.Initialize;
 import eu.animegame.jeva.irc.commands.Nick;
 import eu.animegame.jeva.irc.commands.Pass;
@@ -30,29 +32,22 @@ public class ConnectPlugin implements IrcHandlerPlugin {
 
   @Override
   public void initialize(IrcHandler handler) {
-    var config = handler.getConfiguration();
-    // TODO: Create a own configuration class, have all parameters and validation methods in there
-    validateProperty(IrcHandler.PROP_NICK, config);
-    validateProperty(IrcHandler.PROP_SERVER, config);
-    validateProperty(IrcHandler.PROP_PORT, config);
-  }
-
-  private void validateProperty(String parameter, Properties config) {
-    var value = config.getProperty(parameter);
-    if (value == null || value.isBlank()) {
-      // TODO: Throw a better exception, think about exception hierarchy
-      throw new RuntimeException("Parameter '" + parameter + "' is not set! Please set the property in the config");
+    try {
+      var config = handler.getConfig();
+      config.verifyParameters(IrcConfig.PROP_NICK, IrcConfig.PROP_SERVER, IrcConfig.PROP_PORT);
+    } catch (MissingParameterException e) {
+      throw new InitializationException(e);
     }
   }
 
   @Override
   public void connect(IrcHandler handler) {
-    var config = handler.getConfiguration();
+    var config = handler.getConfigProperties();
 
-    var nick = config.getProperty(IrcHandler.PROP_NICK);
-    var password = config.getProperty(IrcHandler.PROP_PASSWORD);
-    var mode = config.getProperty(IrcHandler.PROP_MODE, "8");
-    var realName = config.getProperty(IrcHandler.PROP_REAL_NAME, "jEva");
+    var nick = config.getProperty(IrcConfig.PROP_NICK);
+    var password = config.getProperty(IrcConfig.PROP_PASSWORD);
+    var mode = config.getProperty(IrcConfig.PROP_MODE, "8");
+    var realName = config.getProperty(IrcConfig.PROP_REAL_NAME, "jEva");
     LOG.debug("Attempt connect with properties: [nick={}, password=***, mode={}, realName={}]", nick, mode, realName);
 
     if (password != null && !password.isBlank()) {

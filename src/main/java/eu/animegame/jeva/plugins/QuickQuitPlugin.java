@@ -15,6 +15,7 @@ public class QuickQuitPlugin implements IrcHandlerPlugin {
   public void parseInput(PrivMsgEvent event, IrcHandler handler) throws Exception {
     if (event.getMessage().equalsIgnoreCase("!quit")) {
       LOG.info("recieved quit command from user {}", event.getNickname());
+      // TODO: Throw a better exception here
       throw new Exception("intenional quit because of user " + event.getNickname());
     }
   }
