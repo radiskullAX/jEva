@@ -3,43 +3,42 @@ package eu.animegame.jeva.core;
 import java.util.Properties;
 import eu.animegame.jeva.core.exceptions.MissingParameterException;
 
-public class IrcConfig {
+public class IrcConfig extends Properties {
 
-  public final static String PROP_NICK = "jeva.irc.nick";
+  public static final String PROP_NICK = "jeva.irc.nick";
 
-  public final static String PROP_PASSWORD = "jeva.irc.password";
+  public static final String PROP_PASSWORD = "jeva.irc.password";
 
-  public final static String PROP_REAL_NAME = "jeva.irc.realName";
+  public static final String PROP_REAL_NAME = "jeva.irc.realName";
 
-  public final static String PROP_SERVER = "jeva.irc.server";
+  public static final String PROP_SERVER = "jeva.irc.server";
 
-  public final static String PROP_PORT = "jeva.irc.port";
+  public static final String PROP_PORT = "jeva.irc.port";
 
-  public final static String PROP_MODE = "jeva.irc.mode";
+  public static final String PROP_MODE = "jeva.irc.mode";
 
-  private final Properties properties;
+  private static final long serialVersionUID = 102970934064351453L;
 
   public IrcConfig() {
-    this(new String[0]);
+    super();
   }
 
-  public IrcConfig(String[] args) {
-    // TODO: parse command args
-    this.properties = new Properties();
+  public IrcConfig(int capacity) {
+    super(capacity);
   }
 
-  public Properties getProperties() {
-    return properties;
+  public IrcConfig(Properties defaults) {
+    super(defaults);
   }
 
   public boolean isPresent(String parameter) {
-    var value = properties.getProperty(parameter, "");
+    var value = getProperty(parameter, "");
     return !value.isBlank();
   }
 
   public boolean isPresent(String... parameters) {
     for (String param : parameters) {
-      var value = properties.getProperty(param, "");
+      var value = getProperty(param, "");
       if (value.isBlank()) {
         return false;
       }

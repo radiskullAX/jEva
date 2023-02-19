@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Properties;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -25,7 +24,7 @@ import eu.animegame.jeva.core.lifecycle.LifecycleState;
  */
 public class IrcHandler {
 
-  private final static Logger LOG = LoggerFactory.getLogger(IrcHandler.class);
+  private static final Logger LOG = LoggerFactory.getLogger(IrcHandler.class);
 
   private final List<IrcHandlerPlugin> plugins;
 
@@ -41,12 +40,13 @@ public class IrcHandler {
 
   private boolean started = false;
 
+  // TODO: parse command args
   public IrcHandler(String... args) {
     this(new SocketConnection(), args);
   }
 
   public IrcHandler(Connection connection, String... args) {
-    this.config = new IrcConfig(args);
+    this.config = new IrcConfig();
     this.connection = connection;
     this.state = new Initialize();
     this.plugins = new ArrayList<>();
@@ -54,10 +54,6 @@ public class IrcHandler {
 
   public IrcConfig getConfig() {
     return config;
-  }
-
-  public Properties getConfigProperties() {
-    return config.getProperties();
   }
 
   public void setState(LifecycleState state) {
@@ -160,7 +156,7 @@ public class IrcHandler {
   public void sendCommand(IrcCommand command) {
     if (command != null) {
       try {
-      connection.write(command.build());
+        connection.write(command.build());
       } catch (Exception e) {
         LOG.warn("Could not send message to server", e);
       }

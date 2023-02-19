@@ -27,7 +27,7 @@ public class ReJoinPlugin implements IrcHandlerPlugin {
 
   @IrcEventAcceptor(command = "KICK", clazz = KickEvent.class)
   public void rejoinChannel(KickEvent event, IrcHandler handler) {
-    var nick = handler.getConfigProperties().getProperty(IrcConfig.PROP_NICK);
+    var nick = handler.getConfig().getProperty(IrcConfig.PROP_NICK, "");
     if (nick.equals(event.getKickedUser())) {
       LOG.info("Kicked from channel {}, trying to rejoin", event.getChannel());
       handler.sendCommand(new Join(event.getChannel()));

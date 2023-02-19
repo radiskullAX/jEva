@@ -8,7 +8,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import java.util.List;
-import java.util.Properties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -44,23 +43,17 @@ class ConnectPluginTest extends PluginBaseTest<ConnectPlugin> {
 
   @BeforeEach
   void before() {
-    buildConfigProperties();
-    doReturn(config.getProperties()).when(handler).getConfigProperties();
+    fillConfig();
     doReturn(config).when(handler).getConfig();
   }
 
-  private void buildConfigProperties() {
-    var props = getConfigProps();
-    props.put(NICK, "TestBot");
-    props.put(PASSWORD, "SuperSecret");
-    props.put(MODE, "12");
-    props.put(REAL_NAME, "TestUser");
-    props.put(PORT, "6665");
-    props.put(SERVER, "irc.animegame.eu");
-  }
-
-  private Properties getConfigProps() {
-    return config.getProperties();
+  private void fillConfig() {
+    config.put(NICK, "TestBot");
+    config.put(PASSWORD, "SuperSecret");
+    config.put(MODE, "12");
+    config.put(REAL_NAME, "TestUser");
+    config.put(PORT, "6665");
+    config.put(SERVER, "irc.animegame.eu");
   }
 
   @Test
@@ -78,7 +71,7 @@ class ConnectPluginTest extends PluginBaseTest<ConnectPlugin> {
 
   @Test
   void connectWithoutPassword() {
-    getConfigProps().remove(PASSWORD);
+    config.remove(PASSWORD);
     plugin.connect(handler);
 
     ArgumentCaptor<IrcCommand> commandCaptor = ArgumentCaptor.forClass(IrcCommand.class);
@@ -91,9 +84,9 @@ class ConnectPluginTest extends PluginBaseTest<ConnectPlugin> {
 
   @Test
   void connectWithStandardValues() {
-    getConfigProps().remove(PASSWORD);
-    getConfigProps().remove(MODE);
-    getConfigProps().remove(REAL_NAME);
+    config.remove(PASSWORD);
+    config.remove(MODE);
+    config.remove(REAL_NAME);
     plugin.connect(handler);
 
     ArgumentCaptor<IrcCommand> commandCaptor = ArgumentCaptor.forClass(IrcCommand.class);
@@ -112,7 +105,7 @@ class ConnectPluginTest extends PluginBaseTest<ConnectPlugin> {
   @ParameterizedTest
   @ValueSource(strings = {NICK, SERVER, PORT})
   void initializeWithNullProperties(String param) {
-    getConfigProps().remove(param);
+    config.remove(param);
 
     Throwable actual = assertThrows(InitializationException.class, () -> plugin.initialize(handler));
 
@@ -122,7 +115,7 @@ class ConnectPluginTest extends PluginBaseTest<ConnectPlugin> {
   @ParameterizedTest
   @ValueSource(strings = {NICK, SERVER, PORT})
   void initializeWithEmptyProperties(String param) {
-    getConfigProps().put(param, "");
+    config.put(param, "");
 
     Throwable actual = assertThrows(InitializationException.class, () -> plugin.initialize(handler));
 

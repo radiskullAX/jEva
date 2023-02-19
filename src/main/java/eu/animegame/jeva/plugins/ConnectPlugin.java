@@ -28,7 +28,7 @@ import eu.animegame.jeva.irc.commands.User;
  */
 public class ConnectPlugin implements IrcHandlerPlugin {
 
-  private final static Logger LOG = LoggerFactory.getLogger(ConnectPlugin.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ConnectPlugin.class);
 
   @Override
   public void initialize(IrcHandler handler) {
@@ -42,7 +42,7 @@ public class ConnectPlugin implements IrcHandlerPlugin {
 
   @Override
   public void connect(IrcHandler handler) {
-    var config = handler.getConfigProperties();
+    var config = handler.getConfig();
 
     var nick = config.getProperty(IrcConfig.PROP_NICK);
     var password = config.getProperty(IrcConfig.PROP_PASSWORD);

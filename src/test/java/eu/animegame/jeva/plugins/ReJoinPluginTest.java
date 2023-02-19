@@ -7,7 +7,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import java.util.Properties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -28,13 +27,10 @@ class ReJoinPluginTest extends PluginBaseTest<ReJoinPlugin> {
 
   private KickEvent event;
 
-  private Properties properties;
-
   private IrcConfig config;
 
   private ReJoinPluginTest() {
     plugin = new ReJoinPlugin();
-    properties = new Properties();
     config = new IrcConfig();
     handler = mock(IrcHandler.class);
     event = mock(KickEvent.class);
@@ -42,12 +38,12 @@ class ReJoinPluginTest extends PluginBaseTest<ReJoinPlugin> {
 
   @BeforeEach
   void before() {
-    properties.put(NICK, USER);
+    config.put(NICK, USER);
   }
 
   @Test
   void rejoinChannel() {
-    when(handler.getConfigProperties()).thenReturn(properties);
+    when(handler.getConfig()).thenReturn(config);
     when(event.getKickedUser()).thenReturn(USER);
     when(event.getChannel()).thenReturn(CHANNEL);
 
@@ -63,7 +59,7 @@ class ReJoinPluginTest extends PluginBaseTest<ReJoinPlugin> {
 
   @Test
   void rejoinChannelWithWrongUser() {
-    when(handler.getConfigProperties()).thenReturn(properties);
+    when(handler.getConfig()).thenReturn(config);
     when(event.getKickedUser()).thenReturn("AnotherUser");
     when(event.getChannel()).thenReturn(CHANNEL);
 
@@ -74,8 +70,17 @@ class ReJoinPluginTest extends PluginBaseTest<ReJoinPlugin> {
   }
 
   @Test
+  void rejoinChannelWithNullProperty() {
+    config.remove(NICK);
+    when(handler.getConfig()).thenReturn(config);
+    when(event.getKickedUser()).thenReturn(USER);
+    when(event.getChannel()).thenReturn(CHANNEL);
+
+    assertDoesNotThrow(() -> plugin.rejoinChannel(event, handler));
+  }
+
+  @Test
   void initialize() {
-    config.getProperties().put(NICK, USER);
     when(handler.getConfig()).thenReturn(config);
 
     assertDoesNotThrow(() -> plugin.initialize(handler));
@@ -83,6 +88,7 @@ class ReJoinPluginTest extends PluginBaseTest<ReJoinPlugin> {
 
   @Test
   void initializeThrowsException() {
+    config.remove(NICK);
     when(handler.getConfig()).thenReturn(config);
     
     Throwable actual = assertThrows(InitializationException.class, () -> plugin.initialize(handler));

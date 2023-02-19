@@ -7,10 +7,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import java.util.Properties;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import eu.animegame.jeva.core.IrcBaseEvent;
+import eu.animegame.jeva.core.IrcConfig;
 import eu.animegame.jeva.core.IrcHandler;
 import eu.animegame.jeva.irc.commands.Join;
 
@@ -29,11 +29,11 @@ class AutoJoinPluginTest extends PluginBaseTest<AutoJoinPlugin> {
 
   private IrcBaseEvent event;
 
-  private Properties config;
+  private IrcConfig config;
 
   private AutoJoinPluginTest() {
     plugin = new AutoJoinPlugin();
-    config = new Properties();
+    config = new IrcConfig();
     handler = mock(IrcHandler.class);
     event = mock(IrcBaseEvent.class);
   }
@@ -166,7 +166,7 @@ class AutoJoinPluginTest extends PluginBaseTest<AutoJoinPlugin> {
 
   @Test
   void initialize() {
-    when(handler.getConfigProperties()).thenReturn(config);
+    when(handler.getConfig()).thenReturn(config);
     config.put(AutoJoinPlugin.PROP_CHANNELS, "#test,#super secret,#channel");
 
     plugin.initialize(handler);
@@ -177,7 +177,7 @@ class AutoJoinPluginTest extends PluginBaseTest<AutoJoinPlugin> {
 
   @Test
   void initializeWithWhitespaces() {
-    when(handler.getConfigProperties()).thenReturn(config);
+    when(handler.getConfig()).thenReturn(config);
     config.put(AutoJoinPlugin.PROP_CHANNELS, "  #test1 , #test2,  #test3  ,#test4   pw,#test5  ");
 
     plugin.initialize(handler);
@@ -187,8 +187,8 @@ class AutoJoinPluginTest extends PluginBaseTest<AutoJoinPlugin> {
   }
 
   @Test
-  void initializeWithMissingConfigProperty() {
-    when(handler.getConfigProperties()).thenReturn(config);
+  void initializeWithNullProperty() {
+    when(handler.getConfig()).thenReturn(config);
 
     assertDoesNotThrow(() -> plugin.initialize(handler));
     

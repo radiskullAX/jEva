@@ -15,9 +15,9 @@ import eu.animegame.jeva.irc.commands.Join;
 
 public class AutoJoinPlugin implements IrcHandlerPlugin {
 
-  public final static String PROP_CHANNELS = "jeva.irc.plugin.autojoin.channels";
+  public static final String PROP_CHANNELS = "jeva.irc.plugin.autojoin.channels";
 
-  private final static Logger LOG = LoggerFactory.getLogger(AutoJoinPlugin.class);
+  private static final Logger LOG = LoggerFactory.getLogger(AutoJoinPlugin.class);
 
   private List<String> channels;
 
@@ -67,7 +67,7 @@ public class AutoJoinPlugin implements IrcHandlerPlugin {
   @Override
   public void initialize(IrcHandler handler) {
     LOG.info("read values from config");
-    var channels = handler.getConfigProperties().getProperty(PROP_CHANNELS, "");
+    var channels = handler.getConfig().getProperty(PROP_CHANNELS, "");
     LOG.debug("property {} is set in config: {}", PROP_CHANNELS, !channels.isBlank());
     Arrays.stream(channels.split("\\s*,\\s*"))
         .map(String::strip) //
