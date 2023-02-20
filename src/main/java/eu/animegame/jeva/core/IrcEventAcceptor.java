@@ -13,6 +13,4 @@ import java.lang.annotation.Target;
 @Target(METHOD)
 public @interface IrcEventAcceptor {
 	String command() default "";
-
-    Class<? extends IrcBaseEvent> clazz() default IrcBaseEvent.class;
 }

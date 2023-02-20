@@ -6,8 +6,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import org.junit.jupiter.api.Test;
 import eu.animegame.jeva.core.Connection;
-import eu.animegame.jeva.core.IrcHandler;
-import eu.animegame.jeva.core.IrcHandlerPlugin;
+import eu.animegame.jeva.core.JEvaIrcClient;
+import eu.animegame.jeva.core.JEvaIrcPlugin;
 import eu.animegame.jeva.core.exceptions.ConnectException;
 
 /**
@@ -16,60 +16,60 @@ import eu.animegame.jeva.core.exceptions.ConnectException;
  */
 class ConnectTest {
 
-  private IrcHandler handler = mock(IrcHandler.class);
+  private JEvaIrcClient jEvaClient = mock(JEvaIrcClient.class);
 
   private LifecycleState state = new Connect();
 
   @Test
   void testSetNextLifecycle() {
-    state.run(handler);
-    LifecycleHelper.verifySetState(handler, Read.class);
+    state.run(jEvaClient);
+    LifecycleHelper.verifySetState(jEvaClient, Read.class);
   }
 
   @Test
   void testPluginsAreNoticed() {
     Connection connection = mock(Connection.class);
-    IrcHandler realHandler = new IrcHandler(connection);
-    IrcHandlerPlugin plugin = mock(IrcHandlerPlugin.class);
-    realHandler.addPlugin(plugin);
-    state.run(realHandler);
+    JEvaIrcClient realJEvaClient = new JEvaIrcClient(connection);
+    JEvaIrcPlugin plugin = mock(JEvaIrcPlugin.class);
+    realJEvaClient.addPlugin(plugin);
+    state.run(realJEvaClient);
 
-    verify(plugin).connect(realHandler);
+    verify(plugin).connect(realJEvaClient);
   }
 
   @Test
   void testConnectSuccessful() throws ConnectException, Exception {
-    state.run(handler);
+    state.run(jEvaClient);
 
-    verify(handler).connect();
+    verify(jEvaClient).connect();
 
-    LifecycleHelper.verifySetState(handler, Read.class);
+    LifecycleHelper.verifySetState(jEvaClient, Read.class);
   }
 
   @Test
   void testPluginFiresException() {
-    doThrow(new RuntimeException()).when(handler).fireLifecycleState(any());
+    doThrow(new RuntimeException()).when(jEvaClient).fireLifecycleState(any());
 
-    state.run(handler);
+    state.run(jEvaClient);
 
-    LifecycleHelper.verifySetState(handler, 2, Shutdown.class);
+    LifecycleHelper.verifySetState(jEvaClient, 2, Shutdown.class);
   }
 
   @Test
   void testConnectfails() throws ConnectException, Exception {
-    doThrow(new ConnectException()).when(handler).connect();
+    doThrow(new ConnectException()).when(jEvaClient).connect();
 
-    state.run(handler);
+    state.run(jEvaClient);
 
-    LifecycleHelper.verifySetState(handler, Disconnect.class);
+    LifecycleHelper.verifySetState(jEvaClient, Disconnect.class);
   }
 
   @Test
   void testConnectionfails() throws ConnectException, Exception {
-    doThrow(new Exception()).when(handler).connect();
+    doThrow(new Exception()).when(jEvaClient).connect();
 
-    state.run(handler);
+    state.run(jEvaClient);
 
-    LifecycleHelper.verifySetState(handler, Shutdown.class);
+    LifecycleHelper.verifySetState(jEvaClient, Shutdown.class);
   }
 }

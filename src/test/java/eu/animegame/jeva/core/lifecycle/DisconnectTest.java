@@ -6,8 +6,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import org.junit.jupiter.api.Test;
 import eu.animegame.jeva.core.Connection;
-import eu.animegame.jeva.core.IrcHandler;
-import eu.animegame.jeva.core.IrcHandlerPlugin;
+import eu.animegame.jeva.core.JEvaIrcClient;
+import eu.animegame.jeva.core.JEvaIrcPlugin;
 
 /**
  *
@@ -15,33 +15,33 @@ import eu.animegame.jeva.core.IrcHandlerPlugin;
  */
 class DisconnectTest {
 
-  private IrcHandler handler = mock(IrcHandler.class);
+  private JEvaIrcClient jEvaClient = mock(JEvaIrcClient.class);
 
   private LifecycleState state = new Disconnect();
 
   @Test
   void testSetNextLifecycle() {
-    state.run(handler);
-    LifecycleHelper.verifySetState(handler, Shutdown.class);
+    state.run(jEvaClient);
+    LifecycleHelper.verifySetState(jEvaClient, Shutdown.class);
   }
 
   @Test
   void testPluginsAreNoticed() {
     Connection connection = mock(Connection.class);
-    IrcHandler realHandler = new IrcHandler(connection);
-    IrcHandlerPlugin plugin = mock(IrcHandlerPlugin.class);
-    realHandler.addPlugin(plugin);
-    state.run(realHandler);
+    JEvaIrcClient realJEvaClient = new JEvaIrcClient(connection);
+    JEvaIrcPlugin plugin = mock(JEvaIrcPlugin.class);
+    realJEvaClient.addPlugin(plugin);
+    state.run(realJEvaClient);
 
-    verify(plugin).disconnect(realHandler);
+    verify(plugin).disconnect(realJEvaClient);
   }
 
   @Test
   void testPluginFiresException() {
-    doThrow(new RuntimeException()).when(handler).fireLifecycleState(any());
+    doThrow(new RuntimeException()).when(jEvaClient).fireLifecycleState(any());
 
-    state.run(handler);
+    state.run(jEvaClient);
 
-    LifecycleHelper.verifySetState(handler, 2, Shutdown.class);
+    LifecycleHelper.verifySetState(jEvaClient, 2, Shutdown.class);
   }
 }

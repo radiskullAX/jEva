@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import org.mockito.ArgumentCaptor;
-import eu.animegame.jeva.core.IrcHandler;
+import eu.animegame.jeva.core.JEvaIrcClient;
 
 /**
  *
@@ -14,16 +14,16 @@ public class LifecycleHelper {
 
   private LifecycleHelper() {}
 
-  public static void verifySetState(IrcHandler handler, Class<? extends LifecycleState> expectedState) {
+  public static void verifySetState(JEvaIrcClient jEvaClient, Class<? extends LifecycleState> expectedState) {
     ArgumentCaptor<LifecycleState> captor = ArgumentCaptor.forClass(LifecycleState.class);
-    verify(handler).setState(captor.capture());
+    verify(jEvaClient).setState(captor.capture());
     assertEquals(expectedState, captor.getValue().getClass());
   }
 
-  public static void verifySetState(IrcHandler handler, int numberOfCalls,
+  public static void verifySetState(JEvaIrcClient jEvaClient, int numberOfCalls,
       Class<? extends LifecycleState> expectedState) {
     ArgumentCaptor<LifecycleState> captor = ArgumentCaptor.forClass(LifecycleState.class);
-    verify(handler, times(numberOfCalls)).setState(captor.capture());
+    verify(jEvaClient, times(numberOfCalls)).setState(captor.capture());
     assertEquals(expectedState, captor.getValue().getClass());
   }
 }

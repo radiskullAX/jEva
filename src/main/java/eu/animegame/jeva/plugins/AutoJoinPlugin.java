@@ -8,12 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.animegame.jeva.core.IrcBaseEvent;
 import eu.animegame.jeva.core.IrcEventAcceptor;
-import eu.animegame.jeva.core.IrcHandler;
-import eu.animegame.jeva.core.IrcHandlerPlugin;
+import eu.animegame.jeva.core.JEvaIrcClient;
+import eu.animegame.jeva.core.JEvaIrcPlugin;
 import eu.animegame.jeva.irc.CommandCode;
 import eu.animegame.jeva.irc.commands.Join;
 
-public class AutoJoinPlugin implements IrcHandlerPlugin {
+public class AutoJoinPlugin implements JEvaIrcPlugin {
 
   public static final String PROP_CHANNELS = "jeva.irc.plugin.autojoin.channels";
 
@@ -65,9 +65,9 @@ public class AutoJoinPlugin implements IrcHandlerPlugin {
   }
 
   @Override
-  public void initialize(IrcHandler handler) {
+  public void initialize(JEvaIrcClient jEvaClient) {
     LOG.info("read values from config");
-    var channels = handler.getConfig().getProperty(PROP_CHANNELS, "");
+    var channels = jEvaClient.getConfig().getProperty(PROP_CHANNELS, "");
     LOG.debug("property {} is set in config: {}", PROP_CHANNELS, !channels.isBlank());
     Arrays.stream(channels.split("\\s*,\\s*"))
         .map(String::strip) //
@@ -76,7 +76,7 @@ public class AutoJoinPlugin implements IrcHandlerPlugin {
   }
 
   @IrcEventAcceptor(command = CommandCode.RPL_WELCOME)
-  public void sendJoin(IrcBaseEvent event, IrcHandler handler) {
+  public void sendJoin(IrcBaseEvent event, JEvaIrcClient jEvaClient) {
     var openChannels = new ArrayList<String>();
     var securedChannels = new ArrayList<String>();
     var passwords = new ArrayList<String>();
@@ -93,11 +93,11 @@ public class AutoJoinPlugin implements IrcHandlerPlugin {
     }
     if (!openChannels.isEmpty()) {
       LOG.debug("send JOIN command to join channels: {}", openChannels);
-      handler.sendCommand(new Join(openChannels));
+      jEvaClient.sendCommand(new Join(openChannels));
     }
     if (!securedChannels.isEmpty()) {
       LOG.debug("send JOIN command to join secured channels: {}", securedChannels);
-      handler.sendCommand(new Join(securedChannels, passwords));
+      jEvaClient.sendCommand(new Join(securedChannels, passwords));
     }
   }
 }

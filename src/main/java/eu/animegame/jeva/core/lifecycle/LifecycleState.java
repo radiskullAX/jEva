@@ -1,6 +1,6 @@
 package eu.animegame.jeva.core.lifecycle;
 
-import eu.animegame.jeva.core.IrcHandler;
+import eu.animegame.jeva.core.JEvaIrcClient;
 
 /**
  *
@@ -8,5 +8,6 @@ import eu.animegame.jeva.core.IrcHandler;
  */
 public interface LifecycleState {
 
-  public void run(IrcHandler context);
+  // TODO: rename context variable .. its not an interface but a concrete class passing through
+  public void run(JEvaIrcClient context);
 }

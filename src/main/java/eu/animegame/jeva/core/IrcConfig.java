@@ -31,13 +31,13 @@ public class IrcConfig extends Properties {
     super(defaults);
   }
 
-  public boolean isPresent(String parameter) {
-    var value = getProperty(parameter, "");
+  public boolean isPresent(String key) {
+    var value = getProperty(key, "");
     return !value.isBlank();
   }
 
-  public boolean isPresent(String... parameters) {
-    for (String param : parameters) {
+  public boolean isPresent(String... keys) {
+    for (String param : keys) {
       var value = getProperty(param, "");
       if (value.isBlank()) {
         return false;
@@ -46,14 +46,14 @@ public class IrcConfig extends Properties {
     return true;
   }
 
-  public void verifyParameter(String param) throws MissingParameterException {
-    if (!isPresent(param)) {
-      throw new MissingParameterException("Parameter '" + param + "' is not set or empty in config.");
+  public void verifyParameter(String key) throws MissingParameterException {
+    if (!isPresent(key)) {
+      throw new MissingParameterException("Parameter '" + key + "' is not set or empty in config.");
     }
   }
 
-  public void verifyParameters(String... params) throws MissingParameterException {
-    for (String parameter : params) {
+  public void verifyParameters(String... keys) throws MissingParameterException {
+    for (String parameter : keys) {
       if (!isPresent(parameter)) {
         throw new MissingParameterException("Parameter '" + parameter + "' is not set or empty in config.");
       }

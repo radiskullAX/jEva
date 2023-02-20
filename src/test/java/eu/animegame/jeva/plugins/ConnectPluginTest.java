@@ -15,7 +15,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import eu.animegame.jeva.core.IrcCommand;
 import eu.animegame.jeva.core.IrcConfig;
-import eu.animegame.jeva.core.IrcHandler;
+import eu.animegame.jeva.core.JEvaIrcClient;
 import eu.animegame.jeva.core.exceptions.InitializationException;
 import eu.animegame.jeva.core.exceptions.MissingParameterException;
 
@@ -38,13 +38,13 @@ class ConnectPluginTest extends PluginBaseTest<ConnectPlugin> {
   public ConnectPluginTest() {
     plugin = new ConnectPlugin();
     config = new IrcConfig();
-    handler = mock(IrcHandler.class);
+    jEvaClient = mock(JEvaIrcClient.class);
   }
 
   @BeforeEach
   void before() {
     fillConfig();
-    doReturn(config).when(handler).getConfig();
+    doReturn(config).when(jEvaClient).getConfig();
   }
 
   private void fillConfig() {
@@ -58,10 +58,10 @@ class ConnectPluginTest extends PluginBaseTest<ConnectPlugin> {
 
   @Test
   void connect() {
-    plugin.connect(handler);
+    plugin.connect(jEvaClient);
 
     ArgumentCaptor<IrcCommand> commandCaptor = ArgumentCaptor.forClass(IrcCommand.class);
-    verify(handler, times(3)).sendCommand(commandCaptor.capture());
+    verify(jEvaClient, times(3)).sendCommand(commandCaptor.capture());
 
     List<IrcCommand> commands = commandCaptor.getAllValues();
     assertEquals("PASS SuperSecret", commands.get(0).build());
@@ -72,10 +72,10 @@ class ConnectPluginTest extends PluginBaseTest<ConnectPlugin> {
   @Test
   void connectWithoutPassword() {
     config.remove(PASSWORD);
-    plugin.connect(handler);
+    plugin.connect(jEvaClient);
 
     ArgumentCaptor<IrcCommand> commandCaptor = ArgumentCaptor.forClass(IrcCommand.class);
-    verify(handler, times(2)).sendCommand(commandCaptor.capture());
+    verify(jEvaClient, times(2)).sendCommand(commandCaptor.capture());
 
     List<IrcCommand> commands = commandCaptor.getAllValues();
     assertEquals("NICK TestBot", commands.get(0).build());
@@ -87,10 +87,10 @@ class ConnectPluginTest extends PluginBaseTest<ConnectPlugin> {
     config.remove(PASSWORD);
     config.remove(MODE);
     config.remove(REAL_NAME);
-    plugin.connect(handler);
+    plugin.connect(jEvaClient);
 
     ArgumentCaptor<IrcCommand> commandCaptor = ArgumentCaptor.forClass(IrcCommand.class);
-    verify(handler, times(2)).sendCommand(commandCaptor.capture());
+    verify(jEvaClient, times(2)).sendCommand(commandCaptor.capture());
 
     List<IrcCommand> commands = commandCaptor.getAllValues();
     assertEquals("NICK TestBot", commands.get(0).build());
@@ -99,7 +99,7 @@ class ConnectPluginTest extends PluginBaseTest<ConnectPlugin> {
 
   @Test
   void initialize() {
-    assertDoesNotThrow(() -> plugin.initialize(handler));
+    assertDoesNotThrow(() -> plugin.initialize(jEvaClient));
   }
 
   @ParameterizedTest
@@ -107,7 +107,7 @@ class ConnectPluginTest extends PluginBaseTest<ConnectPlugin> {
   void initializeWithNullProperties(String param) {
     config.remove(param);
 
-    Throwable actual = assertThrows(InitializationException.class, () -> plugin.initialize(handler));
+    Throwable actual = assertThrows(InitializationException.class, () -> plugin.initialize(jEvaClient));
 
     assertEquals(MissingParameterException.class, actual.getCause().getClass());
   }
@@ -117,7 +117,7 @@ class ConnectPluginTest extends PluginBaseTest<ConnectPlugin> {
   void initializeWithEmptyProperties(String param) {
     config.put(param, "");
 
-    Throwable actual = assertThrows(InitializationException.class, () -> plugin.initialize(handler));
+    Throwable actual = assertThrows(InitializationException.class, () -> plugin.initialize(jEvaClient));
 
     assertEquals(MissingParameterException.class, actual.getCause().getClass());
   }

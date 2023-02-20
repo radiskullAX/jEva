@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import eu.animegame.jeva.core.IrcConfig;
-import eu.animegame.jeva.core.IrcHandler;
+import eu.animegame.jeva.core.JEvaIrcClient;
 import eu.animegame.jeva.core.exceptions.InitializationException;
 import eu.animegame.jeva.core.exceptions.MissingParameterException;
 import eu.animegame.jeva.irc.commands.Join;
@@ -32,7 +32,7 @@ class ReJoinPluginTest extends PluginBaseTest<ReJoinPlugin> {
   private ReJoinPluginTest() {
     plugin = new ReJoinPlugin();
     config = new IrcConfig();
-    handler = mock(IrcHandler.class);
+    jEvaClient = mock(JEvaIrcClient.class);
     event = mock(KickEvent.class);
   }
 
@@ -43,14 +43,14 @@ class ReJoinPluginTest extends PluginBaseTest<ReJoinPlugin> {
 
   @Test
   void rejoinChannel() {
-    when(handler.getConfig()).thenReturn(config);
+    when(jEvaClient.getConfig()).thenReturn(config);
     when(event.getKickedUser()).thenReturn(USER);
     when(event.getChannel()).thenReturn(CHANNEL);
 
-    plugin.rejoinChannel(event, handler);
+    plugin.rejoinChannel(event, jEvaClient);
 
     ArgumentCaptor<Join> captor = ArgumentCaptor.forClass(Join.class);
-    verify(handler).sendCommand(captor.capture());
+    verify(jEvaClient).sendCommand(captor.capture());
 
     Join join = captor.getValue();
     String expected = "JOIN #channel";
@@ -59,39 +59,39 @@ class ReJoinPluginTest extends PluginBaseTest<ReJoinPlugin> {
 
   @Test
   void rejoinChannelWithWrongUser() {
-    when(handler.getConfig()).thenReturn(config);
+    when(jEvaClient.getConfig()).thenReturn(config);
     when(event.getKickedUser()).thenReturn("AnotherUser");
     when(event.getChannel()).thenReturn(CHANNEL);
 
-    plugin.rejoinChannel(event, handler);
+    plugin.rejoinChannel(event, jEvaClient);
 
     ArgumentCaptor<Join> captor = ArgumentCaptor.forClass(Join.class);
-    verify(handler, never()).sendCommand(captor.capture());
+    verify(jEvaClient, never()).sendCommand(captor.capture());
   }
 
   @Test
   void rejoinChannelWithNullProperty() {
     config.remove(NICK);
-    when(handler.getConfig()).thenReturn(config);
+    when(jEvaClient.getConfig()).thenReturn(config);
     when(event.getKickedUser()).thenReturn(USER);
     when(event.getChannel()).thenReturn(CHANNEL);
 
-    assertDoesNotThrow(() -> plugin.rejoinChannel(event, handler));
+    assertDoesNotThrow(() -> plugin.rejoinChannel(event, jEvaClient));
   }
 
   @Test
   void initialize() {
-    when(handler.getConfig()).thenReturn(config);
+    when(jEvaClient.getConfig()).thenReturn(config);
 
-    assertDoesNotThrow(() -> plugin.initialize(handler));
+    assertDoesNotThrow(() -> plugin.initialize(jEvaClient));
   }
 
   @Test
   void initializeThrowsException() {
     config.remove(NICK);
-    when(handler.getConfig()).thenReturn(config);
+    when(jEvaClient.getConfig()).thenReturn(config);
     
-    Throwable actual = assertThrows(InitializationException.class, () -> plugin.initialize(handler));
+    Throwable actual = assertThrows(InitializationException.class, () -> plugin.initialize(jEvaClient));
     
     assertEquals(MissingParameterException.class, actual.getCause().getClass());
   }

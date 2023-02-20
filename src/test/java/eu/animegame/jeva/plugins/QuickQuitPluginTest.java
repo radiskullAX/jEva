@@ -1,11 +1,11 @@
 package eu.animegame.jeva.plugins;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.Test;
-import eu.animegame.jeva.core.IrcHandler;
+import eu.animegame.jeva.core.JEvaIrcClient;
 import eu.animegame.jeva.irc.events.PrivMsgEvent;
 
 class QuickQuitPluginTest extends PluginBaseTest<QuickQuitPlugin> {
@@ -16,7 +16,7 @@ class QuickQuitPluginTest extends PluginBaseTest<QuickQuitPlugin> {
 
   private QuickQuitPluginTest() {
     plugin = new QuickQuitPlugin();
-    handler = mock(IrcHandler.class);
+    jEvaClient = mock(JEvaIrcClient.class);
     event = mock(PrivMsgEvent.class);
   }
 
@@ -25,7 +25,9 @@ class QuickQuitPluginTest extends PluginBaseTest<QuickQuitPlugin> {
     when(event.getMessage()).thenReturn("!quit");
     when(event.getNickname()).thenReturn(USER);
     
-    assertThrows(Exception.class, () -> plugin.parseInput(event, handler));
+    plugin.parseInput(event, jEvaClient);
+    
+    verify(jEvaClient).stop();
   }
 
   @Test
@@ -33,14 +35,18 @@ class QuickQuitPluginTest extends PluginBaseTest<QuickQuitPlugin> {
     when(event.getMessage()).thenReturn("!Quit");
     when(event.getNickname()).thenReturn(USER);
     
-    assertThrows(Exception.class, () -> plugin.parseInput(event, handler));
+    plugin.parseInput(event, jEvaClient);
+    
+    verify(jEvaClient).stop();
   }
 
   @Test
   void parseInputWithWrongMessage() {
     when(event.getMessage()).thenReturn("Hey, this is a test!");
     
-    assertDoesNotThrow(() -> plugin.parseInput(event, handler));
+    plugin.parseInput(event, jEvaClient);
+    
+    verify(jEvaClient, never()).stop();
   }
 
 }

@@ -1,11 +1,12 @@
 package eu.animegame.jeva.plugins;
 
-import eu.animegame.jeva.core.IrcHandler;
-import eu.animegame.jeva.core.IrcHandlerPlugin;
+import eu.animegame.jeva.core.JEvaIrcClient;
+import eu.animegame.jeva.core.JEvaIrcPlugin;
 
-public class PluginBaseTest<P extends IrcHandlerPlugin> {
+// TODO: Unify tests so they all look similar in structure
+public class PluginBaseTest<P extends JEvaIrcPlugin> {
 
-  protected IrcHandler handler;
+  protected JEvaIrcClient jEvaClient;
 
   protected P plugin;
 }
