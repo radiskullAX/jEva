@@ -7,6 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import eu.animegame.jeva.core.exceptions.MissingParameterException;
 
+/**
+ *
+ * @author radiskull
+ */
 class IrcConfigTest {
 
   private static final String PARAM_1 = "param1";

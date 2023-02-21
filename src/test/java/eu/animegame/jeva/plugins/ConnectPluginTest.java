@@ -19,11 +19,15 @@ import eu.animegame.jeva.core.JEvaIrcClient;
 import eu.animegame.jeva.core.exceptions.InitializationException;
 import eu.animegame.jeva.core.exceptions.MissingParameterException;
 
+/**
+ *
+ * @author radiskull
+ */
 class ConnectPluginTest extends PluginBaseTest<ConnectPlugin> {
 
   private static final String NICK = IrcConfig.PROP_NICK;
 
-  private static final String PASSWORD = IrcConfig.PROP_PASSWORD;
+  private static final String PASSWORD = IrcConfig.PROP_SERVER_PASSWORD;
 
   private static final String MODE = IrcConfig.PROP_MODE;
 

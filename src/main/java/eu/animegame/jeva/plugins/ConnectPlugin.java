@@ -45,7 +45,7 @@ public class ConnectPlugin implements JEvaIrcPlugin {
     var config = jEvaClient.getConfig();
 
     var nick = config.getProperty(IrcConfig.PROP_NICK);
-    var password = config.getProperty(IrcConfig.PROP_PASSWORD);
+    var password = config.getProperty(IrcConfig.PROP_SERVER_PASSWORD);
     var mode = config.getProperty(IrcConfig.PROP_MODE, "8");
     var realName = config.getProperty(IrcConfig.PROP_REAL_NAME, "jEva");
     LOG.debug("Attempt connect with properties: [nick={}, password=***, mode={}, realName={}]", nick, mode, realName);

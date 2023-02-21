@@ -60,15 +60,18 @@ class JEvaIrcClientTest {
   private static Stream<Arguments> IrcJEvaClientProvider() {
     var connection = mock(Connection.class);
     var pluginController = mock(IrcPluginController.class);
+    var ircConfig = mock(IrcConfig.class);
     return Stream.of(
         Arguments.of(new JEvaIrcClient()),
         Arguments.of(new JEvaIrcClient(connection)),
+        Arguments.of(new JEvaIrcClient(connection, ircConfig)),
         Arguments.of(new JEvaIrcClient(connection, pluginController))
         );
   }
   
   @Test
   void getConfig() {
+    // test constructor injection too
     IrcConfig config = jEvaClient.getConfig();
 
     assertNotNull(config);
@@ -95,6 +98,14 @@ class JEvaIrcClientTest {
     jEvaClient.getPlugins();
 
     verify(pluginController).getPlugins();
+  }
+
+  @Test
+  void getPlugin() {
+    var pluginClass = JEvaIrcPlugin.class;
+    jEvaClient.getPlugin(pluginClass);
+
+    verify(pluginController).getPlugin(pluginClass);
   }
 
   @Test
@@ -167,6 +178,14 @@ class JEvaIrcClientTest {
     doThrow(Exception.class).when(connection).write(anyString());
 
     assertDoesNotThrow(() -> jEvaClient.sendCommand(command));
+  }
+
+  @Test
+  void builder() {
+    var builder = JEvaIrcClient.builder();
+
+    assertNotNull(builder);
+    assertEquals(JEvaIrcClientBuilder.class, builder.getClass());
   }
 
   @Test

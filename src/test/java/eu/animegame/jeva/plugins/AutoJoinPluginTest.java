@@ -14,6 +14,10 @@ import eu.animegame.jeva.core.IrcConfig;
 import eu.animegame.jeva.core.JEvaIrcClient;
 import eu.animegame.jeva.irc.commands.Join;
 
+/**
+ *
+ * @author radiskull
+ */
 class AutoJoinPluginTest extends PluginBaseTest<AutoJoinPlugin> {
 
   private static final String CHAN_1 = "#channel1";

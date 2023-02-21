@@ -16,6 +16,10 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ *
+ * @author radiskull
+ */
 public class IrcPluginController {
 
   private static final Logger LOG = LoggerFactory.getLogger(IrcPluginController.class);
@@ -40,15 +44,17 @@ public class IrcPluginController {
 
   public boolean removePlugin(JEvaIrcPlugin plugin) {
     if (plugin != null) {
+      // TODO: if a plugin gets removed, we should also remove all callbacks
       LOG.trace("remove plugin: {}", plugin.getClass().getSimpleName());
       return plugins.remove(plugin);
     }
     return false;
   }
 
-  public Optional<JEvaIrcPlugin> getPlugin(Class<? extends JEvaIrcPlugin> clazz) {
+  @SuppressWarnings("unchecked")
+  public <P> Optional<P> getPlugin(Class<P> clazz) {
     LOG.trace("get plugin: {}", clazz);
-    return plugins.stream()
+    return (Optional<P>) plugins.stream()
         .filter(plugin -> plugin.getClass().equals(clazz)) //
         .findFirst();
   }

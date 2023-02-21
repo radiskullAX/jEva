@@ -17,6 +17,10 @@ import eu.animegame.jeva.core.exceptions.MissingParameterException;
 import eu.animegame.jeva.irc.commands.Join;
 import eu.animegame.jeva.irc.events.KickEvent;
 
+/**
+ *
+ * @author radiskull
+ */
 class ReJoinPluginTest extends PluginBaseTest<ReJoinPlugin> {
 
   private static final String NICK = IrcConfig.PROP_NICK;

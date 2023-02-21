@@ -9,6 +9,10 @@ import eu.animegame.jeva.core.IrcBaseEvent;
 import eu.animegame.jeva.core.JEvaIrcClient;
 import eu.animegame.jeva.irc.commands.Pong;
 
+/**
+ *
+ * @author radiskull
+ */
 class PingPluginTest extends PluginBaseTest<PingPlugin> {
 
   private PingPluginTest() {

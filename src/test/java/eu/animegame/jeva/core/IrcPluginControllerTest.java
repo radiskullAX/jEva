@@ -14,6 +14,10 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import eu.animegame.jeva.irc.events.UserBaseEvent;
 
+/**
+ *
+ * @author radiskull
+ */
 class IrcPluginControllerTest {
 
   private static final String COMMAND_1 = "TEST1";

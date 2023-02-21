@@ -13,6 +13,10 @@ import eu.animegame.jeva.core.JEvaIrcPlugin;
 import eu.animegame.jeva.irc.CommandCode;
 import eu.animegame.jeva.irc.commands.Join;
 
+/**
+ *
+ * @author radiskull
+ */
 public class AutoJoinPlugin implements JEvaIrcPlugin {
 
   public static final String PROP_CHANNELS = "jeva.irc.plugin.autojoin.channels";

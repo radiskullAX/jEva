@@ -3,19 +3,23 @@ package eu.animegame.jeva.core;
 import java.util.Properties;
 import eu.animegame.jeva.core.exceptions.MissingParameterException;
 
+/**
+ *
+ * @author radiskull
+ */
 public class IrcConfig extends Properties {
-
-  public static final String PROP_NICK = "jeva.irc.nick";
-
-  public static final String PROP_PASSWORD = "jeva.irc.password";
-
-  public static final String PROP_REAL_NAME = "jeva.irc.realName";
 
   public static final String PROP_SERVER = "jeva.irc.server";
 
+  public static final String PROP_SERVER_PASSWORD = "jeva.irc.serverPassword";
+
   public static final String PROP_PORT = "jeva.irc.port";
 
+  public static final String PROP_NICK = "jeva.irc.nick";
+
   public static final String PROP_MODE = "jeva.irc.mode";
+
+  public static final String PROP_REAL_NAME = "jeva.irc.realName";
 
   private static final long serialVersionUID = 102970934064351453L;
 

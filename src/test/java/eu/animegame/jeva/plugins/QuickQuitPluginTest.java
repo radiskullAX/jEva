@@ -8,6 +8,10 @@ import org.junit.jupiter.api.Test;
 import eu.animegame.jeva.core.JEvaIrcClient;
 import eu.animegame.jeva.irc.events.PrivMsgEvent;
 
+/**
+ *
+ * @author radiskull
+ */
 class QuickQuitPluginTest extends PluginBaseTest<QuickQuitPlugin> {
 
   private static final String USER = "IrcUser";

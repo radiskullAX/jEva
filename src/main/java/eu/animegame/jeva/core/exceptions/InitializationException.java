@@ -1,5 +1,9 @@
 package eu.animegame.jeva.core.exceptions;
 
+/**
+ *
+ * @author radiskull
+ */
 public class InitializationException extends RuntimeException {
 
   private static final long serialVersionUID = 1397840744847369170L;

@@ -3,6 +3,10 @@ package eu.animegame.jeva.irc.events;
 import java.util.Optional;
 import eu.animegame.jeva.core.IrcBaseEvent;
 
+/**
+ *
+ * @author radiskull
+ */
 public class KickEvent extends UserBaseEvent {
 
   private final String channel;

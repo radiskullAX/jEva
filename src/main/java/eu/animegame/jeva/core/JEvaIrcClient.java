@@ -1,6 +1,7 @@
 package eu.animegame.jeva.core;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,26 +18,31 @@ public class JEvaIrcClient {
 
   private static final Logger LOG = LoggerFactory.getLogger(JEvaIrcClient.class);
 
-  protected final IrcPluginController pluginController;
+  private final IrcPluginController pluginController;
 
-  protected final IrcConfig config;
+  private final IrcConfig config;
 
-  protected final Connection connection;
+  private final Connection connection;
 
-  protected LifecycleState state;
+  private LifecycleState state;
 
   private boolean stopped = false;
 
   private boolean started = false;
 
   // TODO: parse command args
+  // TODO: args override config values
   public JEvaIrcClient(String... args) {
     this(new SocketConnection(), args);
   }
 
   public JEvaIrcClient(Connection connection, String... args) {
+    this(connection, new IrcConfig(), args);
+  }
+
+  public JEvaIrcClient(Connection connection, IrcConfig config, String... args) {
     this.connection = connection;
-    this.config = new IrcConfig();
+    this.config = config;
     this.state = new Initialize();
     this.pluginController = new IrcPluginController(this);
   }
@@ -82,7 +88,7 @@ public class JEvaIrcClient {
       do {
         state.run(this);
       } while (!isStopped());
-
+      // TODO: when stopped .. the rest of lifecycles have to run through!
       // reset lifecycle in case we stopped unexpectedly
       setState(new Initialize());
       started = false;
@@ -143,6 +149,10 @@ public class JEvaIrcClient {
     return pluginController.getPlugins();
   }
 
+  public <P> Optional<P> getPlugin(Class<P> pluginClass) {
+    return pluginController.getPlugin(pluginClass);
+  }
+
   public void lookup() {
     pluginController.lookup();
   }
@@ -154,5 +164,9 @@ public class JEvaIrcClient {
 
   public void fireIrcEvent(final IrcBaseEvent event) {
     pluginController.fireIrcEvent(event);
+  }
+
+  public static JEvaIrcClientBuilder builder() {
+    return JEvaIrcClientBuilder.create();
   }
 }

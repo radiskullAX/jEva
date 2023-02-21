@@ -2,6 +2,10 @@ package eu.animegame.jeva.irc.events;
 
 import eu.animegame.jeva.core.IrcBaseEvent;
 
+/**
+ *
+ * @author radiskull
+ */
 public class PrivMsgEvent extends UserBaseEvent {
 
   private final String channel;

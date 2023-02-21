@@ -11,6 +11,10 @@ import eu.animegame.jeva.core.exceptions.MissingParameterException;
 import eu.animegame.jeva.irc.commands.Join;
 import eu.animegame.jeva.irc.events.KickEvent;
 
+/**
+ *
+ * @author radiskull
+ */
 public class ReJoinPlugin implements JEvaIrcPlugin {
 
   private static final Logger LOG = LoggerFactory.getLogger(ReJoinPlugin.class);
