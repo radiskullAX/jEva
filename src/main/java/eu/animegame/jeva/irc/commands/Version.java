@@ -8,6 +8,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Version implements IrcCommand {
 
+  public static final String COMMAND = "VERSION";
+
   private final String server;
 
   public Version() {
@@ -20,7 +22,7 @@ public final class Version implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder("VERSION");
+    var command = new StringBuilder(COMMAND);
     if (server != null) {
       command.append(" ").append(server);
     }

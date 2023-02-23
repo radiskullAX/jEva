@@ -8,6 +8,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Wallops implements IrcCommand {
 
+  public static final String COMMAND = "WALLOPS";
+
   private final String message;
 
   public Wallops(String message) {
@@ -16,8 +18,8 @@ public final class Wallops implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder();
-    command.append("WALLOPS :").append(message);
+    var command = new StringBuilder(COMMAND);
+    command.append(" :").append(message);
     return command.toString();
   }
 

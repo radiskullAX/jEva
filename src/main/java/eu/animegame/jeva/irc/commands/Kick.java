@@ -10,6 +10,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Kick implements IrcCommand {
 
+  public static final String COMMAND = "KICK";
+
   private final String user;
 
   private final String channel;
@@ -36,8 +38,8 @@ public final class Kick implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder();
-    command.append("KICK ").append(channel).append(" ").append(user);
+    var command = new StringBuilder(COMMAND);
+    command.append(" ").append(channel).append(" ").append(user);
     if (message != null) {
       command.append(" :").append(message);
     }

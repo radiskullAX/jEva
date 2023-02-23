@@ -198,6 +198,7 @@ class JEvaIrcClientTest {
     var thread = new Thread(new TestWorker(jEvaClient, countDownLatch));
     thread.start();
 
+    // TODO: it kinda sucks but rather run a loop and check if the client is ready, then do stuff
     Thread.sleep(50);
 
     assertTrue(jEvaClient.isRunning());

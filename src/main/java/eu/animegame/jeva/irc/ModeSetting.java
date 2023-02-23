@@ -8,18 +8,18 @@ package eu.animegame.jeva.irc;
  */
 public enum ModeSetting {
 
-  ADD("+"),
-  REMOVE("-");
+  ADD(),
+  REMOVE();
 
-  private String value;
-
-  private ModeSetting(String value) {
-    this.value = value;
+  @Override
+  public String toString() {
+    switch (this) {
+      case ADD:
+        return "+";
+      case REMOVE:
+        return "-";
+      default:
+        return super.toString();
+    }
   }
-
-  public String getValue() {
-    return value;
-  }
-
-  // TODO: overwrite toString() and return the right value
 }

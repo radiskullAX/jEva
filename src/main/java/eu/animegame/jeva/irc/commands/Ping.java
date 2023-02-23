@@ -8,6 +8,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Ping implements IrcCommand {
 
+  public static final String COMMAND = "PING";
+
   private final String target;
 
   private final String server;
@@ -23,8 +25,8 @@ public final class Ping implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder();
-    command.append("PING ").append(target);
+    var command = new StringBuilder(COMMAND);
+    command.append(" ").append(target);
     if (server != null) {
       command.append(" ").append(server);
     }

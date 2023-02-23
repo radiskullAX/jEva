@@ -9,6 +9,8 @@ import eu.animegame.jeva.irc.ModeSetting;
  */
 public final class UserMode implements IrcCommand {
 
+  public static final String COMMAND = "MODE";
+
   private final String nick;
 
   private final String mode;
@@ -41,10 +43,10 @@ public final class UserMode implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder();
-    command.append("MODE ").append(nick);
+    var command = new StringBuilder(COMMAND);
+    command.append(" ").append(nick);
     if (mode != null && setting != null) {
-      command.append(" ").append(setting.getValue()).append(mode);
+      command.append(" ").append(setting).append(mode);
     }
     return command.toString();
   }

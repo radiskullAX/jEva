@@ -8,6 +8,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Trace implements IrcCommand {
 
+  public static final String COMMAND = "TRACE";
+
   private final String server;
 
   public Trace() {
@@ -20,7 +22,7 @@ public final class Trace implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder("TRACE");
+    var command = new StringBuilder(COMMAND);
     if (server != null) {
       command.append(" ").append(server);
     }

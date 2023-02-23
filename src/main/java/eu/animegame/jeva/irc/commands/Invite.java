@@ -8,6 +8,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Invite implements IrcCommand {
 
+  public static final String COMMAND = "INVITE";
+
   private final String user;
 
   private final String channel;
@@ -19,8 +21,8 @@ public final class Invite implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder();
-    command.append("INVITE ").append(user).append(" ").append(channel);
+    var command = new StringBuilder(COMMAND);
+    command.append(" ").append(user).append(" ").append(channel);
     return command.toString();
   }
 }

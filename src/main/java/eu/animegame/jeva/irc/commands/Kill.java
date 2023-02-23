@@ -8,6 +8,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Kill implements IrcCommand {
 
+  public static final String COMMAND = "KILL";
+
   private final String nick;
 
   private final String comment;
@@ -19,8 +21,8 @@ public final class Kill implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder();
-    command.append("KILL ").append(nick).append(" :").append(comment);
+    var command = new StringBuilder(COMMAND);
+    command.append(" ").append(nick).append(" :").append(comment);
     return command.toString();
   }
 }

@@ -10,6 +10,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class List implements IrcCommand {
 
+  public static final String COMMAND = "LIST";
+
   private final String channel;
 
   private final String server;
@@ -41,7 +43,7 @@ public final class List implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder("LIST");
+    var command = new StringBuilder(COMMAND);
     if (channel != null) {
       command.append(" ").append(channel);
     }

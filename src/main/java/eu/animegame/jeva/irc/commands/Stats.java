@@ -8,6 +8,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Stats implements IrcCommand {
 
+  public static final String COMMAND = "STATS";
+
   private final String server;
 
   private final String query;
@@ -31,7 +33,7 @@ public final class Stats implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder("STATS");
+    var command = new StringBuilder(COMMAND);
     if (query != null) {
       command.append(" ").append(query);
     }

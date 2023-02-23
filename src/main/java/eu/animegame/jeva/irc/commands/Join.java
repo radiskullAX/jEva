@@ -11,6 +11,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Join implements IrcCommand {
 
+  public static final String COMMAND = "JOIN";
+
   private final String channel;
 
   private final String password;
@@ -58,8 +60,8 @@ public final class Join implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder();
-    command.append("JOIN ").append(channel);
+    var command = new StringBuilder(COMMAND);
+    command.append(" ").append(channel);
     if (!password.isBlank()) {
       command.append(" ").append(password);
     }

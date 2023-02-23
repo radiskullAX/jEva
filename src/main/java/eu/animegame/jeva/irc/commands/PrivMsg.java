@@ -8,7 +8,6 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class PrivMsg implements IrcCommand {
 
-  //TODO: Give every command a field like this
   public static final String COMMAND = "PRIVMSG";
 
   private final String target;
@@ -27,8 +26,8 @@ public final class PrivMsg implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder();
-    command.append("PRIVMSG ").append(target).append(" :").append(message);
+    var command = new StringBuilder(COMMAND);
+    command.append(" ").append(target).append(" :").append(message);
     return command.toString();
   }
 

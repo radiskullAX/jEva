@@ -8,6 +8,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Quit implements IrcCommand {
 
+  public static final String COMMAND = "QUIT";
+
   private final String message;
 
   public Quit() {
@@ -20,8 +22,7 @@ public final class Quit implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder();
-    command.append("QUIT");
+    var command = new StringBuilder(COMMAND);
     if (message != null) {
       command.append(" :").append(message);
     }

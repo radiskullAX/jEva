@@ -8,6 +8,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Motd implements IrcCommand {
 
+  public static final String COMMAND = "MOTD";
+
   private final String server;
 
   public Motd() {
@@ -20,7 +22,7 @@ public final class Motd implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder("MOTD");
+    var command = new StringBuilder(COMMAND);
     if (server != null) {
       command.append(" ").append(server);
     }

@@ -8,6 +8,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Connect implements IrcCommand {
 
+  public static final String COMMAND = "CONNECT";
+
   private final String server;
 
   private final int port;
@@ -26,8 +28,8 @@ public final class Connect implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder();
-    command.append("CONNECT ").append(server).append(" ").append(port);
+    var command = new StringBuilder(COMMAND);
+    command.append(" ").append(server).append(" ").append(port);
     if (remoteServer != null) {
       command.append(" ").append(remoteServer);
     }

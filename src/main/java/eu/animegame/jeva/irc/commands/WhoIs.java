@@ -10,6 +10,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class WhoIs implements IrcCommand {
 
+  public static final String COMMAND = "WHOIS";
+
   private final String user;
 
   private final String server;
@@ -33,7 +35,7 @@ public final class WhoIs implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder("WHOIS");
+    var command = new StringBuilder(COMMAND);
     if (server != null) {
       command.append(" ").append(server);
     }

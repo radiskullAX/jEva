@@ -8,9 +8,11 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Die implements IrcCommand {
 
+  public static final String COMMAND = "DIE";
+
   @Override
   public String build() {
-    return "DIE";
+    return COMMAND;
   }
 
 }

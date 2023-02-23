@@ -8,6 +8,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Summon implements IrcCommand {
 
+  public static final String COMMAND = "SUMMON";
+
   private final String nick;
 
   private final String server;
@@ -30,8 +32,8 @@ public final class Summon implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder();
-    command.append("SUMMON ").append(nick);
+    var command = new StringBuilder(COMMAND);
+    command.append(" ").append(nick);
     if (server != null) {
       command.append(" ").append(server);
     }

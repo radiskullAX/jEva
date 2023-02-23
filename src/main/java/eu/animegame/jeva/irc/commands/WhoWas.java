@@ -10,6 +10,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class WhoWas implements IrcCommand {
 
+  public static final String COMMAND = "WHOWAS";
+
   private final String nick;
 
   private final int count;
@@ -44,8 +46,8 @@ public final class WhoWas implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder();
-    command.append("WHOWAS ").append(nick);
+    var command = new StringBuilder(COMMAND);
+    command.append(" ").append(nick);
     if (count > 0) {
       command.append(" ").append(count);
     }

@@ -8,6 +8,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Away implements IrcCommand {
 
+  public static final String COMMAND = "AWAY";
+
   private final String message;
 
   /**
@@ -23,7 +25,7 @@ public final class Away implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder("AWAY");
+    var command = new StringBuilder(COMMAND);
     if (message != null) {
       command.append(" :").append(message);
     }

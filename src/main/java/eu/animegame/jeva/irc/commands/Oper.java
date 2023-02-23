@@ -8,6 +8,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Oper implements IrcCommand {
 
+  public static final String COMMAND = "OPER";
+
   private final String user;
 
   private final String password;
@@ -19,8 +21,8 @@ public final class Oper implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder();
-    command.append("OPER ").append(user).append(" ").append(password);
+    var command = new StringBuilder(COMMAND);
+    command.append(" ").append(user).append(" ").append(password);
     return command.toString();
   }
 

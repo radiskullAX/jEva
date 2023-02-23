@@ -8,6 +8,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Lusers implements IrcCommand {
 
+  public static final String COMMAND = "LUSERS";
+
   private final String mask;
 
   private final String server;
@@ -27,7 +29,7 @@ public final class Lusers implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder("LUSERS");
+    var command = new StringBuilder(COMMAND);
     if (mask != null) {
       command.append(" ").append(mask);
     }

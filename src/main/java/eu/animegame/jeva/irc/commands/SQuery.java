@@ -8,6 +8,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class SQuery implements IrcCommand {
 
+  public static final String COMMAND = "SQUERY";
+
   private final String serviceName;
 
   private final String serviceMessage;
@@ -19,8 +21,8 @@ public final class SQuery implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder();
-    command.append("SQUERY ").append(serviceName).append(" :").append(serviceMessage);
+    var command = new StringBuilder(COMMAND);
+    command.append(" ").append(serviceName).append(" :").append(serviceMessage);
     return command.toString();
   }
 }

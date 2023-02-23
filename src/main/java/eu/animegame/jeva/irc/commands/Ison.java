@@ -10,6 +10,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Ison implements IrcCommand {
 
+  public static final String COMMAND = "ISON";
+
   private final String nick;
 
   public Ison(String nick) {
@@ -22,8 +24,8 @@ public final class Ison implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder();
-    command.append("ISON ").append(nick);
+    var command = new StringBuilder(COMMAND);
+    command.append(" ").append(nick);
     return command.toString();
   }
 

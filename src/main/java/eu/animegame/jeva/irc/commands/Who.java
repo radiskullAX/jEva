@@ -8,6 +8,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Who implements IrcCommand {
 
+  public static final String COMMAND = "WHO";
+
   private final String mask;
 
   private final boolean operatorsOnly;
@@ -23,8 +25,8 @@ public final class Who implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder();
-    command.append("WHO ").append(mask);
+    var command = new StringBuilder(COMMAND);
+    command.append(" ").append(mask);
     if (operatorsOnly) {
       command.append(" ").append("o");
     }

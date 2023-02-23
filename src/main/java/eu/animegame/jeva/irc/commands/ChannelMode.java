@@ -9,6 +9,8 @@ import eu.animegame.jeva.irc.ModeSetting;
  */
 public final class ChannelMode implements IrcCommand {
 
+  public static final String COMMAND = "MODE";
+
   private final String channel;
 
   private final ModeSetting setting;
@@ -39,10 +41,10 @@ public final class ChannelMode implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder();
-    command.append("MODE ").append(channel).append(" ");
+    var command = new StringBuilder(COMMAND);
+    command.append(" ").append(channel).append(" ");
     if (setting != null) {
-      command.append(setting.getValue());
+      command.append(setting);
     }
     command.append(mode);
     if (parameters != null) {

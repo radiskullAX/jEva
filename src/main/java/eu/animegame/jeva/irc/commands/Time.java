@@ -8,6 +8,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Time implements IrcCommand {
 
+  public static final String COMMAND = "TIME";
+
   private final String server;
 
   public Time() {
@@ -20,7 +22,7 @@ public final class Time implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder("TIME");
+    var command = new StringBuilder(COMMAND);
     if (server != null) {
       command.append(" ").append(server);
     }

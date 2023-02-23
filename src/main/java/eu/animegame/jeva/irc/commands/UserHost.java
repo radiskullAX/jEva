@@ -10,6 +10,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class UserHost implements IrcCommand {
 
+  public static final String COMMAND = "USERHOST";
+
   private final String nick;
 
   public UserHost(String nick) {
@@ -22,8 +24,8 @@ public final class UserHost implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder();
-    command.append("USERHOST ").append(nick);
+    var command = new StringBuilder(COMMAND);
+    command.append(" ").append(nick);
     return command.toString();
   }
 

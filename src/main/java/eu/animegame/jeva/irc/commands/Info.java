@@ -8,6 +8,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Info implements IrcCommand {
 
+  public static final String COMMAND = "INFO";
+
   private final String target;
 
   public Info(String target) {
@@ -16,8 +18,8 @@ public final class Info implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder();
-    command.append("INFO ").append(target);
+    var command = new StringBuilder(COMMAND);
+    command.append(" ").append(target);
     return command.toString();
   }
 

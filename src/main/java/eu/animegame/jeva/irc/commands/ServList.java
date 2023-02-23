@@ -8,6 +8,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class ServList implements IrcCommand {
 
+  public static final String COMMAND = "SERVLIST";
+
   private final String mask;
 
   private final String type;
@@ -27,7 +29,7 @@ public final class ServList implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder("SERVLIST");
+    var command = new StringBuilder(COMMAND);
     if (mask != null) {
       command.append(" ").append(mask);
     }

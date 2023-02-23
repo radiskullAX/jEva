@@ -8,6 +8,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Topic implements IrcCommand {
 
+  public static final String COMMAND = "TOPIC";
+
   private final String channel;
 
   private final String topic;
@@ -32,8 +34,8 @@ public final class Topic implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder();
-    command.append("TOPIC ").append(channel);
+    var command = new StringBuilder(COMMAND);
+    command.append(" ").append(channel);
     if (topic != null) {
       command.append(" :").append(topic);
     }

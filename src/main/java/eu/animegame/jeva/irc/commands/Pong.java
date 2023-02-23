@@ -8,6 +8,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Pong implements IrcCommand {
 
+  public static final String COMMAND = "PONG";
+
   private final String pong;
 
   private final String server;
@@ -23,8 +25,8 @@ public final class Pong implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder();
-    command.append("PONG ").append(pong);
+    var command = new StringBuilder(COMMAND);
+    command.append(" ").append(pong);
     if (server != null) {
       command.append(" ").append(server);
     }

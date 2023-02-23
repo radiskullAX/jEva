@@ -8,6 +8,8 @@ import eu.animegame.jeva.core.IrcCommand;
  */
 public final class Error implements IrcCommand {
 
+  public static final String COMMAND = "ERROR";
+
   private final String message;
 
   public Error(String message) {
@@ -16,8 +18,8 @@ public final class Error implements IrcCommand {
 
   @Override
   public String build() {
-    var command = new StringBuilder();
-    command.append("ERROR ").append(message);
+    var command = new StringBuilder(COMMAND);
+    command.append(" ").append(message);
     return command.toString();
   }
 
