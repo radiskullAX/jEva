@@ -4,6 +4,7 @@ import eu.animegame.jeva.core.IrcBaseEvent;
 import eu.animegame.jeva.core.IrcEventAcceptor;
 import eu.animegame.jeva.core.JEvaIrcClient;
 import eu.animegame.jeva.core.JEvaIrcPlugin;
+import eu.animegame.jeva.irc.commands.Ping;
 import eu.animegame.jeva.irc.commands.Pong;
 
 /**
@@ -16,7 +17,7 @@ import eu.animegame.jeva.irc.commands.Pong;
  */
 public class PingPlugin implements JEvaIrcPlugin {
 
-  @IrcEventAcceptor(command = "PING")
+  @IrcEventAcceptor(command = Ping.COMMAND)
   public void sendPong(IrcBaseEvent event, JEvaIrcClient jEvaClient) {
     jEvaClient.sendCommand(new Pong(event.getParameters()));
   }

@@ -1,6 +1,7 @@
 package eu.animegame.jeva.irc.events;
 
 import eu.animegame.jeva.core.IrcBaseEvent;
+import eu.animegame.jeva.core.exceptions.InitializationException;
 
 /**
  *
@@ -24,8 +25,7 @@ public class UserBaseEvent extends IrcBaseEvent {
       user = prefix.substring(endOfNick + 1, endOfUser);
       host = prefix.substring(endOfUser + 1);
     } else {
-      // TODO: throw a good exception
-      throw new RuntimeException("Empty prefix!");
+      throw new InitializationException("Cannot transform event: empty prefix!");
     }
   }
 

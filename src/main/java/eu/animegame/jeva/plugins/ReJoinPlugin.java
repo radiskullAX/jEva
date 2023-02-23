@@ -9,6 +9,7 @@ import eu.animegame.jeva.core.JEvaIrcPlugin;
 import eu.animegame.jeva.core.exceptions.InitializationException;
 import eu.animegame.jeva.core.exceptions.MissingParameterException;
 import eu.animegame.jeva.irc.commands.Join;
+import eu.animegame.jeva.irc.commands.Kick;
 import eu.animegame.jeva.irc.events.KickEvent;
 
 /**
@@ -29,7 +30,7 @@ public class ReJoinPlugin implements JEvaIrcPlugin {
     }
   }
 
-  @IrcEventAcceptor(command = "KICK")
+  @IrcEventAcceptor(command = Kick.COMMAND)
   public void rejoinChannel(KickEvent event, JEvaIrcClient jEvaClient) {
     var nick = jEvaClient.getConfig().getProperty(IrcConfig.PROP_NICK, "");
     if (nick.equals(event.getKickedUser())) {
