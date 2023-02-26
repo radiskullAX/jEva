@@ -8,8 +8,10 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import eu.animegame.jeva.Tags;
 import eu.animegame.jeva.core.IrcConfig;
 import eu.animegame.jeva.core.JEvaIrcClient;
 import eu.animegame.jeva.core.exceptions.InitializationException;
@@ -21,6 +23,7 @@ import eu.animegame.jeva.irc.events.KickEvent;
  *
  * @author radiskull
  */
+@Tag(Tags.UNIT)
 class ReJoinPluginTest extends PluginBaseTest<ReJoinPlugin> {
 
   private static final String NICK = IrcConfig.PROP_NICK;

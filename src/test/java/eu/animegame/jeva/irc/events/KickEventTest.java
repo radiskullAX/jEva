@@ -2,9 +2,12 @@ package eu.animegame.jeva.irc.events;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Optional;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import eu.animegame.jeva.Tags;
 import eu.animegame.jeva.core.IrcBaseEvent;
 
+@Tag(Tags.UNIT)
 class KickEventTest {
 
   private static final String PREFIX = "jEva!~Tester@animegame.eu";

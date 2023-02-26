@@ -11,6 +11,8 @@ public class Tags {
 
   public static final String INTEGRATION = "integration";
 
+  public static final String UNIT = "unit";
+
   private Tags() {
   }
 

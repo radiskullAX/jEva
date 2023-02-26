@@ -10,15 +10,17 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import eu.animegame.jeva.Tags;
 
 /**
  *
  * @author radiskull
  */
-// TODO: Use @Tag annotation more, look into nested tests
+@Tag(Tags.UNIT)
 class JEvaIrcClientTest {
 
   private static final String COMMAND = "TestCommand";

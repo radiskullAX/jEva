@@ -5,14 +5,17 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import eu.animegame.jeva.Tags;
 
 /**
  * This test exists only to satisfy code coverage.
  *
  * @author radiskull
  */
+@Tag(value = Tags.UNIT)
 class ExceptionTest {
 
   private static final String MESSAGE = "This is a test!";

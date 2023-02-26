@@ -3,13 +3,16 @@ package eu.animegame.jeva.core.lifecycle;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import eu.animegame.jeva.Tags;
 import eu.animegame.jeva.core.exceptions.LifeCycleException;
 
 /**
  *
  * @author radiskull
  */
+@Tag(Tags.UNIT)
 class ShutdownTest extends LifeCycleStateBaseTest {
 
   public ShutdownTest() {

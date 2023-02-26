@@ -9,10 +9,12 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
+import eu.animegame.jeva.Tags;
 import eu.animegame.jeva.core.IrcCommand;
 import eu.animegame.jeva.core.IrcConfig;
 import eu.animegame.jeva.core.JEvaIrcClient;
@@ -23,6 +25,7 @@ import eu.animegame.jeva.core.exceptions.MissingParameterException;
  *
  * @author radiskull
  */
+@Tag(Tags.UNIT)
 class ConnectPluginTest extends PluginBaseTest<ConnectPlugin> {
 
   private static final String NICK = IrcConfig.PROP_NICK;

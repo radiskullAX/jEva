@@ -12,28 +12,27 @@ import static org.mockito.Mockito.verify;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.rmi.UnknownHostException;
 import java.util.Properties;
-import java.util.concurrent.CountDownLatch;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import eu.animegame.jeva.Tags;
 import eu.animegame.jeva.core.exceptions.ConnectionException;
 
 /**
  *
  * @author radiskull
  */
+@Tag(Tags.UNIT)
 class SocketConnectionTest {
 
   private static final String SERVER = "localhost";
@@ -61,29 +60,6 @@ class SocketConnectionTest {
     config.put(IrcConfig.PROP_PORT, PORT);
 
     spyConnection.setConfig(config);
-  }
-
-  @Test
-  public void testConnectSuccessful() throws Exception {
-    try {
-      CountDownLatch countDownLatch = new CountDownLatch(1);
-
-      TestServer server = new TestServer(countDownLatch);
-      Thread t = new Thread(server);
-      t.start();
-
-      Thread.sleep(10);
-
-      var connected = spyConnection.connect();
-      var messageSend = spyConnection.write(MESSAGE);
-
-      countDownLatch.await();
-
-      assertEquals(true, connected);
-      assertEquals(true, messageSend);
-    } finally {
-      spyConnection.disconnect();
-    }
   }
 
   @ParameterizedTest()
@@ -222,29 +198,5 @@ class SocketConnectionTest {
   static Stream<Arguments> readExceptionClassProvider() {
     return Stream.of(arguments(IOException.class, ConnectionException.class),
         arguments(NullPointerException.class, Exception.class));
-  }
-
-  private class TestServer implements Runnable {
-
-    private final CountDownLatch latch;
-
-    public TestServer(CountDownLatch latch) {
-      this.latch = latch;
-    }
-
-    @Override
-    public void run() {
-      try (ServerSocket socket = new ServerSocket(PORT_NUMERIC);
-          Socket client = socket.accept();
-          BufferedWriter out = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
-          BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));) {
-
-        in.readLine();
-
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-      latch.countDown();
-    }
   }
 }

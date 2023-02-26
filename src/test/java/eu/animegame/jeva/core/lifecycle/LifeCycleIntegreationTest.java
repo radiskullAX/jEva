@@ -17,13 +17,13 @@ import eu.animegame.jeva.core.exceptions.LifeCycleException;
  * @author radiskull
  */
 @Tag(Tags.INTEGRATION)
-public class LifeCycleIrcStateTest {
+public class LifeCycleIntegreationTest {
 
   private LifeCycle lifeCycle;
 
   @Test
   @Tag(Tags.TIMED)
-  void startLifeCycle() throws LifeCycleException {
+  void start() throws LifeCycleException {
     LifeCycleObject object = mock(LifeCycleObject.class);
 
     lifeCycle = new LifeCycle(new Initialize(object));

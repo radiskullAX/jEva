@@ -1,9 +1,12 @@
 package eu.animegame.jeva.irc.events;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import eu.animegame.jeva.Tags;
 import eu.animegame.jeva.core.IrcBaseEvent;
 
+@Tag(Tags.UNIT)
 class UserBaseEventTest {
 
   private static final String NICK = "jEva";

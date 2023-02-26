@@ -7,8 +7,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import eu.animegame.jeva.Tags;
 import eu.animegame.jeva.core.IrcBaseEvent;
 import eu.animegame.jeva.core.IrcConfig;
 import eu.animegame.jeva.core.JEvaIrcClient;
@@ -18,6 +20,7 @@ import eu.animegame.jeva.irc.commands.Join;
  *
  * @author radiskull
  */
+@Tag(Tags.UNIT)
 class AutoJoinPluginTest extends PluginBaseTest<AutoJoinPlugin> {
 
   private static final String CHAN_1 = "#channel1";

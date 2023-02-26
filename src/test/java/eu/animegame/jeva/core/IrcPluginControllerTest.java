@@ -11,13 +11,16 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import java.util.Arrays;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import eu.animegame.jeva.Tags;
 import eu.animegame.jeva.irc.events.UserBaseEvent;
 
 /**
  *
  * @author radiskull
  */
+@Tag(Tags.UNIT)
 class IrcPluginControllerTest {
 
   private static final String COMMAND_1 = "TEST1";

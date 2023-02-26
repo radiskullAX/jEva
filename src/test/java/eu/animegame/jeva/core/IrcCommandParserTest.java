@@ -3,9 +3,11 @@ package eu.animegame.jeva.core;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import eu.animegame.jeva.Tags;
 import eu.animegame.jeva.core.exceptions.JEvaException;
 import eu.animegame.jeva.core.exceptions.UnknownFormatException;
 
@@ -13,6 +15,7 @@ import eu.animegame.jeva.core.exceptions.UnknownFormatException;
  *
  * @author radiskull
  */
+@Tag(Tags.UNIT)
 class IrcCommandParserTest {
 
   private final static String MESSAGE = "This is a Testmessage";

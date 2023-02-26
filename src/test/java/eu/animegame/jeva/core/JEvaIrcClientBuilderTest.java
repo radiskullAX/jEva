@@ -8,7 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import java.util.Arrays;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import eu.animegame.jeva.Tags;
 import eu.animegame.jeva.plugins.AutoJoinPlugin;
 import eu.animegame.jeva.plugins.ReJoinPlugin;
 
@@ -17,6 +19,7 @@ import eu.animegame.jeva.plugins.ReJoinPlugin;
  *
  * @author radiskull
  */
+@Tag(Tags.UNIT)
 class JEvaIrcClientBuilderTest {
 
   private static final String SERVER = "irc.animegame.eu";

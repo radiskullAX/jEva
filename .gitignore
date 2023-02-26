@@ -9,6 +9,3 @@ target/
 
 # Misc
 *.log
-
-# Tests Ressources
-simplelogger.properties

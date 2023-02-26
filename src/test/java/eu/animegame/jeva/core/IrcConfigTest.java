@@ -4,13 +4,16 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import eu.animegame.jeva.Tags;
 import eu.animegame.jeva.core.exceptions.MissingParameterException;
 
 /**
  *
  * @author radiskull
  */
+@Tag(Tags.UNIT)
 class IrcConfigTest {
 
   private static final String PARAM_1 = "param1";

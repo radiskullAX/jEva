@@ -18,6 +18,7 @@ import eu.animegame.jeva.core.LifeCycleState;
  *
  * @author radiskull
  */
+@Tag(Tags.UNIT)
 class LifeCycleTest {
 
   private LifeCycle lifeCycle;
