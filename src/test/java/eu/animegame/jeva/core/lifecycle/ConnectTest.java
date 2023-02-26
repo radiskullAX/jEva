@@ -1,75 +1,37 @@
 package eu.animegame.jeva.core.lifecycle;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import org.junit.jupiter.api.Test;
-import eu.animegame.jeva.core.Connection;
-import eu.animegame.jeva.core.JEvaIrcClient;
-import eu.animegame.jeva.core.JEvaIrcPlugin;
-import eu.animegame.jeva.core.exceptions.ConnectException;
+import eu.animegame.jeva.core.exceptions.LifeCycleException;
 
 /**
  *
  * @author radiskull
  */
-class ConnectTest {
+class ConnectTest extends LifeCycleStateBaseTest {
 
-  private JEvaIrcClient jEvaClient = mock(JEvaIrcClient.class);
-
-  private LifecycleState state = new Connect();
-
-  @Test
-  void testSetNextLifecycle() {
-    state.run(jEvaClient);
-    LifecycleHelper.verifySetState(jEvaClient, Read.class);
+  public ConnectTest() {
+    super();
+    state = new Connect(lifeCycleObject);
   }
 
   @Test
-  void testPluginsAreNoticed() {
-    Connection connection = mock(Connection.class);
-    JEvaIrcClient realJEvaClient = new JEvaIrcClient(connection);
-    JEvaIrcPlugin plugin = mock(JEvaIrcPlugin.class);
-    realJEvaClient.addPlugin(plugin);
-    state.run(realJEvaClient);
+  void run() throws LifeCycleException {
+    state.run(lifeCycle);
 
-    verify(plugin).connect(realJEvaClient);
+    verify(lifeCycleObject).connect();
+    verify(lifeCycle).setState(any(Read.class));
   }
 
   @Test
-  void testConnectSuccessful() throws ConnectException, Exception {
-    state.run(jEvaClient);
-
-    verify(jEvaClient).connect();
-
-    LifecycleHelper.verifySetState(jEvaClient, Read.class);
-  }
-
-  @Test
-  void testPluginFiresException() {
-    doThrow(new RuntimeException()).when(jEvaClient).fireLifecycleState(any());
-
-    state.run(jEvaClient);
-
-    LifecycleHelper.verifySetState(jEvaClient, 2, Shutdown.class);
-  }
-
-  @Test
-  void testConnectfails() throws ConnectException, Exception {
-    doThrow(new ConnectException()).when(jEvaClient).connect();
-
-    state.run(jEvaClient);
-
-    LifecycleHelper.verifySetState(jEvaClient, Disconnect.class);
-  }
-
-  @Test
-  void testConnectionfails() throws ConnectException, Exception {
-    doThrow(new Exception()).when(jEvaClient).connect();
-
-    state.run(jEvaClient);
-
-    LifecycleHelper.verifySetState(jEvaClient, Shutdown.class);
+  void runThrowsException() throws LifeCycleException {
+    doThrow(LifeCycleException.class).when(lifeCycleObject).connect();
+    
+    assertDoesNotThrow(() -> state.run(lifeCycle));
+    
+    verify(lifeCycle).setState(any(Disconnect.class));
   }
 }

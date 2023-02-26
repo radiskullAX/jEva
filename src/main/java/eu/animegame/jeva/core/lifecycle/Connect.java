@@ -2,32 +2,31 @@ package eu.animegame.jeva.core.lifecycle;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import eu.animegame.jeva.core.JEvaIrcClient;
-import eu.animegame.jeva.core.exceptions.ConnectException;
+import eu.animegame.jeva.core.LifeCycle;
+import eu.animegame.jeva.core.LifeCycleState;
 
 /**
  *
  * @author radiskull
  */
-public class Connect implements LifecycleState {
+public class Connect implements LifeCycleState {
 
   private static final Logger LOG = LoggerFactory.getLogger(Connect.class);
 
-  @Override
-  public void run(JEvaIrcClient context) {
-    LOG.info("Try to establish connection");
+  private final LifeCycleObject object;
 
+  public Connect(LifeCycleObject object) {
+    this.object = object;
+  }
+
+  @Override
+  public void run(LifeCycle context) {
     try {
-      context.connect();
-      context.setState(new Read());
-      context.fireLifecycleState(p -> p.connect(context));
-      LOG.info("Established a connection");
-    } catch (ConnectException ce) {
-      LOG.warn("Failed to establish a connection", ce);
-      context.setState(new Disconnect());
+      object.connect();
+      context.setState(new Read(object));
     } catch (Exception e) {
-      LOG.error("Failed to connect", e);
-      context.setState(new Shutdown());
+      LOG.error("failed to connect", e);
+      context.setState(new Disconnect(object));
     }
   }
 }

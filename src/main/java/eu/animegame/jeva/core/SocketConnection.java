@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import eu.animegame.jeva.core.exceptions.ConnectException;
+import eu.animegame.jeva.core.exceptions.ConnectionException;
 
 /**
  *
@@ -47,7 +47,7 @@ public class SocketConnection implements Connection {
   }
 
   @Override
-  public boolean connect() throws ConnectException, Exception {
+  public boolean connect() throws ConnectionException {
     try {
       var address = config.getProperty(IrcConfig.PROP_SERVER);
       var port = Integer.parseInt(config.getProperty(IrcConfig.PROP_PORT));
@@ -59,15 +59,9 @@ public class SocketConnection implements Connection {
       LOG.debug("Local port: {}", socket.getLocalPort());
 
       return true;
-    } catch (UnsupportedEncodingException e) {
-      disconnect();
-      throw e;
-    } catch (IOException e) {
-      disconnect();
-      throw new ConnectException(e);
     } catch (Exception e) {
       disconnect();
-      throw e;
+      throw new ConnectionException(e);
     }
   }
 
@@ -84,7 +78,7 @@ public class SocketConnection implements Connection {
   }
 
   @Override
-  public boolean disconnect() throws Exception {
+  public boolean disconnect() throws ConnectionException {
     try {
       LOG.debug("Closing Socket.");
       if (reader != null) {
@@ -98,23 +92,20 @@ public class SocketConnection implements Connection {
       }
       return true;
     } catch (Exception e) {
-      throw e;
+      throw new ConnectionException(e);
     }
   }
 
   @Override
-  public String read() throws ConnectException, Exception {
+  public String read() throws ConnectionException {
     var input = "";
     try {
       input = reader.readLine();
       LOG.trace("<INPUT> {}", input);
       return input;
-    } catch (IOException e) {
-      disconnect();
-      throw new ConnectException(e);
     } catch (Exception e) {
       disconnect();
-      throw e;
+      throw new ConnectionException(e);
     }
   }
 

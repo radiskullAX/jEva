@@ -1,47 +1,36 @@
 package eu.animegame.jeva.core.lifecycle;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import org.junit.jupiter.api.Test;
-import eu.animegame.jeva.core.Connection;
-import eu.animegame.jeva.core.JEvaIrcClient;
-import eu.animegame.jeva.core.JEvaIrcPlugin;
+import eu.animegame.jeva.core.exceptions.LifeCycleException;
 
 /**
  *
  * @author radiskull
  */
-class ShutdownTest {
+class ShutdownTest extends LifeCycleStateBaseTest {
 
-  private JEvaIrcClient jEvaClient = mock(JEvaIrcClient.class);
-
-  private LifecycleState state = new Shutdown();
-
-  @Test
-  void testSetNextLifecycle() {
-    state.run(jEvaClient);
-    LifecycleHelper.verifySetState(jEvaClient, Initialize.class);
+  public ShutdownTest() {
+    super();
+    state = new Shutdown(lifeCycleObject);
   }
 
   @Test
-  void testPluginsAreNoticed() {
-    Connection connection = mock(Connection.class);
-    JEvaIrcClient realJEvaClient = new JEvaIrcClient(connection);
-    JEvaIrcPlugin plugin = mock(JEvaIrcPlugin.class);
-    realJEvaClient.addPlugin(plugin);
-    state.run(realJEvaClient);
+  void run() throws LifeCycleException {
+    state.run(lifeCycle);
 
-    verify(plugin).shutdown(realJEvaClient);
+    verify(lifeCycleObject).shutdown();
+    verify(lifeCycle).setState(null);
   }
 
   @Test
-  void testPluginFiresException() {
-    doThrow(new RuntimeException()).when(jEvaClient).fireLifecycleState(any());
+  void runThrowsException() throws LifeCycleException {
+    doThrow(LifeCycleException.class).when(lifeCycleObject).shutdown();
 
-    state.run(jEvaClient);
+    assertDoesNotThrow(() -> state.run(lifeCycle));
 
-    LifecycleHelper.verifySetState(jEvaClient, Initialize.class);
+    verify(lifeCycle).setState(null);
   }
 }

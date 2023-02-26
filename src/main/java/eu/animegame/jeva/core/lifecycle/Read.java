@@ -2,34 +2,30 @@ package eu.animegame.jeva.core.lifecycle;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import eu.animegame.jeva.core.IrcCommandParser;
-import eu.animegame.jeva.core.JEvaIrcClient;
-import eu.animegame.jeva.core.exceptions.ConnectException;
-import eu.animegame.jeva.core.exceptions.UnknownFormatException;
+import eu.animegame.jeva.core.LifeCycle;
+import eu.animegame.jeva.core.LifeCycleState;
 
 /**
  *
  * @author radiskull
  */
-public class Read implements LifecycleState {
+public class Read implements LifeCycleState {
 
   private static final Logger LOG = LoggerFactory.getLogger(Read.class);
 
+  private final LifeCycleObject object;
+
+  public Read(LifeCycleObject object) {
+    this.object = object;
+  }
+
   @Override
-  public void run(JEvaIrcClient context) {
+  public void run(LifeCycle context) {
     try {
-      var message = context.readCommand();
-      var event = IrcCommandParser.toIrcEvent(message);
-      context.fireIrcEvent(event);
-    } catch (UnknownFormatException e) {
-      LOG.warn("Could not parse incoming message", e);
-      LOG.debug("Unknown message: {}", e.getUnknownMessage());
-    } catch (ConnectException ce) {
-      LOG.warn("Failed to keep connection alive", ce);
-      context.setState(new Disconnect());
+      object.read();
     } catch (Exception e) {
-      LOG.error("Failed to read", e);
-      context.setState(new Shutdown());
+      LOG.error("failed to read", e);
     }
+    context.setState(new Disconnect(object));
   }
 }

@@ -1,67 +1,37 @@
 package eu.animegame.jeva.core.lifecycle;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.Test;
-import eu.animegame.jeva.core.JEvaIrcClient;
-import eu.animegame.jeva.core.exceptions.ConnectException;
+import eu.animegame.jeva.core.exceptions.LifeCycleException;
 
 /**
  *
  * @author radiskull
  */
-class ReadTest {
+class ReadTest extends LifeCycleStateBaseTest {
 
-  private static final String MESSAGE = "PING :123456789";
-
-  private JEvaIrcClient jEvaClient = mock(JEvaIrcClient.class);
-
-  private LifecycleState state = new Read();
-
-  @Test
-  void testIrcEventIsFired() throws ConnectException, Exception {
-    when(jEvaClient.readCommand()).thenReturn(MESSAGE);
-    state.run(jEvaClient);
-
-    verify(jEvaClient).fireIrcEvent(any());
-
-    verify(jEvaClient, never()).setState(any());
+  public ReadTest() {
+    super();
+    state = new Read(lifeCycleObject);
   }
 
   @Test
-  void testReadCommandSuccessful() throws ConnectException, Exception {
-    when(jEvaClient.readCommand()).thenReturn(MESSAGE);
-    state.run(jEvaClient);
+  void run() throws LifeCycleException {
+    state.run(lifeCycle);
 
-    verify(jEvaClient).readCommand();
-
-    verify(jEvaClient, never()).setState(any());
+    verify(lifeCycleObject).read();
+    verify(lifeCycle).setState(any(Disconnect.class));
   }
 
   @Test
-  void testMessageFormatFails() throws ConnectException, Exception {
-    when(jEvaClient.readCommand()).thenReturn("Wrong_Format");
-    state.run(jEvaClient);
+  void runThrowsException() throws LifeCycleException {
+    doThrow(LifeCycleException.class).when(lifeCycleObject).read();
 
-    verify(jEvaClient, never()).setState(any());
-  }
+    assertDoesNotThrow(() -> state.run(lifeCycle));
 
-  @Test
-  void testConnectionfails() throws ConnectException, Exception {
-    doThrow(new ConnectException()).when(jEvaClient).readCommand();
-    state.run(jEvaClient);
-
-    LifecycleHelper.verifySetState(jEvaClient, Disconnect.class);
-  }
-
-  @Test
-  void testReadCommandFails() throws ConnectException, Exception {
-    state.run(jEvaClient);
-
-    LifecycleHelper.verifySetState(jEvaClient, Shutdown.class);
+    verify(lifeCycle).setState(any(Disconnect.class));
   }
 }

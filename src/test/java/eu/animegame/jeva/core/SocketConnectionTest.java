@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import eu.animegame.jeva.core.exceptions.ConnectException;
+import eu.animegame.jeva.core.exceptions.ConnectionException;
 
 /**
  *
@@ -210,17 +210,17 @@ class SocketConnectionTest {
   }
 
   static Stream<Arguments> socketExceptionClassProvider() {
-    return Stream.of(arguments(UnknownHostException.class, ConnectException.class),
-        arguments(IOException.class, ConnectException.class), arguments(NullPointerException.class, Exception.class));
+    return Stream.of(arguments(UnknownHostException.class, ConnectionException.class),
+        arguments(IOException.class, ConnectionException.class), arguments(NullPointerException.class, Exception.class));
   }
 
   static Stream<Arguments> ioExceptionClassProvider() {
     return Stream.of(arguments(UnsupportedEncodingException.class, Exception.class),
-        arguments(IOException.class, ConnectException.class), arguments(NullPointerException.class, Exception.class));
+        arguments(IOException.class, ConnectionException.class), arguments(NullPointerException.class, Exception.class));
   }
 
   static Stream<Arguments> readExceptionClassProvider() {
-    return Stream.of(arguments(IOException.class, ConnectException.class),
+    return Stream.of(arguments(IOException.class, ConnectionException.class),
         arguments(NullPointerException.class, Exception.class));
   }
 

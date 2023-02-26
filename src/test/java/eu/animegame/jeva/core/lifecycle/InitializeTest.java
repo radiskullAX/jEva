@@ -1,57 +1,37 @@
 package eu.animegame.jeva.core.lifecycle;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import org.junit.jupiter.api.Test;
-import eu.animegame.jeva.core.Connection;
-import eu.animegame.jeva.core.JEvaIrcClient;
-import eu.animegame.jeva.core.JEvaIrcPlugin;
+import eu.animegame.jeva.core.exceptions.LifeCycleException;
 
 /**
  *
  * @author radiskull
  */
-class InitializeTest {
+class InitializeTest extends LifeCycleStateBaseTest {
 
-  private JEvaIrcClient jEvaClient = mock(JEvaIrcClient.class);
-
-  private LifecycleState state = new Initialize();
-
-  @Test
-  void testSetNextLifecycle() {
-    state.run(jEvaClient);
-    LifecycleHelper.verifySetState(jEvaClient, Connect.class);
+  public InitializeTest() {
+    super();
+    state = new Initialize(lifeCycleObject);
   }
 
   @Test
-  void testPluginsAreNoticed() {
-    Connection connection = mock(Connection.class);
-    JEvaIrcClient realJEvaClient = new JEvaIrcClient(connection);
-    JEvaIrcPlugin plugin = mock(JEvaIrcPlugin.class);
-    realJEvaClient.addPlugin(plugin);
-    state.run(realJEvaClient);
+  void run() throws LifeCycleException {
+    state.run(lifeCycle);
 
-    verify(plugin).initialize(realJEvaClient);
+    verify(lifeCycleObject).initialize();
+    verify(lifeCycle).setState(any(Connect.class));
   }
 
   @Test
-  void lookup() {
-    state.run(jEvaClient);
+  void runThrowsException() throws LifeCycleException {
+    doThrow(LifeCycleException.class).when(lifeCycleObject).initialize();
 
-    verify(jEvaClient).lookup();
+    assertDoesNotThrow(() -> state.run(lifeCycle));
 
-    LifecycleHelper.verifySetState(jEvaClient, Connect.class);
+    verify(lifeCycle).setState(any(Shutdown.class));
   }
-
-  @Test
-  void testPluginFiresException() {
-    doThrow(new RuntimeException()).when(jEvaClient).fireLifecycleState(any());
-
-    state.run(jEvaClient);
-
-    LifecycleHelper.verifySetState(jEvaClient, Shutdown.class);
-  }
-
 }

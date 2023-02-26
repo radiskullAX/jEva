@@ -82,7 +82,7 @@ class ExceptionTest {
   }
 
   static Stream<Class<? extends JEvaException>> exceptionProvider() {
-    return Stream.of(JEvaException.class, ConnectException.class, LifecycleException.class,
+    return Stream.of(JEvaException.class, ConnectionException.class, LifeCycleException.class,
         UnknownFormatException.class, MissingParameterException.class);
   }
 }
