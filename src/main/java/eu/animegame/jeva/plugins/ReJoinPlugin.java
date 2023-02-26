@@ -34,7 +34,7 @@ public class ReJoinPlugin implements JEvaIrcPlugin {
   public void rejoinChannel(KickEvent event, JEvaIrcEngine jEvaIrcEngine) {
     var nick = jEvaIrcEngine.getConfig().getProperty(IrcConfig.PROP_NICK, "");
     if (nick.equals(event.getKickedUser())) {
-      LOG.info("Kicked from channel {}, trying to rejoin", event.getChannel());
+      LOG.info("try to rejoin after kick: [channel: {}]", event.getChannel());
       jEvaIrcEngine.sendCommand(new Join(event.getChannel()));
     }
   }

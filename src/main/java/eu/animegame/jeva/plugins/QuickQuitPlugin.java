@@ -19,10 +19,7 @@ public class QuickQuitPlugin implements JEvaIrcPlugin {
   @IrcEventAcceptor(command = PrivMsg.COMMAND)
   public void parseInput(PrivMsgEvent event, JEvaIrcEngine jEvaIrcEngine) {
     if (event.getMessage().equalsIgnoreCase("!quit")) {
-      LOG.info("recieved quit command from user {}", event.getNickname());
-      // TODO: think about this .. there is also a QUIT command .. do we even fire this?
-      // if not, we should still check if we send the server a QUIT command
-      // TODO: create a plugin that sends QUIT
+      LOG.info("recieved quit command: [user: {}]", event.getNickname());
       jEvaIrcEngine.stop();
     }
   }

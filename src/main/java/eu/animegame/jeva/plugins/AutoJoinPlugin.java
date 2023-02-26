@@ -33,7 +33,7 @@ public class AutoJoinPlugin implements JEvaIrcPlugin {
     if (channel != null && !channel.isBlank()) {
       var stripChan = channel.strip();
       if (!channels.contains(stripChan)) {
-        LOG.trace("add channel: {}", stripChan);
+        LOG.trace("add channel: [channel: {}]", stripChan);
         channels.add(stripChan);
       }
     }
@@ -43,14 +43,14 @@ public class AutoJoinPlugin implements JEvaIrcPlugin {
     if ((channel != null && password != null) && (!channel.isBlank() && !password.isBlank())) {
       var combine = channel.strip() + " " + password.strip();
       if (!channels.contains(combine)) {
-        LOG.trace("add channel with password: {}", combine);
+        LOG.trace("add channel with password: [channel: {}]", combine);
         channels.add(combine);
       }
     }
   }
 
   public void removeChannel(String channel) {
-    LOG.trace("remove channel: {}", channel);
+    LOG.trace("remove channel: [channel: {}]", channel);
     channels.remove(channel);
   }
 
@@ -70,9 +70,8 @@ public class AutoJoinPlugin implements JEvaIrcPlugin {
 
   @Override
   public void initialize(JEvaIrcEngine jEvaIrcEngine) {
-    LOG.info("read values from config");
+    LOG.info("read config: [property: {}]", PROP_CHANNELS);
     var channels = jEvaIrcEngine.getConfig().getProperty(PROP_CHANNELS, "");
-    LOG.debug("property {} is set in config: {}", PROP_CHANNELS, !channels.isBlank());
     Arrays.stream(channels.split("\\s*,\\s*"))
         .map(String::strip) //
         .map(c -> c.replaceAll("\\s+", " ")) //
@@ -85,7 +84,7 @@ public class AutoJoinPlugin implements JEvaIrcPlugin {
     var securedChannels = new ArrayList<String>();
     var passwords = new ArrayList<String>();
 
-    LOG.info("try to join {} channels", channels.size());
+    LOG.info("join channels: [numberOfChannels: {}]", channels.size());
     for (String channel : channels) {
       if (channel.contains(" ")) {
         var content = channel.split(" ");
@@ -96,11 +95,11 @@ public class AutoJoinPlugin implements JEvaIrcPlugin {
       }
     }
     if (!openChannels.isEmpty()) {
-      LOG.debug("send JOIN command to join channels: {}", openChannels);
+      LOG.debug("send JOIN command: [channels: {}]", openChannels);
       jEvaIrcEngine.sendCommand(new Join(openChannels));
     }
     if (!securedChannels.isEmpty()) {
-      LOG.debug("send JOIN command to join secured channels: {}", securedChannels);
+      LOG.debug("send JOIN command: [securedChannels: {}]", securedChannels);
       jEvaIrcEngine.sendCommand(new Join(securedChannels, passwords));
     }
   }

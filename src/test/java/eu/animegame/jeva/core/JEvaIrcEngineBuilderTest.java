@@ -50,7 +50,7 @@ class JEvaIrcEngineBuilderTest {
     assertNotNull(engine.getConfig());
     assertEquals(0, engine.getConfig().size());
     assertNotNull(engine.getConnection());
-    assertEquals(2, engine.getPlugins().size());
+    assertEquals(3, engine.getPlugins().size());
   }
 
   @Test
@@ -133,7 +133,7 @@ class JEvaIrcEngineBuilderTest {
 
     var opt = engine.getPlugin(plugin.getClass());
     assertTrue(opt.isPresent());
-    assertEquals(3, engine.getPlugins().size());
+    assertEquals(4, engine.getPlugins().size());
   }
 
   @Test

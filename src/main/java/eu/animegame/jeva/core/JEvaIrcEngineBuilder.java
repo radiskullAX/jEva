@@ -6,6 +6,7 @@ import java.util.Properties;
 import java.util.function.Supplier;
 import eu.animegame.jeva.plugins.AutoJoinPlugin;
 import eu.animegame.jeva.plugins.ConnectPlugin;
+import eu.animegame.jeva.plugins.DisconnectPlugin;
 import eu.animegame.jeva.plugins.PingPlugin;
 import eu.animegame.jeva.plugins.ReJoinPlugin;
 
@@ -101,6 +102,7 @@ public class JEvaIrcEngineBuilder {
     for (Supplier<JEvaIrcPlugin> plugin : plugins) {
       engine.addPlugin(plugin.get());
     }
+    engine.addPlugin(new DisconnectPlugin());
     return engine;
   }
 
