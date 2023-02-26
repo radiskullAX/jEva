@@ -13,7 +13,7 @@ import org.mockito.ArgumentCaptor;
 import eu.animegame.jeva.Tags;
 import eu.animegame.jeva.core.IrcBaseEvent;
 import eu.animegame.jeva.core.IrcConfig;
-import eu.animegame.jeva.core.JEvaIrcClient;
+import eu.animegame.jeva.core.JEvaIrcEngine;
 import eu.animegame.jeva.irc.commands.Join;
 
 /**
@@ -40,7 +40,7 @@ class AutoJoinPluginTest extends PluginBaseTest<AutoJoinPlugin> {
   private AutoJoinPluginTest() {
     plugin = new AutoJoinPlugin();
     config = new IrcConfig();
-    jEvaClient = mock(JEvaIrcClient.class);
+    jEvaIrcEngine = mock(JEvaIrcEngine.class);
     event = mock(IrcBaseEvent.class);
   }
 
@@ -99,10 +99,10 @@ class AutoJoinPluginTest extends PluginBaseTest<AutoJoinPlugin> {
     plugin.addChannel(" " + CHAN_1 + " ", " " + PW_1 + " ");
     plugin.addChannel("  " + CHAN_2 + "  ", "  " + PW_2 + "  ");
 
-    plugin.sendJoin(event, jEvaClient);
+    plugin.sendJoin(event, jEvaIrcEngine);
 
     ArgumentCaptor<Join> captor = ArgumentCaptor.forClass(Join.class);
-    verify(jEvaClient).sendCommand(captor.capture());
+    verify(jEvaIrcEngine).sendCommand(captor.capture());
     Join join = captor.getValue();
     var expected = "JOIN " + CHAN_1 + "," + CHAN_2 + " " + PW_1 + "," + PW_2;
     assertEquals(expected, join.build());
@@ -172,10 +172,10 @@ class AutoJoinPluginTest extends PluginBaseTest<AutoJoinPlugin> {
 
   @Test
   void initialize() {
-    when(jEvaClient.getConfig()).thenReturn(config);
+    when(jEvaIrcEngine.getConfig()).thenReturn(config);
     config.put(AutoJoinPlugin.PROP_CHANNELS, "#test,#super secret,#channel");
 
-    plugin.initialize(jEvaClient);
+    plugin.initialize(jEvaIrcEngine);
     
     var result = plugin.getChannels();
     assertArrayEquals(new String[] {"#test", "#super", "#channel"}, result.toArray());
@@ -183,10 +183,10 @@ class AutoJoinPluginTest extends PluginBaseTest<AutoJoinPlugin> {
 
   @Test
   void initializeWithWhitespaces() {
-    when(jEvaClient.getConfig()).thenReturn(config);
+    when(jEvaIrcEngine.getConfig()).thenReturn(config);
     config.put(AutoJoinPlugin.PROP_CHANNELS, "  #test1 , #test2,  #test3  ,#test4   pw,#test5  ");
 
-    plugin.initialize(jEvaClient);
+    plugin.initialize(jEvaIrcEngine);
     
     var result = plugin.getChannels();
     assertArrayEquals(new String[] {"#test1", "#test2", "#test3", "#test4", "#test5"}, result.toArray());
@@ -194,9 +194,9 @@ class AutoJoinPluginTest extends PluginBaseTest<AutoJoinPlugin> {
 
   @Test
   void initializeWithNullProperty() {
-    when(jEvaClient.getConfig()).thenReturn(config);
+    when(jEvaIrcEngine.getConfig()).thenReturn(config);
 
-    assertDoesNotThrow(() -> plugin.initialize(jEvaClient));
+    assertDoesNotThrow(() -> plugin.initialize(jEvaIrcEngine));
     
     var result = plugin.getChannels();
     assertEquals(0, result.size());
@@ -207,10 +207,10 @@ class AutoJoinPluginTest extends PluginBaseTest<AutoJoinPlugin> {
     plugin.addChannel(CHAN_1);
     plugin.addChannel(CHAN_2);
 
-    plugin.sendJoin(event, jEvaClient);
+    plugin.sendJoin(event, jEvaIrcEngine);
 
     ArgumentCaptor<Join> captor = ArgumentCaptor.forClass(Join.class);
-    verify(jEvaClient, times(1)).sendCommand(captor.capture());
+    verify(jEvaIrcEngine, times(1)).sendCommand(captor.capture());
 
     Join join = captor.getValue();
     var expected = "JOIN " + CHAN_1 + "," + CHAN_2;
@@ -222,10 +222,10 @@ class AutoJoinPluginTest extends PluginBaseTest<AutoJoinPlugin> {
     plugin.addChannel(CHAN_1, PW_1);
     plugin.addChannel(CHAN_2, PW_2);
 
-    plugin.sendJoin(event, jEvaClient);
+    plugin.sendJoin(event, jEvaIrcEngine);
 
     ArgumentCaptor<Join> captor = ArgumentCaptor.forClass(Join.class);
-    verify(jEvaClient, times(1)).sendCommand(captor.capture());
+    verify(jEvaIrcEngine, times(1)).sendCommand(captor.capture());
 
     Join join = captor.getValue();
     var expected = "JOIN " + CHAN_1 + "," + CHAN_2 + " " + PW_1 + "," + PW_2;
@@ -237,9 +237,9 @@ class AutoJoinPluginTest extends PluginBaseTest<AutoJoinPlugin> {
     plugin.addChannel(CHAN_1);
     plugin.addChannel(CHAN_2, PW_2);
 
-    plugin.sendJoin(event, jEvaClient);
+    plugin.sendJoin(event, jEvaIrcEngine);
 
     ArgumentCaptor<Join> captor = ArgumentCaptor.forClass(Join.class);
-    verify(jEvaClient, times(2)).sendCommand(captor.capture());
+    verify(jEvaIrcEngine, times(2)).sendCommand(captor.capture());
   }
 }

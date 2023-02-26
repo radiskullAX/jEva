@@ -20,7 +20,7 @@ import eu.animegame.jeva.plugins.ReJoinPlugin;
  * @author radiskull
  */
 @Tag(Tags.UNIT)
-class JEvaIrcClientBuilderTest {
+class JEvaIrcEngineBuilderTest {
 
   private static final String SERVER = "irc.animegame.eu";
 
@@ -36,21 +36,21 @@ class JEvaIrcClientBuilderTest {
 
   private static final String CHANNEL = "#test";
 
-  private JEvaIrcClientBuilder builder;
+  private JEvaIrcEngineBuilder builder;
 
-  private JEvaIrcClientBuilderTest() {
-    builder = JEvaIrcClientBuilder.create();
+  private JEvaIrcEngineBuilderTest() {
+    builder = JEvaIrcEngineBuilder.create();
   }
 
   @Test
   void create() {
-    var client = builder.build();
+    var engine = builder.build();
 
-    assertNotNull(client);
-    assertNotNull(client.getConfig());
-    assertEquals(0, client.getConfig().size());
-    assertNotNull(client.getConnection());
-    assertEquals(2, client.getPlugins().size());
+    assertNotNull(engine);
+    assertNotNull(engine.getConfig());
+    assertEquals(0, engine.getConfig().size());
+    assertNotNull(engine.getConnection());
+    assertEquals(2, engine.getPlugins().size());
   }
 
   @Test
@@ -61,57 +61,57 @@ class JEvaIrcClientBuilderTest {
 
   @Test
   void server() {
-    var client = builder.server(SERVER).build();
+    var engine = builder.server(SERVER).build();
 
-    var actual = client.getConfig().getProperty(IrcConfig.PROP_SERVER);
+    var actual = engine.getConfig().getProperty(IrcConfig.PROP_SERVER);
     assertEquals(SERVER, actual);
   }
 
   @Test
   void serverPassword() {
-    var client = builder.serverPassword(SERVER_PASSWORD).build();
+    var engine = builder.serverPassword(SERVER_PASSWORD).build();
 
-    var actual = client.getConfig().getProperty(IrcConfig.PROP_SERVER_PASSWORD);
+    var actual = engine.getConfig().getProperty(IrcConfig.PROP_SERVER_PASSWORD);
     assertEquals(SERVER_PASSWORD, actual);
   }
 
   @Test
   void port() {
-    var client = builder.port(PORT).build();
+    var engine = builder.port(PORT).build();
 
-    var actual = client.getConfig().getProperty(IrcConfig.PROP_PORT);
+    var actual = engine.getConfig().getProperty(IrcConfig.PROP_PORT);
     assertEquals(PORT, actual);
   }
 
   @Test
   void nick() {
-    var client = builder.nick(NICK).build();
+    var engine = builder.nick(NICK).build();
 
-    var actual = client.getConfig().getProperty(IrcConfig.PROP_NICK);
+    var actual = engine.getConfig().getProperty(IrcConfig.PROP_NICK);
     assertEquals(NICK, actual);
   }
 
   @Test
   void mode() {
-    var client = builder.mode(MODE).build();
+    var engine = builder.mode(MODE).build();
 
-    var actual = client.getConfig().getProperty(IrcConfig.PROP_MODE);
+    var actual = engine.getConfig().getProperty(IrcConfig.PROP_MODE);
     assertEquals(MODE, actual);
   }
 
   @Test
   void realName() {
-    var client = builder.realName(REAL_NAME).build();
+    var engine = builder.realName(REAL_NAME).build();
 
-    var actual = client.getConfig().getProperty(IrcConfig.PROP_REAL_NAME);
+    var actual = engine.getConfig().getProperty(IrcConfig.PROP_REAL_NAME);
     assertEquals(REAL_NAME, actual);
   }
 
   @Test
   void channel() {
-    var client = builder.channel(CHANNEL).build();
+    var engine = builder.channel(CHANNEL).build();
 
-    var opt = client.getPlugin(AutoJoinPlugin.class);
+    var opt = engine.getPlugin(AutoJoinPlugin.class);
     assertTrue(opt.isPresent());
 
     var channels = opt.get().getChannels();
@@ -120,36 +120,36 @@ class JEvaIrcClientBuilderTest {
 
   @Test
   void autoRejoin() {
-    var client = builder.autoRejoin(true).build();
+    var engine = builder.autoRejoin(true).build();
 
-    var opt = client.getPlugin(ReJoinPlugin.class);
+    var opt = engine.getPlugin(ReJoinPlugin.class);
     assertTrue(opt.isPresent());
   }
 
   @Test
   void plugin() {
     var plugin = mock(JEvaIrcPlugin.class);
-    var client = builder.plugin(() -> plugin).build();
+    var engine = builder.plugin(() -> plugin).build();
 
-    var opt = client.getPlugin(plugin.getClass());
+    var opt = engine.getPlugin(plugin.getClass());
     assertTrue(opt.isPresent());
-    assertEquals(3, client.getPlugins().size());
+    assertEquals(3, engine.getPlugins().size());
   }
 
   @Test
   void buildCreatesDifferentObjects() {
     builder.channel(CHANNEL).autoRejoin(true).plugin(() -> mock(JEvaIrcPlugin.class));
-    var client1 = builder.build();
-    var client2 = builder.build();
-    var pluginList1 = client1.getPlugins();
-    var pluginList2 = client2.getPlugins();
+    var engine1 = builder.build();
+    var engine2 = builder.build();
+    var pluginList1 = engine1.getPlugins();
+    var pluginList2 = engine2.getPlugins();
 
-    client1.getConfig().put(IrcConfig.PROP_SERVER, SERVER);
+    engine1.getConfig().put(IrcConfig.PROP_SERVER, SERVER);
 
-    assertNotEquals(client1, client2);
-    assertNotEquals(client1.getConfig(), client2.getConfig());
-    assertEquals(null, client2.getConfig().getProperty(IrcConfig.PROP_SERVER));
-    assertNotEquals(client1.getConnection(), client2.getConnection());
+    assertNotEquals(engine1, engine2);
+    assertNotEquals(engine1.getConfig(), engine2.getConfig());
+    assertEquals(null, engine2.getConfig().getProperty(IrcConfig.PROP_SERVER));
+    assertNotEquals(engine1.getConnection(), engine2.getConnection());
 
     assertEquals(pluginList1.size(), pluginList2.size());
     for (int i = 0; i < pluginList1.size(); i++) {

@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.animegame.jeva.core.IrcBaseEvent;
 import eu.animegame.jeva.core.IrcEventAcceptor;
-import eu.animegame.jeva.core.JEvaIrcClient;
+import eu.animegame.jeva.core.JEvaIrcEngine;
 import eu.animegame.jeva.core.JEvaIrcPlugin;
 import eu.animegame.jeva.irc.CommandCode;
 import eu.animegame.jeva.irc.commands.Join;
@@ -69,9 +69,9 @@ public class AutoJoinPlugin implements JEvaIrcPlugin {
   }
 
   @Override
-  public void initialize(JEvaIrcClient jEvaClient) {
+  public void initialize(JEvaIrcEngine jEvaIrcEngine) {
     LOG.info("read values from config");
-    var channels = jEvaClient.getConfig().getProperty(PROP_CHANNELS, "");
+    var channels = jEvaIrcEngine.getConfig().getProperty(PROP_CHANNELS, "");
     LOG.debug("property {} is set in config: {}", PROP_CHANNELS, !channels.isBlank());
     Arrays.stream(channels.split("\\s*,\\s*"))
         .map(String::strip) //
@@ -80,7 +80,7 @@ public class AutoJoinPlugin implements JEvaIrcPlugin {
   }
 
   @IrcEventAcceptor(command = CommandCode.RPL_WELCOME)
-  public void sendJoin(IrcBaseEvent event, JEvaIrcClient jEvaClient) {
+  public void sendJoin(IrcBaseEvent event, JEvaIrcEngine jEvaIrcEngine) {
     var openChannels = new ArrayList<String>();
     var securedChannels = new ArrayList<String>();
     var passwords = new ArrayList<String>();
@@ -97,11 +97,11 @@ public class AutoJoinPlugin implements JEvaIrcPlugin {
     }
     if (!openChannels.isEmpty()) {
       LOG.debug("send JOIN command to join channels: {}", openChannels);
-      jEvaClient.sendCommand(new Join(openChannels));
+      jEvaIrcEngine.sendCommand(new Join(openChannels));
     }
     if (!securedChannels.isEmpty()) {
       LOG.debug("send JOIN command to join secured channels: {}", securedChannels);
-      jEvaClient.sendCommand(new Join(securedChannels, passwords));
+      jEvaIrcEngine.sendCommand(new Join(securedChannels, passwords));
     }
   }
 }

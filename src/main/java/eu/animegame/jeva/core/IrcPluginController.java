@@ -24,14 +24,14 @@ public class IrcPluginController {
 
   private static final Logger LOG = LoggerFactory.getLogger(IrcPluginController.class);
 
-  private final JEvaIrcClient jEvaClient;
+  private final JEvaIrcEngine jEvaIrcEngine;
 
   private final List<JEvaIrcPlugin> plugins;
 
   private Map<String, List<CallbackEntry>> callbacks = new HashMap<>();
 
-  public IrcPluginController(JEvaIrcClient jEvaClient) {
-    this.jEvaClient = jEvaClient;
+  public IrcPluginController(JEvaIrcEngine jEvaIrcEngine) {
+    this.jEvaIrcEngine = jEvaIrcEngine;
     this.plugins = new ArrayList<>();
   }
 
@@ -123,8 +123,8 @@ public class IrcPluginController {
       if (IrcBaseEvent.class.isAssignableFrom(parameterType)) {
         // TODO: Buffer transformed event for other calls
         args[i] = getExactEvent(parameterType, event);
-      } else if (JEvaIrcClient.class.equals(parameterType)) {
-        args[i] = jEvaClient;
+      } else if (JEvaIrcEngine.class.equals(parameterType)) {
+        args[i] = jEvaIrcEngine;
       } else {
         throw new IllegalArgumentException("Argument '" + parameterType.getName() + "' is not supported");
       }

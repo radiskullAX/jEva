@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.animegame.jeva.core.IrcConfig;
 import eu.animegame.jeva.core.IrcEventAcceptor;
-import eu.animegame.jeva.core.JEvaIrcClient;
+import eu.animegame.jeva.core.JEvaIrcEngine;
 import eu.animegame.jeva.core.JEvaIrcPlugin;
 import eu.animegame.jeva.core.exceptions.InitializationException;
 import eu.animegame.jeva.core.exceptions.MissingParameterException;
@@ -21,9 +21,9 @@ public class ReJoinPlugin implements JEvaIrcPlugin {
   private static final Logger LOG = LoggerFactory.getLogger(ReJoinPlugin.class);
 
   @Override
-  public void initialize(JEvaIrcClient jEvaClient) {
+  public void initialize(JEvaIrcEngine jEvaIrcEngine) {
     try {
-      var config = jEvaClient.getConfig();
+      var config = jEvaIrcEngine.getConfig();
       config.verifyParameter(IrcConfig.PROP_NICK);
     } catch (MissingParameterException e) {
       throw new InitializationException(e);
@@ -31,11 +31,11 @@ public class ReJoinPlugin implements JEvaIrcPlugin {
   }
 
   @IrcEventAcceptor(command = Kick.COMMAND)
-  public void rejoinChannel(KickEvent event, JEvaIrcClient jEvaClient) {
-    var nick = jEvaClient.getConfig().getProperty(IrcConfig.PROP_NICK, "");
+  public void rejoinChannel(KickEvent event, JEvaIrcEngine jEvaIrcEngine) {
+    var nick = jEvaIrcEngine.getConfig().getProperty(IrcConfig.PROP_NICK, "");
     if (nick.equals(event.getKickedUser())) {
       LOG.info("Kicked from channel {}, trying to rejoin", event.getChannel());
-      jEvaClient.sendCommand(new Join(event.getChannel()));
+      jEvaIrcEngine.sendCommand(new Join(event.getChannel()));
     }
   }
 }

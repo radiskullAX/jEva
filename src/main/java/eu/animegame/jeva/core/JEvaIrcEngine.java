@@ -15,9 +15,9 @@ import eu.animegame.jeva.util.ForTestsOnly;
  *
  * @author radiskull
  */
-public class JEvaIrcClient {
+public class JEvaIrcEngine {
 
-  private static final Logger LOG = LoggerFactory.getLogger(JEvaIrcClient.class);
+  private static final Logger LOG = LoggerFactory.getLogger(JEvaIrcEngine.class);
 
   private final IrcPluginController pluginController;
 
@@ -37,15 +37,15 @@ public class JEvaIrcClient {
 
   // TODO: parse command args
   // TODO: args override config values
-  public JEvaIrcClient(String... args) {
+  public JEvaIrcEngine(String... args) {
     this(new SocketConnection(), args);
   }
 
-  public JEvaIrcClient(Connection connection, String... args) {
+  public JEvaIrcEngine(Connection connection, String... args) {
     this(connection, new IrcConfig(), args);
   }
 
-  public JEvaIrcClient(Connection connection, IrcConfig config, String... args) {
+  public JEvaIrcEngine(Connection connection, IrcConfig config, String... args) {
     this.connection = connection;
     this.config = config;
     this.parser = new IrcCommandParser();
@@ -54,7 +54,7 @@ public class JEvaIrcClient {
   }
 
   @ForTestsOnly
-  JEvaIrcClient(Connection connection, IrcPluginController pluginController, String... args) {
+  JEvaIrcEngine(Connection connection, IrcPluginController pluginController, String... args) {
     this.connection = connection;
     this.pluginController = pluginController;
     this.config = new IrcConfig();
@@ -119,15 +119,15 @@ public class JEvaIrcClient {
     return pluginController.getPlugin(pluginClass);
   }
 
-  public static JEvaIrcClientBuilder builder() {
-    return JEvaIrcClientBuilder.create();
+  public static JEvaIrcEngineBuilder builder() {
+    return JEvaIrcEngineBuilder.create();
   }
 
   private class LifeCycleListener implements LifeCycleObject {
 
-    private JEvaIrcClient engine;
+    private JEvaIrcEngine engine;
 
-    public LifeCycleListener(JEvaIrcClient engine) {
+    public LifeCycleListener(JEvaIrcEngine engine) {
       this.engine = engine;
     }
 

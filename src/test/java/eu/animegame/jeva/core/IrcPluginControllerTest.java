@@ -45,15 +45,15 @@ class IrcPluginControllerTest {
 
   private IrcPluginController controller;
 
-  private JEvaIrcClient jEvaClient;
+  private JEvaIrcEngine jEvaIrcEngine;
 
   private JEvaIrcPlugin pluginMock1;
 
   private TestPlugin pluginMock2;
 
   private IrcPluginControllerTest() {
-    jEvaClient = mock(JEvaIrcClient.class);
-    controller = new IrcPluginController(jEvaClient);
+    jEvaIrcEngine = mock(JEvaIrcEngine.class);
+    controller = new IrcPluginController(jEvaIrcEngine);
     pluginMock1 = mock(JEvaIrcPlugin.class);
     pluginMock2 = mock(TestPlugin.class);
   }
@@ -143,8 +143,8 @@ class IrcPluginControllerTest {
   void fireLifecycleState() {
     controller.addPlugin(pluginMock1);
 
-    controller.fireLifecycleState(p -> p.connect(jEvaClient));
-    verify(pluginMock1).connect(jEvaClient);
+    controller.fireLifecycleState(p -> p.connect(jEvaIrcEngine));
+    verify(pluginMock1).connect(jEvaIrcEngine);
   }
 
   @Test
@@ -155,7 +155,7 @@ class IrcPluginControllerTest {
     controller.lookup();
     controller.fireIrcEvent(event);
 
-    verify(pluginMock2).method3(event, jEvaClient);
+    verify(pluginMock2).method3(event, jEvaIrcEngine);
   }
 
   @Test
@@ -190,7 +190,7 @@ class IrcPluginControllerTest {
 
     verify(pluginMock2, never()).method1();
     verify(pluginMock2, never()).method2(event);
-    verify(pluginMock2, never()).method3(event, jEvaClient);
+    verify(pluginMock2, never()).method3(event, jEvaIrcEngine);
     verify(pluginMock2, never()).method4(any(UserBaseEvent.class));
   }
 
@@ -279,7 +279,7 @@ class IrcPluginControllerTest {
     public void method2(IrcBaseEvent event) {}
 
     @IrcEventAcceptor(command = COMMAND_3)
-    public void method3(IrcBaseEvent event, JEvaIrcClient jEvaClient) {}
+    public void method3(IrcBaseEvent event, JEvaIrcEngine jEvaIrcEngine) {}
 
     @IrcEventAcceptor(command = COMMAND_4)
     public void method4(UserBaseEvent event) {}
@@ -291,6 +291,6 @@ class IrcPluginControllerTest {
     public void method6(TestIrcEvent event) {}
 
     @IrcEventAcceptor(command = COMMAND_7)
-    public void method7(IrcBaseEvent event, JEvaIrcClient jEvaClient, Object additional) {}
+    public void method7(IrcBaseEvent event, JEvaIrcEngine jEvaIrcEngine, Object additional) {}
   }
 }

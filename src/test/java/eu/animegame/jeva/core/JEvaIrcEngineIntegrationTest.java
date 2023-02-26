@@ -25,9 +25,9 @@ import eu.animegame.jeva.core.exceptions.ConnectionException;
  */
 @Tag(Tags.INTEGRATION)
 @Tag(Tags.TIMED)
-public class JEvaIrcClientIntegrationTest {
+public class JEvaIrcEngineIntegrationTest {
 
-  private JEvaIrcClient engine;
+  private JEvaIrcEngine engine;
 
   private Connection connection;
 
@@ -35,17 +35,17 @@ public class JEvaIrcClientIntegrationTest {
 
   private JEvaIrcPlugin plugin;
 
-  public JEvaIrcClientIntegrationTest() {
+  public JEvaIrcEngineIntegrationTest() {
     connection = mock(Connection.class);
     pluginController = mock(IrcPluginController.class);
-    engine = new JEvaIrcClient(connection, pluginController);
+    engine = new JEvaIrcEngine(connection, pluginController);
   }
 
   @Test
   void start() throws Exception {
     plugin = new TestPlugin();
     pluginController = spy(new IrcPluginController(engine));
-    engine = new JEvaIrcClient(connection, pluginController);
+    engine = new JEvaIrcEngine(connection, pluginController);
     engine.addPlugin(plugin);
 
     assertTimeoutPreemptively(Duration.ofSeconds(5), () -> engine.start());
@@ -113,26 +113,26 @@ public class JEvaIrcClientIntegrationTest {
   private class TestPlugin implements JEvaIrcPlugin {
 
     @Override
-    public void connect(JEvaIrcClient jEvaClient) {
+    public void connect(JEvaIrcEngine jEvaIrcEngine) {
       // should stop the read phase immediately but not the lifecycle
-      jEvaClient.stop();
+      jEvaIrcEngine.stop();
     }
   }
 
   private class TestWorker implements Runnable {
 
-    private final JEvaIrcClient jEvaClient;
+    private final JEvaIrcEngine jEvaIrcEngine;
     private final CountDownLatch latch;
 
-    public TestWorker(JEvaIrcClient jEvaClient, CountDownLatch latch) {
-      this.jEvaClient = jEvaClient;
+    public TestWorker(JEvaIrcEngine jEvaIrcEngine, CountDownLatch latch) {
+      this.jEvaIrcEngine = jEvaIrcEngine;
       this.latch = latch;
     }
 
     @Override
     public void run() {
       // would run endlessly until stop is called
-      jEvaClient.start();
+      jEvaIrcEngine.start();
       latch.countDown();
     }
   }

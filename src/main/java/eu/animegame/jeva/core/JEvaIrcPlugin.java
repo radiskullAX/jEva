@@ -5,11 +5,11 @@ package eu.animegame.jeva.core;
  */
 public interface JEvaIrcPlugin {
 
-  public default void initialize(JEvaIrcClient jEvaClient) {};
+  public default void initialize(JEvaIrcEngine jEvaIrcEngine) {};
 
-  public default void connect(JEvaIrcClient jEvaClient) {};
+  public default void connect(JEvaIrcEngine jEvaIrcEngine) {};
 
-  public default void disconnect(JEvaIrcClient jEvaClient) {};
+  public default void disconnect(JEvaIrcEngine jEvaIrcEngine) {};
 
-  public default void shutdown(JEvaIrcClient jEvaClient) {};
+  public default void shutdown(JEvaIrcEngine jEvaIrcEngine) {};
 }

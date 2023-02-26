@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import eu.animegame.jeva.Tags;
 import eu.animegame.jeva.core.IrcBaseEvent;
-import eu.animegame.jeva.core.JEvaIrcClient;
+import eu.animegame.jeva.core.JEvaIrcEngine;
 import eu.animegame.jeva.irc.commands.Pong;
 
 /**
@@ -20,16 +20,16 @@ class PingPluginTest extends PluginBaseTest<PingPlugin> {
 
   private PingPluginTest() {
     plugin = new PingPlugin();
-    jEvaClient = mock(JEvaIrcClient.class);
+    jEvaIrcEngine = mock(JEvaIrcEngine.class);
   }
 
   @Test
   void successfulPong() {
     IrcBaseEvent event = new IrcBaseEvent("PING", "1234", "source");
-    plugin.sendPong(event, jEvaClient);
+    plugin.sendPong(event, jEvaIrcEngine);
 
     ArgumentCaptor<Pong> captor = ArgumentCaptor.forClass(Pong.class);
-    verify(jEvaClient).sendCommand(captor.capture());
+    verify(jEvaIrcEngine).sendCommand(captor.capture());
 
     Pong pong = captor.getValue();
     assertEquals("PONG 1234", pong.build());

@@ -3,7 +3,7 @@ package eu.animegame.jeva.plugins;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.animegame.jeva.core.IrcConfig;
-import eu.animegame.jeva.core.JEvaIrcClient;
+import eu.animegame.jeva.core.JEvaIrcEngine;
 import eu.animegame.jeva.core.JEvaIrcPlugin;
 import eu.animegame.jeva.core.exceptions.InitializationException;
 import eu.animegame.jeva.core.exceptions.MissingParameterException;
@@ -31,9 +31,9 @@ public class ConnectPlugin implements JEvaIrcPlugin {
   private static final Logger LOG = LoggerFactory.getLogger(ConnectPlugin.class);
 
   @Override
-  public void initialize(JEvaIrcClient jEvaClient) {
+  public void initialize(JEvaIrcEngine jEvaIrcEngine) {
     try {
-      var config = jEvaClient.getConfig();
+      var config = jEvaIrcEngine.getConfig();
       config.verifyParameters(IrcConfig.PROP_NICK, IrcConfig.PROP_SERVER, IrcConfig.PROP_PORT);
     } catch (MissingParameterException e) {
       throw new InitializationException(e);
@@ -41,8 +41,8 @@ public class ConnectPlugin implements JEvaIrcPlugin {
   }
 
   @Override
-  public void connect(JEvaIrcClient jEvaClient) {
-    var config = jEvaClient.getConfig();
+  public void connect(JEvaIrcEngine jEvaIrcEngine) {
+    var config = jEvaIrcEngine.getConfig();
 
     var nick = config.getProperty(IrcConfig.PROP_NICK);
     var password = config.getProperty(IrcConfig.PROP_SERVER_PASSWORD);
@@ -51,10 +51,10 @@ public class ConnectPlugin implements JEvaIrcPlugin {
     LOG.debug("Attempt connect with properties: [nick={}, password=***, mode={}, realName={}]", nick, mode, realName);
 
     if (password != null && !password.isBlank()) {
-      jEvaClient.sendCommand(new Pass(password));
+      jEvaIrcEngine.sendCommand(new Pass(password));
     }
     // TODO: handling problems when the nick is already in use
-    jEvaClient.sendCommand(new Nick(nick));
-    jEvaClient.sendCommand(new User(nick, mode, realName));
+    jEvaIrcEngine.sendCommand(new Nick(nick));
+    jEvaIrcEngine.sendCommand(new User(nick, mode, realName));
   }
 }
