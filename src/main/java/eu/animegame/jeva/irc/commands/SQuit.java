@@ -6,18 +6,9 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public final class SQuit implements IrcCommand {
+public record SQuit(String server, String comment) implements IrcCommand {
 
   public static final String COMMAND = "SQUIT";
-
-  private final String server;
-
-  private final String comment;
-
-  public SQuit(String server, String comment) {
-    this.server = server;
-    this.comment = comment;
-  }
 
   @Override
   public String build() {
@@ -25,5 +16,4 @@ public final class SQuit implements IrcCommand {
     command.append(" ").append(server).append(" :").append(comment);
     return command.toString();
   }
-
 }

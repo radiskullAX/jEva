@@ -6,30 +6,23 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public final class Away implements IrcCommand {
+public record Away(String message) implements IrcCommand {
 
   public static final String COMMAND = "AWAY";
-
-  private final String message;
 
   /**
    * remove the away message
    */
   public Away() {
-    this(null);
-  }
-
-  public Away(String message) {
-    this.message = message;
+    this("");
   }
 
   @Override
   public String build() {
     var command = new StringBuilder(COMMAND);
-    if (message != null) {
+    if (!message.isBlank()) {
       command.append(" :").append(message);
     }
     return command.toString();
   }
-
 }

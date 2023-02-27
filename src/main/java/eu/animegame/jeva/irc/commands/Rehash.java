@@ -6,7 +6,7 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public final class Rehash implements IrcCommand {
+public record Rehash() implements IrcCommand {
 
   public static final String COMMAND = "REHASH";
 
@@ -14,5 +14,4 @@ public final class Rehash implements IrcCommand {
   public String build() {
     return COMMAND;
   }
-
 }

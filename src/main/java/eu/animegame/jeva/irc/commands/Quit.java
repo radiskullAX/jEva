@@ -6,27 +6,20 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public final class Quit implements IrcCommand {
+public record Quit(String message) implements IrcCommand {
 
   public static final String COMMAND = "QUIT";
 
-  private final String message;
-
   public Quit() {
-    this(null);
-  }
-
-  public Quit(String message) {
-    this.message = message;
+    this("");
   }
 
   @Override
   public String build() {
     var command = new StringBuilder(COMMAND);
-    if (message != null) {
+    if (!message.isBlank()) {
       command.append(" :").append(message);
     }
     return command.toString();
   }
-
 }

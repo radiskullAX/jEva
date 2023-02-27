@@ -6,7 +6,7 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public final class Restart implements IrcCommand {
+public record Restart() implements IrcCommand {
 
   public static final String COMMAND = "RESTART";
 
@@ -14,5 +14,4 @@ public final class Restart implements IrcCommand {
   public String build() {
     return COMMAND;
   }
-
 }

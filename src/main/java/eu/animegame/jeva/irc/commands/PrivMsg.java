@@ -3,26 +3,15 @@ package eu.animegame.jeva.irc.commands;
 import eu.animegame.jeva.core.IrcCommand;
 
 /**
- *
+ * 
+ * @param target a channel or user
+ * @param privMessage
+ * 
  * @author radiskull
  */
-public final class PrivMsg implements IrcCommand {
+public record PrivMsg(String target, String message) implements IrcCommand {
 
   public static final String COMMAND = "PRIVMSG";
-
-  private final String target;
-
-  private final String message;
-
-  /**
-   * 
-   * @param target a channel or user
-   * @param privMessage
-   */
-  public PrivMsg(String target, String message) {
-    this.target = target;
-    this.message = message;
-  }
 
   @Override
   public String build() {
@@ -30,5 +19,4 @@ public final class PrivMsg implements IrcCommand {
     command.append(" ").append(target).append(" :").append(message);
     return command.toString();
   }
-
 }

@@ -6,15 +6,9 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public final class Users implements IrcCommand {
+public record Users(String server) implements IrcCommand {
 
   public static final String COMMAND = "USERS";
-
-  private final String server;
-
-  public Users(String server) {
-    this.server = server;
-  }
 
   @Override
   public String build() {

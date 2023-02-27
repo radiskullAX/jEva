@@ -6,34 +6,21 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public final class Connect implements IrcCommand {
+public record Connect(String server, int port, String remoteServer) implements IrcCommand {
 
   public static final String COMMAND = "CONNECT";
 
-  private final String server;
-
-  private final int port;
-
-  private final String remoteServer;
-
   public Connect(String server, int port) {
-    this(server, port, null);
-  }
-
-  public Connect(String server, int port, String remoteServer) {
-    this.server = server;
-    this.port = port;
-    this.remoteServer = remoteServer;
+    this(server, port, "");
   }
 
   @Override
   public String build() {
     var command = new StringBuilder(COMMAND);
     command.append(" ").append(server).append(" ").append(port);
-    if (remoteServer != null) {
+    if (!remoteServer.isBlank()) {
       command.append(" ").append(remoteServer);
     }
     return command.toString();
   }
-
 }

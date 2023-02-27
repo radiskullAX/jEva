@@ -6,27 +6,20 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public final class Time implements IrcCommand {
+public record Time(String server) implements IrcCommand {
 
   public static final String COMMAND = "TIME";
 
-  private final String server;
-
   public Time() {
-    this(null);
-  }
-
-  public Time(String server) {
-    this.server = server;
+    this("");
   }
 
   @Override
   public String build() {
     var command = new StringBuilder(COMMAND);
-    if (server != null) {
+    if (!server.isBlank()) {
       command.append(" ").append(server);
     }
     return command.toString();
   }
-
 }

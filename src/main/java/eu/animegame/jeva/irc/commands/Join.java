@@ -9,13 +9,9 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public final class Join implements IrcCommand {
+public record Join(String channel, String password) implements IrcCommand {
 
   public static final String COMMAND = "JOIN";
-
-  private final String channel;
-
-  private final String password;
 
   public Join() {
     this("0", "");
@@ -51,11 +47,6 @@ public final class Join implements IrcCommand {
    */
   public Join(List<String> channels, List<String> passwords) {
     this(channels.stream().collect(joining(",")), passwords.stream().collect(joining(",")));
-  }
-
-  public Join(String channel, String password) {
-    this.channel = channel;
-    this.password = password;
   }
 
   @Override

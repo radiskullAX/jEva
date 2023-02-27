@@ -6,34 +6,25 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public final class ServList implements IrcCommand {
+public record ServList(String mask, String type) implements IrcCommand {
 
   public static final String COMMAND = "SERVLIST";
 
-  private final String mask;
-
-  private final String type;
-
   public ServList() {
-    this(null, null);
+    this("", "");
   }
 
   public ServList(String mask) {
-    this(mask, null);
-  }
-
-  public ServList(String mask, String type) {
-    this.mask = mask;
-    this.type = type;
+    this(mask, "");
   }
 
   @Override
   public String build() {
     var command = new StringBuilder(COMMAND);
-    if (mask != null) {
+    if (!mask.isBlank()) {
       command.append(" ").append(mask);
     }
-    if (type != null) {
+    if (!type.isBlank()) {
       command.append(" ").append(type);
     }
     return command.toString();

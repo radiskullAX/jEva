@@ -6,15 +6,9 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public final class Pass implements IrcCommand {
+public record Pass(String password) implements IrcCommand {
 
   public static final String COMMAND = "PASS";
-
-  private final String password;
-
-  public Pass(String password) {
-    this.password = password;
-  }
 
   @Override
   public String build() {
@@ -22,5 +16,4 @@ public final class Pass implements IrcCommand {
     command.append(" ").append(password);
     return command.toString();
   }
-
 }

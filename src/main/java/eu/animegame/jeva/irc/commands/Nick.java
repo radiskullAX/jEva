@@ -6,15 +6,9 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public final class Nick implements IrcCommand {
+public record Nick(String nick) implements IrcCommand {
 
   public static final String COMMAND = "NICK";
-
-  private final String nick;
-
-  public Nick(String nick) {
-    this.nick = nick;
-  }
 
   @Override
   public String build() {
@@ -22,5 +16,4 @@ public final class Nick implements IrcCommand {
     command.append(" ").append(nick);
     return command.toString();
   }
-
 }

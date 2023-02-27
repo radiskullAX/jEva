@@ -8,39 +8,29 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public final class Part implements IrcCommand {
+public record Part(String channel, String message) implements IrcCommand {
 
   public static final String COMMAND = "PART";
 
-  private final String channel;
-
-  private final String message;
-
   public Part(String channel) {
-    this(channel, null);
+    this(channel, "");
   }
 
   public Part(String[] channels) {
-    this(Arrays.stream(channels).collect(joining(",")), null);
+    this(Arrays.stream(channels).collect(joining(",")), "");
   }
 
   public Part(String[] channels, String message) {
     this(Arrays.stream(channels).collect(joining(",")), message);
   }
 
-  public Part(String channel, String message) {
-    this.channel = channel;
-    this.message = message;
-  }
-
   @Override
   public String build() {
     var command = new StringBuilder(COMMAND);
     command.append(" ").append(channel);
-    if (message != null) {
+    if (!message.isBlank()) {
       command.append(" :").append(message);
     }
     return command.toString();
   }
-
 }

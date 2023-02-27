@@ -18,7 +18,6 @@ import eu.animegame.jeva.util.ForTestsOnly;
  */
 public class JEvaIrcEngine {
 
-  // TODO: Upgrade java version / dependencies
   // TODO: Think about an ALL command that gets all irc events
 
   private static final Logger LOG = LoggerFactory.getLogger(JEvaIrcEngine.class);

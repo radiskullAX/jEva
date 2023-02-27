@@ -8,46 +8,36 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public final class Names implements IrcCommand {
+public record Names(String channel, String server) implements IrcCommand {
 
   public static final String COMMAND = "NAMES";
-
-  private final String channel;
-
-  private final String server;
 
   /**
    * list all channels + users
    */
   public Names() {
-    this.channel = null;
-    this.server = null;
+    this("", "");
   }
 
   public Names(String channel) {
-    this(channel, null);
+    this(channel, "");
   }
 
   public Names(String[] channels) {
-    this(Arrays.stream(channels).collect(joining(",")), null);
+    this(Arrays.stream(channels).collect(joining(",")), "");
   }
 
   public Names(String[] channels, String server) {
     this(Arrays.stream(channels).collect(joining(",")), server);
   }
 
-  public Names(String channel, String server) {
-    this.channel = channel;
-    this.server = server;
-  }
-
   @Override
   public String build() {
     var command = new StringBuilder(COMMAND);
-    if (channel != null) {
+    if (!channel.isBlank()) {
       command.append(" ").append(channel);
     }
-    if (server != null) {
+    if (!server.isBlank()) {
       command.append(" ").append(server);
     }
     return command.toString();

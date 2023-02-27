@@ -6,37 +6,27 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public final class Links implements IrcCommand {
+public record Links(String server, String mask) implements IrcCommand {
 
   public static final String COMMAND = "LINKS";
 
-  private final String server;
-
-  private final String mask;
-
   public Links() {
-    this(null, null);
+    this("", "");
   }
 
   public Links(String mask) {
-    this(null, mask);
-  }
-
-  public Links(String server, String mask) {
-    this.server = server;
-    this.mask = mask;
+    this("", mask);
   }
 
   @Override
   public String build() {
     var command = new StringBuilder(COMMAND);
-    if (server != null) {
+    if (!server.isBlank()) {
       command.append(" ").append(server);
     }
-    if (mask != null) {
+    if (!mask.isBlank()) {
       command.append(" ").append(mask);
     }
     return command.toString();
   }
-
 }

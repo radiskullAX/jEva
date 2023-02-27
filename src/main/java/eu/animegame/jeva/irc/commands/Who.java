@@ -6,21 +6,12 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public final class Who implements IrcCommand {
+public record Who(String mask, boolean operatorsOnly) implements IrcCommand {
 
   public static final String COMMAND = "WHO";
 
-  private final String mask;
-
-  private final boolean operatorsOnly;
-
   public Who(boolean operatorsOnly) {
     this("0", operatorsOnly);
-  }
-
-  public Who(String mask, boolean operatorsOnly) {
-    this.mask = mask;
-    this.operatorsOnly = operatorsOnly;
   }
 
   @Override

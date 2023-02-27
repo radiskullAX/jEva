@@ -6,27 +6,20 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public final class Admin implements IrcCommand {
+public record Admin(String server) implements IrcCommand {
 
   public static final String COMMAND = "ADMIN";
 
-  private final String server;
-
   public Admin() {
-    this(null);
-  }
-
-  public Admin(String server) {
-    this.server = server;
+    this("");
   }
 
   @Override
   public String build() {
     var command = new StringBuilder(COMMAND);
-    if (server != null) {
+    if (!server.isBlank()) {
       command.append(" ").append(server);
     }
     return command.toString();
   }
-
 }

@@ -8,8 +8,9 @@ package eu.animegame.jeva.irc;
  */
 public enum ModeSetting {
 
-  ADD(),
-  REMOVE();
+  ADD,
+  REMOVE,
+  NONE;
 
   @Override
   public String toString() {
@@ -18,6 +19,8 @@ public enum ModeSetting {
         return "+";
       case REMOVE:
         return "-";
+      case NONE:
+        return "";
       default:
         return super.toString();
     }

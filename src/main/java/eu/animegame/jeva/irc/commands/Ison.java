@@ -8,18 +8,16 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public final class Ison implements IrcCommand {
+public record Ison(String nick) implements IrcCommand {
 
   public static final String COMMAND = "ISON";
 
-  private final String nick;
-
-  public Ison(String nick) {
-    this.nick = nick;
-  }
-
   public Ison(String[] nicks) {
     this(Arrays.stream(nicks).collect(joining(" ")));
+  }
+
+  public Ison(java.util.List<String> nicks) {
+    this(nicks.stream().collect(joining(" ")));
   }
 
   @Override
@@ -28,5 +26,4 @@ public final class Ison implements IrcCommand {
     command.append(" ").append(nick);
     return command.toString();
   }
-
 }

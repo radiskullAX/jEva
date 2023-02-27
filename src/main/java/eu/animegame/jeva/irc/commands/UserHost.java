@@ -8,15 +8,9 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public final class UserHost implements IrcCommand {
+public record UserHost(String nick) implements IrcCommand {
 
   public static final String COMMAND = "USERHOST";
-
-  private final String nick;
-
-  public UserHost(String nick) {
-    this.nick = nick;
-  }
 
   public UserHost(String[] nicks) {
     this(Arrays.stream(nicks).collect(joining(" ")));
@@ -28,5 +22,4 @@ public final class UserHost implements IrcCommand {
     command.append(" ").append(nick);
     return command.toString();
   }
-
 }

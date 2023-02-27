@@ -6,15 +6,9 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public final class Wallops implements IrcCommand {
+public record Wallops(String message) implements IrcCommand {
 
   public static final String COMMAND = "WALLOPS";
-
-  private final String message;
-
-  public Wallops(String message) {
-    this.message = message;
-  }
 
   @Override
   public String build() {
@@ -22,5 +16,4 @@ public final class Wallops implements IrcCommand {
     command.append(" :").append(message);
     return command.toString();
   }
-
 }

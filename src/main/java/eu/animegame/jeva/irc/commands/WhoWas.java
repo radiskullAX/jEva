@@ -8,40 +8,28 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public final class WhoWas implements IrcCommand {
+public record WhoWas(String nick, int count, String server) implements IrcCommand {
 
   public static final String COMMAND = "WHOWAS";
 
-  private final String nick;
-
-  private final int count;
-
-  private final String server;
-
   public WhoWas(String nick) {
-    this(nick, 0, null);
+    this(nick, 0, "");
   }
 
   public WhoWas(String[] nicks) {
-    this(Arrays.stream(nicks).collect(joining(",")), 0, null);
+    this(Arrays.stream(nicks).collect(joining(",")), 0, "");
   }
 
   public WhoWas(String nick, int count) {
-    this(nick, count, null);
+    this(nick, count, "");
   }
 
   public WhoWas(String[] nicks, int count) {
-    this(Arrays.stream(nicks).collect(joining(",")), count, null);
+    this(Arrays.stream(nicks).collect(joining(",")), count, "");
   }
 
   public WhoWas(String[] nicks, int count, String server) {
     this(Arrays.stream(nicks).collect(joining(",")), count, server);
-  }
-
-  public WhoWas(String nick, int count, String server) {
-    this.nick = nick;
-    this.count = count;
-    this.server = server;
   }
 
   @Override
@@ -51,7 +39,7 @@ public final class WhoWas implements IrcCommand {
     if (count > 0) {
       command.append(" ").append(count);
     }
-    if (server != null) {
+    if (!server.isBlank()) {
       command.append(" ").append(server);
     }
     return command.toString();

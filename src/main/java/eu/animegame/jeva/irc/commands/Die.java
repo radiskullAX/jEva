@@ -6,7 +6,7 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public final class Die implements IrcCommand {
+public record Die() implements IrcCommand {
 
   public static final String COMMAND = "DIE";
 
@@ -14,5 +14,4 @@ public final class Die implements IrcCommand {
   public String build() {
     return COMMAND;
   }
-
 }

@@ -6,21 +6,9 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public class Service implements IrcCommand {
+public record Service(String nick, String serverMask, String info) implements IrcCommand {
 
   public static final String COMMAND = "SERVICE";
-
-  private final String nick;
-
-  private final String serverMask;
-
-  private final String info;
-
-  public Service(String nick, String serverMask, String info) {
-    this.nick = nick;
-    this.serverMask = serverMask;
-    this.info = info;
-  }
 
   @Override
   public String build() {

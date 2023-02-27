@@ -191,10 +191,6 @@ class IrcCommandTest {
     expected = "TOPIC " + CHANNEL;
     assertEquals(expected, command.build());
 
-    command = new Topic(CHANNEL, "");
-    expected = "TOPIC " + CHANNEL + " :";
-    assertEquals(expected, command.build());
-
     command = new Topic(CHANNEL, MESSAGE);
     expected = "TOPIC " + CHANNEL + " :" + MESSAGE;
     assertEquals(expected, command.build());

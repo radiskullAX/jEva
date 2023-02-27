@@ -8,49 +8,38 @@ import eu.animegame.jeva.core.IrcCommand;
  *
  * @author radiskull
  */
-public final class List implements IrcCommand {
+public record List(String channel, String server) implements IrcCommand {
 
   public static final String COMMAND = "LIST";
-
-  private final String channel;
-
-  private final String server;
 
   /**
    * list all channels
    */
   public List() {
-    this.channel = null;
-    this.server = null;
+    this("", "");
   }
 
   public List(String channel) {
-    this(channel, null);
+    this(channel, "");
   }
 
   public List(String[] channels) {
-    this(Arrays.stream(channels).collect(joining(",")), null);
+    this(Arrays.stream(channels).collect(joining(",")), "");
   }
 
   public List(String[] channels, String server) {
     this(Arrays.stream(channels).collect(joining(",")), server);
   }
 
-  public List(String channel, String server) {
-    this.channel = channel;
-    this.server = server;
-  }
-
   @Override
   public String build() {
     var command = new StringBuilder(COMMAND);
-    if (channel != null) {
+    if (!channel.isBlank()) {
       command.append(" ").append(channel);
     }
-    if (server != null) {
+    if (!server.isBlank()) {
       command.append(" ").append(server);
     }
     return command.toString();
   }
-
 }
