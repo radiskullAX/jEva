@@ -52,6 +52,7 @@ public class JEvaIrcEngineIntegrationTest {
 
     verify(pluginController).lookup();
     verify(pluginController, times(4)).fireLifecycleState(any());
+    verify(pluginController).cleanup();
 
     verify(connection, never()).read();
     verify(pluginController, never()).fireIrcEvent(any());

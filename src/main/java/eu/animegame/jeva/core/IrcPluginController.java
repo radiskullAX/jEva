@@ -44,11 +44,28 @@ public class IrcPluginController {
 
   public boolean removePlugin(JEvaIrcPlugin plugin) {
     if (plugin != null) {
-      // TODO: if a plugin gets removed, we should also remove all callbacks
       LOG.trace("remove plugin: {}", plugin.getClass().getSimpleName());
-      return plugins.remove(plugin);
+      if (plugins.remove(plugin)) {
+        removeCallbacks(plugin);
+        return true;
+      }
     }
     return false;
+  }
+
+  private void removeCallbacks(JEvaIrcPlugin plugin) {
+    int counter = 0;
+    for (Entry<String, List<CallbackEntry>> callbackEntries : callbacks.entrySet()) {
+      var result = new ArrayList<CallbackEntry>();
+      for (CallbackEntry callback : callbackEntries.getValue()) {
+        if (callback.plugin.equals(plugin)) {
+          result.add(callback);
+        }
+      }
+      counter += result.size();
+      callbackEntries.getValue().removeAll(result);
+    }
+    LOG.trace("removed callbacks: [numberOfCallbacks: {}]", counter);
   }
 
   @SuppressWarnings("unchecked")
@@ -76,6 +93,10 @@ public class IrcPluginController {
     LOG.info("lookup plugins for @IrcEventAcceptor: [numberOfMethods: {}, numberOfCommands: {}]",
         callbacks.values().stream().mapToInt(l -> l.size()).sum(), callbacks.size());
     LOG.debug("commands: {}", callbacks.keySet().stream().collect(Collectors.joining(",")));
+  }
+
+  public void cleanup() {
+    callbacks.clear();
   }
 
   private List<CallbackEntry> mergeLists(List<CallbackEntry> leftList, List<CallbackEntry> rightList) {

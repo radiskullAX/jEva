@@ -53,7 +53,7 @@ public class ConnectPlugin implements JEvaIrcPlugin {
     if (password != null && !password.isBlank()) {
       jEvaIrcEngine.sendCommand(new Pass(password));
     }
-    // TODO: handling problems when the nick is already in use
+    // TODO: (!) handling problems when the nick is already in use
     jEvaIrcEngine.sendCommand(new Nick(nick));
     jEvaIrcEngine.sendCommand(new User(nick, mode, realName));
   }

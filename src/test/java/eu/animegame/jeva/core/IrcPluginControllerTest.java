@@ -101,6 +101,25 @@ class IrcPluginControllerTest {
   }
 
   @Test
+  void removePluginAlsoRemovesCallbacks() {
+    var event1 = new IrcBaseEvent(COMMAND_1, PARAMETER, SOURCE);
+    var event2 = new IrcBaseEvent(COMMAND_2, PARAMETER, SOURCE);
+    var event3 = new IrcBaseEvent(COMMAND_3, PARAMETER, SOURCE);
+    controller.addPlugin(pluginMock2);
+
+    controller.lookup();
+    controller.removePlugin(pluginMock2);
+
+    controller.fireIrcEvent(event1);
+    controller.fireIrcEvent(event2);
+    controller.fireIrcEvent(event3);
+
+    verify(pluginMock2, never()).method1();
+    verify(pluginMock2, never()).method2(event2);
+    verify(pluginMock2, never()).method3(event3, jEvaIrcEngine);
+  }
+
+  @Test
   void getPlugin() {
     var testPlugin = new TestPlugin();
     controller.addPlugin(testPlugin);

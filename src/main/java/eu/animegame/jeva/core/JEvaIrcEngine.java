@@ -13,10 +13,13 @@ import eu.animegame.jeva.core.lifecycle.LifeCycleObject;
 import eu.animegame.jeva.util.ForTestsOnly;
 
 /**
- *
+ * 
  * @author radiskull
  */
 public class JEvaIrcEngine {
+
+  // TODO: Upgrade java version / dependencies
+  // TODO: Think about an ALL command that gets all irc events
 
   private static final Logger LOG = LoggerFactory.getLogger(JEvaIrcEngine.class);
 
@@ -196,6 +199,7 @@ public class JEvaIrcEngine {
       } catch (Exception e) {
         LOG.warn("failed to shut down plugins", e);
       }
+      pluginController.cleanup();
       started = false;
       running = false;
     }
