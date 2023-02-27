@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import java.util.Arrays;
-import org.junit.jupiter.api.Disabled;
+import java.util.Properties;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import eu.animegame.jeva.Tags;
@@ -50,13 +50,17 @@ class JEvaIrcEngineBuilderTest {
     assertNotNull(engine.getConfig());
     assertEquals(0, engine.getConfig().size());
     assertNotNull(engine.getConnection());
-    assertEquals(3, engine.getPlugins().size());
+    assertEquals(4, engine.getPlugins().size());
   }
 
   @Test
-  @Disabled
-  void args() {
-    // TODO: implement when args parsing works
+  void properties() {
+    var props = new Properties();
+    props.put(IrcConfig.PROP_SERVER, SERVER);
+    var engine = builder.properties(props).build();
+
+    var actual = engine.getConfig().getProperty(IrcConfig.PROP_SERVER);
+    assertEquals(SERVER, actual);
   }
 
   @Test
@@ -133,7 +137,7 @@ class JEvaIrcEngineBuilderTest {
 
     var opt = engine.getPlugin(plugin.getClass());
     assertTrue(opt.isPresent());
-    assertEquals(4, engine.getPlugins().size());
+    assertEquals(5, engine.getPlugins().size());
   }
 
   @Test

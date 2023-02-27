@@ -2,6 +2,7 @@ package eu.animegame.jeva.core;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.animegame.jeva.core.exceptions.JEvaException;
@@ -35,19 +36,17 @@ public class JEvaIrcEngine {
 
   private boolean running = false;
 
-  // TODO: parse command args
-  // TODO: args override config values
-  public JEvaIrcEngine(String... args) {
-    this(new SocketConnection(), args);
+  public JEvaIrcEngine() {
+    this(new SocketConnection());
   }
 
-  public JEvaIrcEngine(Connection connection, String... args) {
-    this(connection, new IrcConfig(), args);
+  public JEvaIrcEngine(Connection connection) {
+    this(connection, new IrcConfig());
   }
 
-  public JEvaIrcEngine(Connection connection, IrcConfig config, String... args) {
+  public JEvaIrcEngine(Connection connection, Properties properties) {
     this.connection = connection;
-    this.config = config;
+    this.config = new IrcConfig(properties);
     this.parser = new IrcCommandParser();
     this.pluginController = new IrcPluginController(this);
     this.lifeCycleStateMachine = new LifeCycle(new Initialize(new LifeCycleListener(this)));

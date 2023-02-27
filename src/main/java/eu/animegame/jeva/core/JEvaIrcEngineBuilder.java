@@ -22,8 +22,6 @@ public class JEvaIrcEngineBuilder {
 
   private List<String> channels;
 
-  private String[] args;
-
   private boolean autoRejoin;
 
   private JEvaIrcEngineBuilder() {
@@ -35,11 +33,6 @@ public class JEvaIrcEngineBuilder {
 
   public static JEvaIrcEngineBuilder create() {
     return new JEvaIrcEngineBuilder();
-  }
-
-  public JEvaIrcEngineBuilder args(String... args) {
-    this.args = args;
-    return this;
   }
 
   public JEvaIrcEngineBuilder server(String server) {
@@ -72,6 +65,11 @@ public class JEvaIrcEngineBuilder {
     return this;
   }
 
+  public JEvaIrcEngineBuilder properties(Properties props) {
+    properties.putAll(props);
+    return this;
+  }
+
   public JEvaIrcEngineBuilder channel(String channel) {
     channels.add(channel);
     return this;
@@ -90,29 +88,25 @@ public class JEvaIrcEngineBuilder {
   // TODO: Eventually add a Connection method too .. when there is an SSLConnection
   public JEvaIrcEngine build() {
     var ircConfig = new IrcConfig(properties);
-    var engine = new JEvaIrcEngine(new SocketConnection(), ircConfig, args);
+    var engine = new JEvaIrcEngine(new SocketConnection(), ircConfig);
     engine.addPlugin(new ConnectPlugin());
     engine.addPlugin(new PingPlugin());
-    if (!channels.isEmpty()) {
-      addPluginAndChannels(engine);
-    }
-    if (autoRejoin) {
-      engine.addPlugin(new ReJoinPlugin());
-    }
-    for (Supplier<JEvaIrcPlugin> plugin : plugins) {
-      engine.addPlugin(plugin.get());
-    }
-    engine.addPlugin(new DisconnectPlugin());
-    return engine;
-  }
-
-  private void addPluginAndChannels(JEvaIrcEngine engine) {
 
     var joinPlugin = new AutoJoinPlugin();
     engine.addPlugin(joinPlugin);
-
     for (String channel : channels) {
       joinPlugin.addChannel(channel);
     }
+
+    if (autoRejoin) {
+      engine.addPlugin(new ReJoinPlugin());
+    }
+
+    for (Supplier<JEvaIrcPlugin> plugin : plugins) {
+      engine.addPlugin(plugin.get());
+    }
+
+    engine.addPlugin(new DisconnectPlugin());
+    return engine;
   }
 }
